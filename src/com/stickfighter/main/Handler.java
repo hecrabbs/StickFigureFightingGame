@@ -8,21 +8,21 @@ public class Handler {
     LinkedList<GameObject> object = new LinkedList<GameObject>();
 
     //updates all game objects
-    public void tick() {
+    public void tick(double delta) {
         for (int i = 0; i < object.size(); i++) {
             GameObject tempObject = object.get(i);
 
-            tempObject.tick();
+            tempObject.tick(delta);
         }
 
     }
 
     //renders all game objects
-    public void render(Graphics g) {
+    public void render(Graphics g, double delta) {
         for (int i = 0; i < object.size(); i++) {
             GameObject tempObject = object.get(i);
 
-            tempObject.render(g);
+            tempObject.render(g, delta);
         }
 
     }

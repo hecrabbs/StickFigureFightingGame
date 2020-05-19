@@ -75,11 +75,11 @@ public class Game extends Canvas implements Runnable {
             delta += (now - lastTime) / ns;
             lastTime = now;
             while (delta >= 1) {
-                tick();
+                tick(delta);
                 delta--;
             }
             if (running) {
-                render();
+                render(delta);
             }
             frames++;
 
@@ -92,12 +92,12 @@ public class Game extends Canvas implements Runnable {
         stop();
     }
 
-    private void tick() {
-        handler.tick();
+    private void tick(double delta) {
+        handler.tick(delta);
 
     }
 
-    private void render() {
+    private void render(double delta) {
         BufferStrategy bs = this.getBufferStrategy();
         if (bs == null) {
             this.createBufferStrategy(3);
@@ -109,7 +109,7 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        handler.render(g);
+        handler.render(g, delta);
 
         g.dispose();
         bs.show();

@@ -14,11 +14,11 @@ public abstract class GameObject {
         this.id = id;
     }
 
-    public abstract void tick();
+    public abstract void tick(double delta);
 
-    public abstract void render(Graphics g);
+    public abstract void render(Graphics g, double delta);
 
-    public void follow(GameObject gameObject) {
+    public void follow(GameObject gameObject, double delta) {
         int dx = this.x - gameObject.x;
         int dy = this.y - gameObject.y;
         double direction;
@@ -34,8 +34,8 @@ public abstract class GameObject {
             direction -= Math.PI;
         }
 
-        this.x += this.velX * Math.cos(direction);
-        this.y += this.velY * Math.sin(direction);
+        this.x += this.velX * Math.cos(direction) * delta;
+        this.y += this.velY * Math.sin(direction) * delta;
     }
 
     public void setX(int x) {

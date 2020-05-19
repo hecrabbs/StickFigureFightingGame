@@ -16,12 +16,12 @@ public class Enemy extends GameObject {
 
     }
 
-    public void tick() {
-        follow(this.player);
+    public void tick(double delta) {
+        follow(this.player, delta);
 
     }
 
-    public void render(Graphics g) {
+    public void render(Graphics g, double delta) {
         g.setColor(Color.RED);
         g.fillRect(x, y, 25, 25);
 
