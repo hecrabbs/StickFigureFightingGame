@@ -11,8 +11,14 @@ public class Handler {
     public void tick(double delta) {
         for (int i = 0; i < object.size(); i++) {
             GameObject tempObject = object.get(i);
-
+            
             tempObject.tick(delta);
+            for (int j = i+1; j < object.size(); j++) {
+                if(tempObject.detectCollision(object.get(j))) {
+                    tempObject.collide(object.get(j));
+                }
+                
+            }
         }
 
     }
