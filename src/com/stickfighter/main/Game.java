@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
-//Run from src directory with: javac ./com/stickfighter/main/*.java && java com.stickfighter.main.Game
 public class Game extends Canvas implements Runnable {
 
     //generated serial version UID (whatever that is)
@@ -37,6 +36,7 @@ public class Game extends Canvas implements Runnable {
         for (int i = 0; i < 20; i++) {
             handler.addObject((new Enemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.Enemy, handler.object.getFirst())));
         }
+        handler.addObject((new Platform(WIDTH / 2, 1020, ID.Platform)));
 
     }
 
