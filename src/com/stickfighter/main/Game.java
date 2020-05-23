@@ -1,5 +1,7 @@
 package com.stickfighter.main;
 
+import com.stickfighter.graphics.Assets;
+
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -16,10 +18,11 @@ public class Game extends Canvas implements Runnable {
 
     public static final int WIDTH = 1920;
     public static final int HEIGHT = 1080;
-    private static double delta = 0;
 
-    //need to implement maxfps
-    private int FPS = 60;
+    private static double delta = 0;
+    public static int FPS = 60;
+    private static int frames = 0;
+    private double dt;
 
     private Thread thread;
     private boolean running = false;
@@ -40,6 +43,8 @@ public class Game extends Canvas implements Runnable {
         this.addKeyListener(new KeyInput(handler));
 
         new Window(WIDTH, HEIGHT, "Stick Fighter", this);
+
+        Assets.init();
 
         r = new Random();
 
@@ -70,38 +75,31 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void run() {
+        /* 1 billion nano seconds per second divided by frames per second = nanoSec/frames
+         * timePerTick is max amount of time allowed to run tick and render methods per 1 frame
+         */
+        double timePerTick = 1e9 / FPS;
+        long now;
         long lastTime = System.nanoTime();
-        double amountOfTicks = 60.0;
-        double ns = 1000000000 / amountOfTicks;
         long timer = System.currentTimeMillis();
-        int frames = 0;
-        /*"lastTime", "now," and "ns" are used to calculate "delta."
-        amountOfTicks is the amount of tics/second, and ns is the amount of nanoseconds/tick.
-        When delta is calculated, you have (now-lastTime)/(ns/tick),
-        but now and lastTime  are in nanoseconds, so it has units "tick".
-        We then add this to delta, and keep going.
-        Whenever delta+=1, one tick has passed, and we therefore call the command tick()
-        and reset delta to 0 in the while(delta>=1) loop.
-        the if(running) loop updates the window (by rendering again),
-        and increases the frames with 1.
-        the if(System.currentTimeMillis()-timer>1000) loop writes out the FPS once per second by
-        checking if the current time is more than 1000 milliseconds (1 second) larger than "timer" was.
-        IF so, we update "timer" to be 1 second later (timer+=1000;),
-        and print the amount of frames that have passed, and set frames to 0.
-        Since this event happens once every second, the value "frames" is the frames per second.
-        stop() stops the game.*/
+
         while (running) {
-            long now = System.nanoTime();
-            delta += (now - lastTime) / ns;
+            now = System.nanoTime();
+            /* amount of time passed since this line was last run, divided by max time allowed
+             */
+            dt = now - lastTime;
+            delta += (now - lastTime) / timePerTick;
             lastTime = now;
-            while (delta >= 1) {
+
+            /* once the time that has passed is greater than or equal to the max time allowed
+             * tick, render, and start delta timer over
+             */
+            if (delta >= 1) {
                 tick(delta);
+                render(delta);
+                frames++;
                 delta--;
             }
-            if (running) {
-                render(delta);
-            }
-            frames++;
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
@@ -130,16 +128,16 @@ public class Game extends Canvas implements Runnable {
         notify();
     }
 */
-    public static double getDelta() {
-        return delta;
+    public static int getFrames() {
+        return frames;
     }
 
-    private void tick(double delta) {
+    private void tick(double dt) {
         handler.tick(delta);
 
     }
 
-    private void render(double delta) {
+    private void render(double dt) {
         BufferStrategy bs = this.getBufferStrategy();
         if (bs == null) {
             this.createBufferStrategy(3);

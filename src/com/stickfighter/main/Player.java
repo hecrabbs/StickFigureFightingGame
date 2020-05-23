@@ -1,10 +1,13 @@
 package com.stickfighter.main;
 
+import com.stickfighter.graphics.Assets;
+
 import java.awt.*;
 import java.util.LinkedList;
 
 public class Player extends GameObject {
     private Handler handler;
+
 
 
 
@@ -15,10 +18,17 @@ public class Player extends GameObject {
         this.height = 64;
     }
 
-    public void tick(double delta) {
-        x += velX * delta;
-        y += velY * delta;
-        velY += 1.2*delta;
+    public void tick(double dt) {
+//        x += velX * 60/Game.FPS;
+//        y += velY * 60/Game.FPS;
+//        velY += 1.2 * 60/Game.FPS;
+        x += velX * dt;
+        y += velY * dt;
+        velY += 1.2*dt;
+//        x += velX ;
+//        y += velY ;
+//        velY += 1.2;
+
         //checking for collisions here
 //        if( falling || jumping){
 //
@@ -37,6 +47,9 @@ public class Player extends GameObject {
         g2d.draw(getPBoundsTop());
         g2d.draw(getPBoundsL());
         g2d.draw(getPBoundsR());
+        g.drawImage(Assets.playerRight[0], this.x-40, this.y-40, null);
+
+
     }
     //This gets the bottom bounds of the rectangle
     public Rectangle getBounds(){

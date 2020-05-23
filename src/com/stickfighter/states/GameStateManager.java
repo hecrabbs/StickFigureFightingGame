@@ -1,4 +1,4 @@
-package com.stickfighter.main.states;
+package com.stickfighter.states;
 
 import com.stickfighter.main.KeyInput;
 
