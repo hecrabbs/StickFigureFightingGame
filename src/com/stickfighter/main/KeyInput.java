@@ -27,7 +27,6 @@ public class KeyInput extends KeyAdapter {
                 switch (key) {
                     case KeyEvent.VK_P:
                         pause=!pause;
-                        Game.pauser=pause;
                         break;
                     case KeyEvent.VK_SPACE://For Jumping
                         if (!tempObject.jumping && !tempObject.falling) {

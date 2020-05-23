@@ -17,7 +17,6 @@ public class Game extends Canvas implements Runnable {
     public static final int WIDTH = 1920;
     public static final int HEIGHT = 1080;
     private static double delta = 0;
-    public static boolean pauser;
 
     //need to implement maxfps
     private int FPS = 60;
@@ -128,7 +127,6 @@ public class Game extends Canvas implements Runnable {
     }
 /*    public synchronized void resumeGame() {
         KeyInput.pause = false;
-        //pauser=false;
         notify();
     }
 */
