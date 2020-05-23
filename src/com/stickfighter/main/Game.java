@@ -3,6 +3,7 @@ package com.stickfighter.main;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 import  java.util.LinkedList;
@@ -16,6 +17,7 @@ public class Game extends Canvas implements Runnable {
     public static final int WIDTH = 1920;
     public static final int HEIGHT = 1080;
     private static double delta = 0;
+    public static boolean pauser;
 
     //need to implement maxfps
     private int FPS = 60;
@@ -107,10 +109,29 @@ public class Game extends Canvas implements Runnable {
                 System.out.println("FPS: " + frames);
                 frames = 0;
             }
+            /*try{
+                if(KeyInput.pause){
+                    synchronized (this) {
+                        while (KeyInput.pause) {
+                            thread.sleep(1);
+                        }
+                    }
+                }
+                else{ resumeGame(); }
+            }
+            catch(InterruptedException e){
+                e.printStackTrace();
+            }*/
+
         }
         stop();
     }
-
+/*    public synchronized void resumeGame() {
+        KeyInput.pause = false;
+        //pauser=false;
+        notify();
+    }
+*/
     public static double getDelta() {
         return delta;
     }

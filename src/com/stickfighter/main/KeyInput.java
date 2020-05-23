@@ -11,6 +11,7 @@ public class KeyInput extends KeyAdapter {
     private boolean down = false;
     private boolean left = false;
     private boolean right = false;
+    public static boolean pause=false;
 
     public KeyInput(Handler handler) {
         this.handler = handler;
@@ -24,6 +25,10 @@ public class KeyInput extends KeyAdapter {
             //player movement.  Could add another player with different ID but would need multiple threads for them to move at the same time.
             if (tempObject.getID() == ID.Player) {
                 switch (key) {
+                    case KeyEvent.VK_P:
+                        pause=!pause;
+                        Game.pauser=pause;
+                        break;
                     case KeyEvent.VK_SPACE://For Jumping
                         if (!tempObject.jumping && !tempObject.falling) {
                             tempObject.setVelY(-30);
@@ -51,6 +56,9 @@ public class KeyInput extends KeyAdapter {
                         tempObject.setVelX(5);
                         break;
                 }
+            }
+            else if(key==KeyEvent.VK_P){
+                pause=!pause;
             }
         }
 

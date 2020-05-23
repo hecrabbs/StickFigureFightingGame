@@ -96,12 +96,5 @@ public abstract class GameObject {
         return velY;
     }
 
-    public boolean isFalling() { return falling; }
-
-    public boolean isJumping() { return jumping; }
-
-    public boolean isColliding(GameObject gameObj) {
-        return this.rect.intersects(gameObj.rect);
-    }
 
 }
