@@ -25,8 +25,8 @@ public class KeyInput extends KeyAdapter {
             if (tempObject.getID() == ID.Player) {
                 switch (key) {
                     case KeyEvent.VK_SPACE://For Jumping
-                        if (!tempObject.jumping) {
-                            tempObject.setVelY(-20);
+                        if (!tempObject.jumping && !tempObject.falling) {
+                            tempObject.setVelY(-30);
                             tempObject.jumping=true;
                             tempObject.falling = true;
                         }

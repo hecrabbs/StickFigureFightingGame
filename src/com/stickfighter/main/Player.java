@@ -62,26 +62,24 @@ public class Player extends GameObject {
                 //this checks to see if the player object is overlapping the object in question
                 if(getBounds().intersects(temp.getBounds())){//Bottom intersection
                     //System.out.println("Boom");
-                    velY=0;
-                    y = temp.getY()-this.height;
+                    this.velY=0;
+                    this.y = temp.getY()-this.height;
                     falling=false;jumping=false;
                 }
                 else if(getPBoundsTop().intersects(temp.getBounds())){//Top intersection
                     //This is a little buggy, you can get pushed through the floor
                     //and possibly other objects if there is something on top of the player
-                    y = temp.getY()+this.height;
+                    this.y = temp.getY()+temp.height;
                     falling=false;jumping=false;
                 }
                 else if(getPBoundsL().intersects(temp.getBounds())){//Left intersection
                     //I'm pretty sure this is a little buggy, could be the right hand side
                     //the issue is the same as the top bounds. Could potentially push you through
                     //a boundary of some kind.
-                    x = temp.getX()+this.width;
-                    this.setVelX(0);
+                    this.x = temp.getX() + temp.width;
                 }
                 else if(getPBoundsR().intersects(temp.getBounds())){//Right intersection
-                    x = temp.getX()-this.width;
-                    this.setVelX(0);
+                    this.x = temp.getX() - this.width;
                 }
             }
         }

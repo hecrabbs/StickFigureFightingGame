@@ -49,7 +49,7 @@ public class Game extends Canvas implements Runnable {
         }
         handler.addObject((new Platform(0, HEIGHT-50, WIDTH, 15, ID.Platform)));
         handler.addObject((new Platform(0, 2*HEIGHT/3, WIDTH/3, 15, ID.Platform)));
-
+        handler.addObject((new Platform(WIDTH/2, HEIGHT-110, 50, 50, ID.Platform)));
 
     }
 
