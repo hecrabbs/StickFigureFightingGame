@@ -6,11 +6,12 @@ import java.awt.Rectangle;
 public abstract class GameObject {
 
     protected int x, y;
+    protected int centerX, centerY;
+    protected int width, height;
     protected ID id;
     protected int velX, velY;
     protected Rectangle rect;
-    protected boolean falling=true, jumping=false;
-    //protected Platform platform;
+    protected boolean falling = true, jumping = false;
 
     public GameObject(int x, int y, ID id) {
         this.x = x;
@@ -21,26 +22,38 @@ public abstract class GameObject {
     public abstract void tick(double delta);
 
     public abstract void render(Graphics g, double delta);
-    public abstract Rectangle getBounds();//getBounds is in all classes that implement 'GameObject'
+
+    public Rectangle getBounds() {
+        return new Rectangle(this.x, this.y, width, height);
+    };
+
+    public void updateCenter() {
+        this.centerX = this.x - this.width/2;
+        this.centerY = this.y - this.height/2;
+    }
 
     public void follow(GameObject gameObject, double delta) {
-        int dx = this.x - gameObject.x;
-        int dy = this.y - gameObject.y;
+        this.updateCenter();
+        gameObject.updateCenter();
+        int dx = this.centerX - gameObject.centerX;
+        int dy = this.centerY - gameObject.centerY;
         double direction;
-        if (dx == 0 && this.y > gameObject.y) {
+        if (dx == 0 && this.centerY > gameObject.centerY) {
             direction = -Math.PI / 2;
-        } else if (dx == 0 && this.y < gameObject.y) {
+        } else if (dx == 0 && this.centerY < gameObject.centerY) {
             direction = Math.PI / 2;
         } else {
             direction = Math.atan(((double) dy / (double) dx));
         }
 
-        if (this.x > gameObject.x) {
+        if (this.centerX > gameObject.centerX) {
             direction -= Math.PI;
         }
 
-        this.x += this.velX * Math.cos(direction) * delta;
-        this.y += this.velY * Math.sin(direction) * delta;
+        this.centerX += (this.velX * Math.cos(direction) * delta);
+        this.centerY += (this.velY * Math.sin(direction) * delta);
+        this.x = this.centerX + this.width/2;
+        this.y = this.centerY + this.height/2;
     }
 
     public void setX(int x) {
@@ -86,12 +99,6 @@ public abstract class GameObject {
     public boolean isFalling() { return falling; }
 
     public boolean isJumping() { return jumping; }
-
-    /*
-     * int w/h is the width and the height.
-     * This method gets the bounds of the rectangle
-     * and will be used to find the collisions
-     */
 
     public boolean isColliding(GameObject gameObj) {
         return this.rect.intersects(gameObj.rect);

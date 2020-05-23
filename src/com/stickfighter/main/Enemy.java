@@ -9,30 +9,19 @@ public class Enemy extends GameObject {
     public Enemy(int x, int y, ID id, GameObject player) {
         super(x, y, id);
         this.player = player;
-
-        velX = 2;
-        velY = 2;
-
+        this.width = 25;
+        this.height = 25;
+        this.velX = 2;
+        this.velY = 2;
     }
 
     public void tick(double delta) {
         follow(this.player, delta);
-
     }
 
     public void render(Graphics g, double delta) {
         g.setColor(Color.RED);
-        g.fillRect(x, y, 25, 25);
-
-    }
-
-    public Rectangle getBounds() {
-        /*
-        Enemies should have the same universal size,
-        unless we want to make a big guy, but then
-        we can just make a new bad guy class
-        */
-        return new Rectangle(x, y, 25,25);
+        g.fillRect(this.x, this.y, this.width, this.height);
     }
 
 }

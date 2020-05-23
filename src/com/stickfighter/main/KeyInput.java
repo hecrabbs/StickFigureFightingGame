@@ -11,7 +11,6 @@ public class KeyInput extends KeyAdapter {
     private boolean down = false;
     private boolean left = false;
     private boolean right = false;
-    private boolean jumping=false,falling=false;
 
     public KeyInput(Handler handler) {
         this.handler = handler;
@@ -20,14 +19,17 @@ public class KeyInput extends KeyAdapter {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        for (int i = 0; i < handler.object.size(); i++) {
-            GameObject tempObject = handler.object.get(i);
+        for (int i = 0; i < handler.gameObjects.size(); i++) {
+            GameObject tempObject = handler.gameObjects.get(i);
             //player movement.  Could add another player with different ID but would need multiple threads for them to move at the same time.
             if (tempObject.getID() == ID.Player) {
                 switch (key) {
                     case KeyEvent.VK_SPACE://For Jumping
-                        tempObject.setVelY(-5);
-                        jumping=true;
+                        if (!tempObject.jumping) {
+                            tempObject.setVelY(-20);
+                            tempObject.jumping=true;
+                            tempObject.falling = true;
+                        }
                         break;
                     case KeyEvent.VK_ESCAPE:
                         System.exit(1);
@@ -57,19 +59,13 @@ public class KeyInput extends KeyAdapter {
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
 
-        for (int i = 0; i < handler.object.size(); i++) {
-            GameObject tempObject = handler.object.get(i);
+        for (int i = 0; i < handler.gameObjects.size(); i++) {
+            GameObject tempObject = handler.gameObjects.get(i);
             //player movement
             if (tempObject.getID() == ID.Player) {
                 switch (key) {
                     case KeyEvent.VK_SPACE:
-                        //For Jumping. This is buggy, guy jumps up but does not fall back down
-                        while(jumping || falling){
-                            tempObject.setVelY(tempObject.getVelY()+1);
-                            if(tempObject.getVelY()==0){
-                                jumping=false;falling=false;
-                            }
-                        }
+                        tempObject.jumping = false;
                         break;
                     case KeyEvent.VK_W:
                         up = false;
@@ -112,5 +108,4 @@ public class KeyInput extends KeyAdapter {
     public void keyTyped(KeyEvent e) {
 
     }
-
 }

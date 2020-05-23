@@ -15,6 +15,7 @@ public class Game extends Canvas implements Runnable {
 
     public static final int WIDTH = 1920;
     public static final int HEIGHT = 1080;
+    private static double delta = 0;
 
     //need to implement maxfps
     private int FPS = 60;
@@ -28,6 +29,7 @@ public class Game extends Canvas implements Runnable {
     public static Player p1;
     public static LinkedList<GameObject> gameObjects;
 
+
     //initializing thins ing constructor rn. Add init() method??
     public Game() {
         handler = new Handler();
@@ -39,13 +41,15 @@ public class Game extends Canvas implements Runnable {
         new Window(WIDTH, HEIGHT, "Stick Fighter", this);
 
         r = new Random();
-        p1=new Player(r.nextInt(WIDTH), r.nextInt(HEIGHT),handler, ID.Player);
+
+        p1=new Player(10, 10, handler, ID.Player);
         handler.addObject(p1);
         for (int i = 0; i < 1; i++) {
-            handler.addObject((new Enemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.Enemy, handler.object.getFirst())));
+            handler.addObject((new Enemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.Enemy, p1)));
         }
-        handler.addObject((new Platform(0,1020,ID.Platform)));
-        System.out.println(gameObjects.size());
+        handler.addObject((new Platform(0, HEIGHT-50, WIDTH, 15, ID.Platform)));
+        handler.addObject((new Platform(0, 2*HEIGHT/3, WIDTH/3, 15, ID.Platform)));
+
 
     }
 
@@ -68,17 +72,14 @@ public class Game extends Canvas implements Runnable {
         long lastTime = System.nanoTime();
         double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
-        double delta = 0;
         long timer = System.currentTimeMillis();
         int frames = 0;
-        //reusable game loop
         /*"lastTime", "now," and "ns" are used to calculate "delta."
         amountOfTicks is the amount of tics/second, and ns is the amount of nanoseconds/tick.
         When delta is calculated, you have (now-lastTime)/(ns/tick),
         but now and lastTime  are in nanoseconds, so it has units "tick".
         We then add this to delta, and keep going.
         Whenever delta+=1, one tick has passed, and we therefore call the command tick()
-        [[[which is explained in the video]]],
         and reset delta to 0 in the while(delta>=1) loop.
         the if(running) loop updates the window (by rendering again),
         and increases the frames with 1.
@@ -108,6 +109,10 @@ public class Game extends Canvas implements Runnable {
             }
         }
         stop();
+    }
+
+    public static double getDelta() {
+        return delta;
     }
 
     private void tick(double delta) {

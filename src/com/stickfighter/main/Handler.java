@@ -5,37 +5,37 @@ import java.awt.Graphics;
 
 public class Handler {
 
-    LinkedList<GameObject> object = new LinkedList<GameObject>();
+    LinkedList<GameObject> gameObjects = new LinkedList<GameObject>();
 
-    //updates all game objects
+    //updates all game gameObjects
     public void tick(double delta) {
-        for (int i = 0; i < object.size(); i++) {
-            GameObject tempObject = object.get(i);
+        for (int i = 0; i < gameObjects.size(); i++) {
+            GameObject tempObject = gameObjects.get(i);
 
             tempObject.tick(delta);
         }
 
     }
 
-    //renders all game objects
+    //renders all game gameObjects
     public void render(Graphics g, double delta) {
-        for (int i = 0; i < object.size(); i++) {
-            GameObject tempObject = object.get(i);
+        for (int i = 0; i < gameObjects.size(); i++) {
+            GameObject tempObject = gameObjects.get(i);
 
             tempObject.render(g, delta);
         }
 
     }
 
-    public void addObject(GameObject object) {
-        this.object.add(object);
+    public void addObject(GameObject gameObjects) {
+        this.gameObjects.add(gameObjects);
     }
 
-    public void removeObject(GameObject object) {
-        this.object.remove(object);
+    public void removeObject(GameObject gameObjects) {
+        this.gameObjects.remove(gameObjects);
     }
 
     public LinkedList<GameObject> getObject() {
-        return object;
+        return gameObjects;
     }
 }
