@@ -20,8 +20,8 @@ public class Player extends GameObject {
     }
 
     public void tick(double dt) {
-        x += velX ;
-        y += velY ;
+        x += velX;
+        y += velY;
         velY += 1.2;
 
         //check collisions
