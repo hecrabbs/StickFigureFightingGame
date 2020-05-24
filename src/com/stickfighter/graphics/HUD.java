@@ -22,11 +22,16 @@ public class HUD {
     }
 
     public void render(Graphics g) {
+
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(x, y, width, height);
         g.setColor(Color.RED);
         g.fillRect(x, y, healthWidth, height);
         g.setColor(Color.WHITE);
         g.drawRect(x, y, width, height);
+        g.setColor(Color.GREEN);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.PLAIN, 20));
+        g.drawString("Health", x, y);
     }
 }

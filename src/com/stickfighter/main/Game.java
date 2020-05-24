@@ -34,13 +34,11 @@ public class Game extends Canvas implements Runnable {
     public static LinkedList<GameObject> gameObjects;
     private HUD hud;
 
-
     //initializing thins ing constructor rn. Add init() method??
     public Game() {
         handler = new Handler();
         hud = new HUD();
         gameObjects=handler.getObject();
-
 
         this.addKeyListener(new KeyInput(handler));
 
@@ -58,8 +56,6 @@ public class Game extends Canvas implements Runnable {
         handler.addObject((new Platform(0, HEIGHT-50, WIDTH, 15, ID.Platform)));
         handler.addObject((new Platform(0, 2*HEIGHT/3, WIDTH/3, 15, ID.Platform)));
         handler.addObject((new Platform(WIDTH/2, HEIGHT-110, 50, 50, ID.Platform)));
-
-
     }
 
     public synchronized void start() {
@@ -79,7 +75,6 @@ public class Game extends Canvas implements Runnable {
 
     public void run() {
         this.requestFocus();
-
         /* 1 billion nano seconds per second divided by frames per second = nanoSec/frames
          * timePerTick is max amount of time allowed to run tick and render methods per 1 frame
          */
