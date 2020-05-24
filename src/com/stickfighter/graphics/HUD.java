@@ -10,7 +10,7 @@ public class HUD {
     private int width = 300;
     private int height = 40;
     private int x = Game.WIDTH-width-30;
-    private int y = 10;
+    private int y = 50;
     private int healthWidth;
 
     public void tick() {
