@@ -17,9 +17,7 @@ public class Assets {
     public static BufferedImage[] playerLeft = new BufferedImage[columns];
 
     public static void init() {
-        System.out.println("Getting image");
         SpriteSheet sheet = new SpriteSheet(loadImage("./res/textures/testSheet.png"));
-        System.out.println("Got image");
         for (int i = 0; i < columns; i++ ) {
             playerRight[i] = sheet.crop(x,y,width,height);
             x+=width;

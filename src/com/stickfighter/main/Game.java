@@ -1,6 +1,7 @@
 package com.stickfighter.main;
 
 import com.stickfighter.graphics.Assets;
+import com.stickfighter.graphics.HUD;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -29,14 +30,15 @@ public class Game extends Canvas implements Runnable {
 
     private Random r;
     private Handler handler;
-
     public static Player p1;
     public static LinkedList<GameObject> gameObjects;
+    private HUD hud;
 
 
     //initializing thins ing constructor rn. Add init() method??
     public Game() {
         handler = new Handler();
+        hud = new HUD();
         gameObjects=handler.getObject();
 
 
@@ -57,6 +59,7 @@ public class Game extends Canvas implements Runnable {
         handler.addObject((new Platform(0, 2*HEIGHT/3, WIDTH/3, 15, ID.Platform)));
         handler.addObject((new Platform(WIDTH/2, HEIGHT-110, 50, 50, ID.Platform)));
 
+
     }
 
     public synchronized void start() {
@@ -75,6 +78,8 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void run() {
+        this.requestFocus();
+
         /* 1 billion nano seconds per second divided by frames per second = nanoSec/frames
          * timePerTick is max amount of time allowed to run tick and render methods per 1 frame
          */
@@ -134,7 +139,7 @@ public class Game extends Canvas implements Runnable {
 
     private void tick(double dt) {
         handler.tick(delta);
-
+        hud.tick();
     }
 
     private void render(double dt) {
@@ -150,6 +155,7 @@ public class Game extends Canvas implements Runnable {
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         handler.render(g, delta);
+        hud.render(g);
 
         g.dispose();
         bs.show();
