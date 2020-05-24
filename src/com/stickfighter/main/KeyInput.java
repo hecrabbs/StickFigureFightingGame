@@ -38,21 +38,21 @@ public class KeyInput extends KeyAdapter {
                     case KeyEvent.VK_ESCAPE:
                         System.exit(1);
                         break;
-                    case KeyEvent.VK_W:
-                        up = true;
-                        tempObject.setVelY(-5);
-                        break;
+//                    case KeyEvent.VK_W:
+//                        up = true;
+//                        tempObject.setVelY(-5);
+//                        break;
                     case KeyEvent.VK_A:
                         left = true;
-                        tempObject.setVelX(-5);
+                        tempObject.setVelX(-8);
                         break;
-                    case KeyEvent.VK_S:
-                        down = true;
-                        tempObject.setVelY(5);
-                        break;
+//                    case KeyEvent.VK_S:
+//                        down = true;
+//                        tempObject.setVelY(5);
+//                        break;
                     case KeyEvent.VK_D:
                         right = true;
-                        tempObject.setVelX(5);
+                        tempObject.setVelX(8);
                         break;
                 }
             }
@@ -74,34 +74,34 @@ public class KeyInput extends KeyAdapter {
                     case KeyEvent.VK_SPACE:
                         tempObject.jumping = false;
                         break;
-                    case KeyEvent.VK_W:
-                        up = false;
-                        if (down) {
-                            tempObject.setVelY(5);
-                        } else {
-                            tempObject.setVelY(0);
-                        }
-                        break;
+//                    case KeyEvent.VK_W:
+//                        up = false;
+//                        if (down) {
+//                            tempObject.setVelY(5);
+//                        } else {
+//                            tempObject.setVelY(0);
+//                        }
+//                        break;
                     case KeyEvent.VK_A:
                         left = false;
                         if (right) {
-                            tempObject.setVelX(5);
+                            tempObject.setVelX(8);
                         } else {
                             tempObject.setVelX(0);
                         }
                         break;
-                    case KeyEvent.VK_S:
-                        down = false;
-                        if (up) {
-                            tempObject.setVelY(-5);
-                        } else {
-                            tempObject.setVelY(0);
-                        }
-                        break;
+//                    case KeyEvent.VK_S:
+//                        down = false;
+//                        if (up) {
+//                            tempObject.setVelY(-5);
+//                        } else {
+//                            tempObject.setVelY(0);
+//                        }
+//                        break;
                     case KeyEvent.VK_D:
                         right = false;
                         if (left) {
-                            tempObject.setVelX(-5);
+                            tempObject.setVelX(-8);
                         } else {
                             tempObject.setVelX(0);
                         }

@@ -11,12 +11,17 @@ public class Enemy extends GameObject {
         this.player = player;
         this.width = 25;
         this.height = 25;
-        this.velX = 2;
-        this.velY = 2;
     }
 
     public void tick(double delta) {
         follow(this.player, delta);
+        if(this.getBounds().intersects(player.getBounds())) {
+            this.velX = 0;
+            this.velY = 0;
+        } else {
+            this.velX = 3;
+            this.velY = 3;
+        }
     }
 
     public void render(Graphics g, double delta) {

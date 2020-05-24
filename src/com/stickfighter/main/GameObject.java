@@ -23,9 +23,13 @@ public abstract class GameObject {
 
     public abstract void render(Graphics g, double delta);
 
-    public Rectangle getBounds() {
+    public Rectangle getBoundsBottom() {
         return new Rectangle(this.x, this.y, width, height);
     };
+
+    public Rectangle getBounds(){
+        return new Rectangle (this.x,this.y,this.width,this.height);
+    }
 
     public void updateCenter() {
         this.centerX = this.x - this.width/2;
