@@ -165,6 +165,7 @@ public class Game extends Canvas implements Runnable {
 
 
     public static void main(String[] args) {
+        //ThreadPool pool=new ThreadPool(2);//Using this to add music
         new Game();
     }
 }
