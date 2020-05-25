@@ -1,4 +1,4 @@
-package com.stickfighter.states;
+package com.stickfighter.enumStates;
 
 import com.stickfighter.main.KeyInput;
 
@@ -6,11 +6,9 @@ import java.awt.*;
 
 public class GameStateManager {
     public void GameStateManager(){
-
     }
 
     public void update(){
-
     }
 
     public void render(Graphics g){

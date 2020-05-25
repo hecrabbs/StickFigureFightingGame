@@ -1,11 +1,12 @@
 package com.stickfighter.main;
 
+import com.stickfighter.enumStates.GameState;
+import com.stickfighter.enumStates.Menu;
+import com.stickfighter.enumStates.Paused;
 import com.stickfighter.graphics.Assets;
 import com.stickfighter.graphics.HUD;
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
@@ -24,6 +25,11 @@ public class Game extends Canvas implements Runnable {
     public static int FPS = 60;
     private static int frames = 0;
     private double dt;
+    //States declared here
+    private static GameState state = GameState.Menu;
+    private final Menu menu;
+    private Paused pause;
+
 
     private Thread thread;
     private boolean running = false;
@@ -38,6 +44,8 @@ public class Game extends Canvas implements Runnable {
     public Game() {
         handler = new Handler();
         hud = new HUD();
+        menu=new Menu();
+        pause=new Paused();
         gameObjects=handler.getObject();
 
         this.addKeyListener(new KeyInput(handler));
@@ -133,6 +141,28 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void tick(double dt) {
+        //Once ready to test states, un-comment lines below.
+        if(state==GameState.Play){
+            handler.tick(delta);
+            hud.tick();
+        }
+        // Don't know if this switch statement should be in the 'run' method or here.
+        /*switch(Game.getState()){
+            case Menu:
+                //Figure out what to put here
+                break;
+            case Play:
+                //Probably just call the current running function
+                break;
+            case Paused:
+                //Figure out how to pause the game.
+                break;
+            case Level:
+                //Do we need a level?
+                //Can we do a mouse input from menu and
+                //add load in the levels differently=?
+                break;
+        }*/
         handler.tick(delta);
         hud.tick();
     }
@@ -148,13 +178,25 @@ public class Game extends Canvas implements Runnable {
 
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
-
-        handler.render(g, delta);
-        hud.render(g);
-
+        if(state==GameState.Play) {
+            handler.render(g, delta);
+            hud.render(g);
+        }
+        else if(state==GameState.Menu){
+            menu.renderScreen(g);
+        }
+        else if(state==GameState.Paused){
+            pause.renderPaused(g);
+        }
         g.dispose();
         bs.show();
     }
+
+    public static GameState getState() { return state; }
+
+    public static void setState(GameState gameState) { state=gameState; }
+
+
 
     public static void main(String[] args) {
         new Game();

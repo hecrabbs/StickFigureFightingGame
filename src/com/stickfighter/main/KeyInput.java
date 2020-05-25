@@ -1,5 +1,7 @@
 package com.stickfighter.main;
 
+import com.stickfighter.enumStates.GameState;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -22,42 +24,64 @@ public class KeyInput extends KeyAdapter {
 
         for (int i = 0; i < handler.gameObjects.size(); i++) {
             GameObject tempObject = handler.gameObjects.get(i);
-            //player movement.  Could add another player with different ID but would need multiple threads for them to move at the same time.
-            if (tempObject.getID() == ID.Player) {
-                switch (key) {
-                    case KeyEvent.VK_P:
-                        pause=!pause;
-                        break;
-                    case KeyEvent.VK_SPACE://For Jumping
-                        if (!tempObject.jumping && !tempObject.falling) {
-                            tempObject.setVelY(-30);
-                            tempObject.jumping=true;
-                            tempObject.falling = true;
-                        }
-                        break;
-                    case KeyEvent.VK_ESCAPE:
-                        System.exit(1);
-                        break;
+            //adding conditional for if the game state is "Play".
+            if(Game.getState()==GameState.Play) {
+                //player movement.  Could add another player with different ID but would need multiple threads for them to move at the same time.
+                if (tempObject.getID() == ID.Player) {
+                    switch (key) {
+                        case KeyEvent.VK_P:
+                            pause = !pause;
+                            break;
+                        case KeyEvent.VK_SPACE://For Jumping
+                            if (!tempObject.jumping && !tempObject.falling) {
+                                tempObject.setVelY(-30);
+                                tempObject.jumping = true;
+                                tempObject.falling = true;
+                            }
+                            break;
+                        case KeyEvent.VK_ESCAPE:
+                            System.exit(1);
+                            break;
 //                    case KeyEvent.VK_W:
 //                        up = true;
 //                        tempObject.setVelY(-5);
 //                        break;
-                    case KeyEvent.VK_A:
-                        left = true;
-                        tempObject.setVelX(-8);
-                        break;
+                        case KeyEvent.VK_A:
+                            left = true;
+                            tempObject.setVelX(-8);
+                            break;
 //                    case KeyEvent.VK_S:
 //                        down = true;
 //                        tempObject.setVelY(5);
 //                        break;
-                    case KeyEvent.VK_D:
-                        right = true;
-                        tempObject.setVelX(8);
+                        case KeyEvent.VK_D:
+                            right = true;
+                            tempObject.setVelX(8);
+                            break;
+                    }
+                } else if (key == KeyEvent.VK_P) {
+                    Game.setState(GameState.Paused);
+                }
+            }
+            else if(Game.getState()==GameState.Menu){
+                switch (key){
+                    case KeyEvent.VK_SPACE://For Jumping
+                        Game.setState(GameState.Play);
+                        break;
+                    case KeyEvent.VK_ESCAPE:
+                        System.exit(1);
                         break;
                 }
             }
-            else if(key==KeyEvent.VK_P){
-                pause=!pause;
+            else if(Game.getState()==GameState.Paused){
+                switch (key){
+                    case KeyEvent.VK_SPACE:
+                        Game.setState(GameState.Play);
+                        break;
+                    case KeyEvent.VK_ESCAPE:
+                        System.exit(1);
+                        break;
+                }
             }
         }
 
