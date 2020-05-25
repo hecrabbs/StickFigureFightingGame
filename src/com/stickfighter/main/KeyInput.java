@@ -63,24 +63,25 @@ public class KeyInput extends KeyAdapter {
                     Game.setState(GameState.Paused);
                 }
             }
+            //Enhanced Switch Statements. Similar to pattern matching in OCaml.
             else if(Game.getState()==GameState.Menu){
-                switch (key){
-                    case KeyEvent.VK_SPACE://For Jumping
-                        Game.setState(GameState.Play);
-                        break;
-                    case KeyEvent.VK_ESCAPE:
-                        System.exit(1);
-                        break;
+                switch (key) {
+                    case KeyEvent.VK_H -> Game.setState(GameState.Help);
+                    case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
+                    case KeyEvent.VK_ESCAPE -> System.exit(1);
                 }
             }
             else if(Game.getState()==GameState.Paused){
-                switch (key){
-                    case KeyEvent.VK_SPACE:
-                        Game.setState(GameState.Play);
-                        break;
-                    case KeyEvent.VK_ESCAPE:
-                        System.exit(1);
-                        break;
+                switch (key) {
+                    case KeyEvent.VK_H -> Game.setState(GameState.Help);
+                    case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
+                    case KeyEvent.VK_ESCAPE -> System.exit(1);
+                }
+            }
+            else if(Game.getState()==GameState.Help){
+                switch (key) {
+                    case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
+                    case KeyEvent.VK_ESCAPE -> System.exit(1);
                 }
             }
         }

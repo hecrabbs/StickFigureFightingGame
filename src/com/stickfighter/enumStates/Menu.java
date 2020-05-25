@@ -5,17 +5,25 @@ import java.awt.Graphics;
 import java.awt.Font;
 import java.awt.Rectangle;
 
-public class Menu {
+public class Menu extends GameStateManager {
     //adding buttons to the screen
     Rectangle play=new Rectangle(Game.WIDTH/2-80,300,100,74);
     Rectangle help=new Rectangle(Game.WIDTH/2-80,400,100,74);
     Rectangle quit=new Rectangle(Game.WIDTH/2-80,500,100,74);
 
     public void renderScreen(Graphics g){
+        g.drawOval(80, 70, 150, 150);
+        g.setColor(Color.YELLOW);
+        g.fillOval(80, 70, 150, 150);
+        g.setColor(Color.BLACK);
+        g.fillOval(120, 120, 15, 25);
+        g.fillOval(170, 120, 15, 25);
+        g.drawArc(120, 160, 70, 40, 180, 180);
+
         Font font=new Font("arial",Font.BOLD,60);
         g.setFont(font);
         g.setColor(Color.PINK);
-        g.drawString("Stick Figure Fighting", Game.WIDTH/4,100);
+        g.drawString("Trouble in ChinaTown", Game.WIDTH/4,100);
 
         Font fnt=new Font("arial",Font.PLAIN,30);
         g.setFont(fnt);

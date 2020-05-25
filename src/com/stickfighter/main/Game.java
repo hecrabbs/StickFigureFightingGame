@@ -1,6 +1,7 @@
 package com.stickfighter.main;
 
 import com.stickfighter.enumStates.GameState;
+import com.stickfighter.enumStates.Help;
 import com.stickfighter.enumStates.Menu;
 import com.stickfighter.enumStates.Paused;
 import com.stickfighter.graphics.Assets;
@@ -28,6 +29,7 @@ public class Game extends Canvas implements Runnable {
     private static GameState state = GameState.Menu;
     private final Menu menu;
     private Paused pause;
+    private Help help;
 
     private Thread thread;
     private boolean running = false;
@@ -42,8 +44,7 @@ public class Game extends Canvas implements Runnable {
     public Game() {
         handler = new Handler();
         hud = new HUD();
-        menu=new Menu();
-        pause=new Paused();
+        menu=new Menu();pause=new Paused();help=new Help();
         gameObjects=handler.getObject();
 
         this.addKeyListener(new KeyInput(handler));
@@ -121,7 +122,8 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void tick(double dt) {
-        //Once ready to test states, un-comment lines below.
+        //GameState becomes 'Play' when the user: either exits the main menu or pause screen.
+        //Refer to KeyInput class to see how the key input changes the game state.
         if(state==GameState.Play){
             handler.tick(delta);
             hud.tick();
@@ -147,7 +149,10 @@ public class Game extends Canvas implements Runnable {
             menu.renderScreen(g);
         }
         else if(state==GameState.Paused){
-            pause.renderPaused(g);
+            pause.renderScreen(g);
+        }
+        else if(state==GameState.Help){
+            help.renderScreen(g);
         }
         g.dispose();
         bs.show();
