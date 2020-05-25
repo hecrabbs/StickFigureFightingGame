@@ -14,12 +14,11 @@ import  java.util.LinkedList;
 
 //Run from src directory with: javac ./com/stickfighter/main/*.java && java com.stickfighter.main.Game
 public class Game extends Canvas implements Runnable {
-
     //generated serial version UID (whatever that is)
     private static final long serialVersionUID = 1856390909208917103L;
 
-    public static final int WIDTH = 1920;
-    public static final int HEIGHT = 1080;
+    public static final int WIDTH = 1280;//changed from 1920
+    public static final int HEIGHT = 720;//change from 1080
 
     private static double delta = 0;
     public static int FPS = 60;
@@ -29,7 +28,6 @@ public class Game extends Canvas implements Runnable {
     private static GameState state = GameState.Menu;
     private final Menu menu;
     private Paused pause;
-
 
     private Thread thread;
     private boolean running = false;
@@ -61,9 +59,9 @@ public class Game extends Canvas implements Runnable {
         for (int i = 0; i < 1; i++) {
             handler.addObject((new Enemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), handler, ID.Enemy, p1)));
         }
-        handler.addObject((new Platform(0, HEIGHT-50, WIDTH, 15, ID.Platform)));
-        handler.addObject((new Platform(0, 2*HEIGHT/3, WIDTH/3, 15, ID.Platform)));
-        handler.addObject((new Platform(WIDTH/2, HEIGHT-110, 50, 50, ID.Platform)));
+        handler.addObject((new Platform(0, HEIGHT-50, WIDTH, 20, ID.Platform)));
+        handler.addObject((new Platform(0, 2*HEIGHT/3, WIDTH/3, 50, ID.Platform)));
+        handler.addObject((new Platform(WIDTH/2, HEIGHT-110, 50, 80, ID.Platform)));
     }
 
     public synchronized void start() {
@@ -114,28 +112,10 @@ public class Game extends Canvas implements Runnable {
                 System.out.println("FPS: " + frames);
                 frames = 0;
             }
-            /*try{
-                if(KeyInput.pause){
-                    synchronized (this) {
-                        while (KeyInput.pause) {
-                            thread.sleep(1);
-                        }
-                    }
-                }
-                else{ resumeGame(); }
-            }
-            catch(InterruptedException e){
-                e.printStackTrace();
-            }*/
-
         }
         stop();
     }
-/*    public synchronized void resumeGame() {
-        KeyInput.pause = false;
-        notify();
-    }
-*/
+
     public static int getFrames() {
         return frames;
     }
@@ -146,25 +126,6 @@ public class Game extends Canvas implements Runnable {
             handler.tick(delta);
             hud.tick();
         }
-        // Don't know if this switch statement should be in the 'run' method or here.
-        /*switch(Game.getState()){
-            case Menu:
-                //Figure out what to put here
-                break;
-            case Play:
-                //Probably just call the current running function
-                break;
-            case Paused:
-                //Figure out how to pause the game.
-                break;
-            case Level:
-                //Do we need a level?
-                //Can we do a mouse input from menu and
-                //add load in the levels differently=?
-                break;
-        }*/
-        handler.tick(delta);
-        hud.tick();
     }
 
     private void render(double dt) {
