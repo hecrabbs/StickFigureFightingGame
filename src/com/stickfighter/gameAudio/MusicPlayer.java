@@ -1,4 +1,4 @@
-package com.stickfighter.audio;
+package com.stickfighter.gameAudio;
 
 import javax.sound.sampled.*;
 import java.io.File;
