@@ -16,7 +16,7 @@ public class Platform extends GameObject{
     }
 
     public void render(Graphics g, double delta) {
-        g.setColor(Color.YELLOW);
+        g.setColor(Color.GRAY);
         g.fillRect(this.x,this.y,this.width, this.height);
     }
 }

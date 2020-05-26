@@ -1,28 +1,35 @@
 package com.stickfighter.main;
 
+import com.stickfighter.enumStates.GameState;
+import com.stickfighter.enumStates.Help;
+import com.stickfighter.enumStates.Menu;
+import com.stickfighter.enumStates.Paused;
 import com.stickfighter.graphics.Assets;
 import com.stickfighter.graphics.HUD;
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 import  java.util.LinkedList;
 
 //Run from src directory with: javac ./com/stickfighter/main/*.java && java com.stickfighter.main.Game
 public class Game extends Canvas implements Runnable {
-
     //generated serial version UID (whatever that is)
     private static final long serialVersionUID = 1856390909208917103L;
 
-    public static final int WIDTH = 1920;
-    public static final int HEIGHT = 1080;
+    public static final int WIDTH = 1280;//changed from 1920
+    public static final int HEIGHT = 720;//change from 1080
 
     private static double delta = 0;
     public static int FPS = 60;
     private static int frames = 0;
     private double dt;
+    //States declared here
+    private static GameState state = GameState.Menu;
+    private final Menu menu;
+    private Paused pause;
+    private Help help;
 
     private Thread thread;
     private boolean running = false;
@@ -33,11 +40,11 @@ public class Game extends Canvas implements Runnable {
     public static LinkedList<GameObject> gameObjects;
     private HUD hud;
 
-
     //initializing thins ing constructor rn. Add init() method??
     public Game() {
         handler = new Handler();
         hud = new HUD();
+        menu=new Menu();pause=new Paused();help=new Help();
         gameObjects=handler.getObject();
 
         this.addKeyListener(new KeyInput(handler));
@@ -48,19 +55,14 @@ public class Game extends Canvas implements Runnable {
 
         r = new Random();
 
-        p1 = new Player(10, 10, handler, ID.Player);
-
-
-
+        p1=new Player(10, 10, handler, ID.Player);
         handler.addObject(p1);
         for (int i = 0; i < 1; i++) {
             handler.addObject((new Enemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), handler, ID.Enemy, p1)));
         }
-        handler.addObject((new Platform(0, HEIGHT-50, WIDTH, 15, ID.Platform)));
-        handler.addObject((new Platform(0, 2*HEIGHT/3, WIDTH/3, 15, ID.Platform)));
-        handler.addObject((new Platform(WIDTH/2, HEIGHT-110, 50, 50, ID.Platform)));
-
-
+        handler.addObject((new Platform(0, HEIGHT-50, WIDTH, 20, ID.Platform)));
+        handler.addObject((new Platform(0, 2*HEIGHT/3, WIDTH/3, 50, ID.Platform)));
+        handler.addObject((new Platform(WIDTH/2, HEIGHT-110, 50, 80, ID.Platform)));
     }
 
     public synchronized void start() {
@@ -111,36 +113,21 @@ public class Game extends Canvas implements Runnable {
                 System.out.println("FPS: " + frames);
                 frames = 0;
             }
-            /*try{
-                if(KeyInput.pause){
-                    synchronized (this) {
-                        while (KeyInput.pause) {
-                            thread.sleep(1);
-                        }
-                    }
-                }
-                else{ resumeGame(); }
-            }
-            catch(InterruptedException e){
-                e.printStackTrace();
-            }*/
-
         }
         stop();
     }
-/*    public synchronized void resumeGame() {
-        KeyInput.pause = false;
-        notify();
-    }
-*/
+
     public static int getFrames() {
         return frames;
     }
 
     private void tick(double dt) {
-        handler.tick(delta);
-        hud.tick();
-
+        //GameState becomes 'Play' when the user: either exits the main menu or pause screen.
+        //Refer to KeyInput class to see how the key input changes the game state.
+        if(state==GameState.Play){
+            handler.tick(delta);
+            hud.tick();
+        }
     }
 
     private void render(double dt) {
@@ -154,16 +141,31 @@ public class Game extends Canvas implements Runnable {
 
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
-
-        handler.render(g, delta);
-        hud.render(g);
-
+        if(state==GameState.Play) {
+            handler.render(g, delta);
+            hud.render(g);
+        }
+        else if(state==GameState.Menu){
+            menu.renderScreen(g);
+        }
+        else if(state==GameState.Paused){
+            pause.renderScreen(g);
+        }
+        else if(state==GameState.Help){
+            help.renderScreen(g);
+        }
         g.dispose();
         bs.show();
-
     }
 
+    public static GameState getState() { return state; }
+
+    public static void setState(GameState gameState) { state=gameState; }
+
+
+
     public static void main(String[] args) {
+        //ThreadPool pool=new ThreadPool(2);//Using this to add music
         new Game();
     }
 }

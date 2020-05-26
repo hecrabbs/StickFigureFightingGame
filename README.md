@@ -4,6 +4,14 @@ A 2D stick figure fighting game
 
 ToDo:
 -
+1. States:
+   - 
+     - Menu State
+          - Finite State Machine
+      - Level States
+      - Pause State
+      - Settings
+---
 - Player/Enemy Damage
 - Player Attack
 - Enemy Attack
@@ -14,10 +22,6 @@ ToDo:
 - Double Jump
 - Textures
 - Mouse input
-- Menu State
-- Level States
-- Pause State
-- Settings
 - Player animation
 - Camera
 - Consumables/Pick-Ups 
