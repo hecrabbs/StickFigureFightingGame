@@ -23,41 +23,45 @@ public abstract class GameObject {
 
     public abstract void render(Graphics g, double delta);
 
-    public Rectangle getBoundsBottom() {
+    public Rectangle getBounds() {
         return new Rectangle(this.x, this.y, width, height);
     };
 
-    public Rectangle getBounds(){
-        return new Rectangle (this.x,this.y,this.width,this.height);
-    }
-
     public void updateCenter() {
-        this.centerX = this.x - this.width/2;
-        this.centerY = this.y - this.height/2;
+        this.centerX = this.x + this.width/2;
+        this.centerY = this.y + this.height/2;
     }
 
-    public void follow(GameObject gameObject, double delta) {
-        this.updateCenter();
-        gameObject.updateCenter();
-        int dx = this.centerX - gameObject.centerX;
-        int dy = this.centerY - gameObject.centerY;
-        double direction;
-        if (dx == 0 && this.centerY > gameObject.centerY) {
-            direction = -Math.PI / 2;
-        } else if (dx == 0 && this.centerY < gameObject.centerY) {
-            direction = Math.PI / 2;
-        } else {
-            direction = Math.atan(((double) dy / (double) dx));
-        }
+//    public void follow(GameObject gameObject, double delta) {
+//        this.updateCenter();
+//        gameObject.updateCenter();
+//        int dx = this.centerX - gameObject.centerX;
+//        int dy = this.centerY - gameObject.centerY;
+//        double direction;
+//        if (dx == 0 && this.centerY > gameObject.centerY) {
+//            direction = -Math.PI / 2;
+//        } else if (dx == 0 && this.centerY < gameObject.centerY) {
+//            direction = Math.PI / 2;
+//        } else {
+//            direction = Math.atan(((double) dy / (double) dx));
+//        }
+//
+//        if (this.centerX > gameObject.centerX) {
+//            direction -= Math.PI;
+//        }
+//
+//        this.centerX += (this.velX * Math.cos(direction) * delta);
+//        this.centerY += (this.velY * Math.sin(direction) * delta);
+//        this.x = this.centerX + this.width/2;
+//        this.y = this.centerY + this.height/2;
+//    }
 
-        if (this.centerX > gameObject.centerX) {
-            direction -= Math.PI;
+    public void follow(GameObject gameObject) {
+        if (this.x >= gameObject.x + gameObject.width) {
+            this.x -= this.velX;
+        } else if (this.x + this.width <= gameObject.x) {
+            this.x += this.velX;
         }
-
-        this.centerX += (this.velX * Math.cos(direction) * delta);
-        this.centerY += (this.velY * Math.sin(direction) * delta);
-        this.x = this.centerX + this.width/2;
-        this.y = this.centerY + this.height/2;
     }
 
     public void setX(int x) {
@@ -100,5 +104,20 @@ public abstract class GameObject {
         return velY;
     }
 
+    public void setWidth(int w) {
+        this.width = w;
+    }
+
+    public void setHeight(int h) {
+        this.height = h;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 
 }

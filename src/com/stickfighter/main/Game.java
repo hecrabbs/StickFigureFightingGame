@@ -6,7 +6,6 @@ import com.stickfighter.graphics.HUD;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 import  java.util.LinkedList;
@@ -34,6 +33,7 @@ public class Game extends Canvas implements Runnable {
     public static LinkedList<GameObject> gameObjects;
     private HUD hud;
 
+
     //initializing thins ing constructor rn. Add init() method??
     public Game() {
         handler = new Handler();
@@ -48,7 +48,10 @@ public class Game extends Canvas implements Runnable {
 
         r = new Random();
 
-        p1=new Player(10, 10, handler, ID.Player);
+        p1 = new Player(10, 10, handler, ID.Player);
+
+
+
         handler.addObject(p1);
         for (int i = 0; i < 1; i++) {
             handler.addObject((new Enemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), handler, ID.Enemy, p1)));
@@ -56,6 +59,8 @@ public class Game extends Canvas implements Runnable {
         handler.addObject((new Platform(0, HEIGHT-50, WIDTH, 15, ID.Platform)));
         handler.addObject((new Platform(0, 2*HEIGHT/3, WIDTH/3, 15, ID.Platform)));
         handler.addObject((new Platform(WIDTH/2, HEIGHT-110, 50, 50, ID.Platform)));
+
+
     }
 
     public synchronized void start() {
@@ -135,6 +140,7 @@ public class Game extends Canvas implements Runnable {
     private void tick(double dt) {
         handler.tick(delta);
         hud.tick();
+
     }
 
     private void render(double dt) {
@@ -154,6 +160,7 @@ public class Game extends Canvas implements Runnable {
 
         g.dispose();
         bs.show();
+
     }
 
     public static void main(String[] args) {

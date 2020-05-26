@@ -1,7 +1,5 @@
 package com.stickfighter.main;
 
-import com.stickfighter.graphics.Assets;
-
 import java.awt.*;
 import java.util.LinkedList;
 
@@ -16,22 +14,13 @@ public class Enemy extends GameObject {
         this.handler = handler;
         this.width = 32;
         this.height = 64;
+        this.velX = 3;
     }
 
     public void tick(double delta) {
-        //follow(this.player, delta);
-        x += velX;
         y += velY;
-        velX=3;
         velY += 1.2;
-        /*if(this.getBounds().intersects(player.getBounds())) {
-            this.velX = 0;
-            //this.velY = 0;
-        }
-        else {
-            this.velX = 3;
-            //this.velY = 3;
-        }*/
+        follow(this.player);
         enemyCollision(Game.gameObjects);
     }
 
@@ -69,7 +58,7 @@ public class Enemy extends GameObject {
             GameObject temp = object.get(i);
             if(temp.getID()==ID.Platform){
                 //this checks to see if the player object is overlapping the object in question
-                if(getEBoundsB().intersects(temp.getBoundsBottom())){//Bottom intersection
+                if(getEBoundsB().intersects(temp.getBounds())){//Bottom intersection
                     //System.out.println("Boom");
                     this.velY=0;
                     this.y = temp.getY()-this.height;
@@ -78,7 +67,7 @@ public class Enemy extends GameObject {
                         health--;
                     }*/
                 }
-                else if(getEBoundsTop().intersects(temp.getBoundsBottom())){//Top intersection
+                else if(getEBoundsTop().intersects(temp.getBounds())){//Top intersection
                     //This is a little buggy, you can get pushed through the floor
                     //and possibly other objects if there is something on top of the player
                     this.y = temp.getY()+temp.height;
@@ -86,7 +75,7 @@ public class Enemy extends GameObject {
                         health--;
                     }*/
                 }
-                else if(getEBoundsL().intersects(temp.getBoundsBottom())){//Left intersection
+                else if(getEBoundsL().intersects(temp.getBounds())){//Left intersection
                     //I'm pretty sure this is a little buggy, could be the right hand side
                     //the issue is the same as the top bounds. Could potentially push you through
                     //a boundary of some kind.
@@ -95,7 +84,7 @@ public class Enemy extends GameObject {
                         health--;
                     }*/
                 }
-                else if(getEBoundsR().intersects(temp.getBoundsBottom())){//Right intersection
+                else if(getEBoundsR().intersects(temp.getBounds())){//Right intersection
                     this.x = temp.getX() - this.width;
                     /*if(temp.getID()==ID.Enemy) {
                         health--;
