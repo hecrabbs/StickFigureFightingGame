@@ -28,9 +28,9 @@ public class KeyInput extends KeyAdapter {
                 //player movement.  Could add another player with different ID but would need multiple threads for them to move at the same time.
                 if (tempObject.getID() == ID.Player) {
                     switch (key) {
-                        case KeyEvent.VK_P:
-                            pause = !pause;
-                            break;
+//                        case KeyEvent.VK_P:
+//                            pause = !pause;
+//                            break;
                         case KeyEvent.VK_SPACE://For Jumping
                             if (!tempObject.jumping && !tempObject.falling) {
                                 tempObject.setVelY(-30);
@@ -58,7 +58,8 @@ public class KeyInput extends KeyAdapter {
                             tempObject.setVelX(8);
                             break;
                     }
-                } else if (key == KeyEvent.VK_P) {
+                }
+                if (key == KeyEvent.VK_P) {
                     Game.setState(GameState.Paused);
                 }
             }
@@ -89,9 +90,7 @@ public class KeyInput extends KeyAdapter {
                     case KeyEvent.VK_ESCAPE -> System.exit(1);
                 }
             }
-
         }
-
     }
 
     public void keyReleased(KeyEvent e) {
@@ -140,10 +139,8 @@ public class KeyInput extends KeyAdapter {
                 }
             }
         }
-
     }
 
     public void keyTyped(KeyEvent e) {
-
     }
 }

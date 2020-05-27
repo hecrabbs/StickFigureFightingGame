@@ -1,5 +1,6 @@
 package com.stickfighter.main;
 
+import javax.swing.*;
 import java.util.LinkedList;
 import java.awt.Graphics;
 

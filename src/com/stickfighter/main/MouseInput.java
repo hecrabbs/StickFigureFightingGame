@@ -7,17 +7,21 @@ import java.awt.event.MouseEvent;
 
 public class MouseInput extends MouseAdapter {
 
-//    private Handler handler;
-//
-//    public MouseInput(Handler handler) {
-//        this.handler = handler;
-//    }
-    public MouseInput() {
+
+    public Boolean hover;
+
+    public MouseInput(Boolean hover) {
+        this.hover = hover;
 
     }
 
     public void mouseEntered(MouseEvent e) {
-        System.out.println("Entered");
+       this.hover = true;
+       System.out.println("HOVER");
+    }
+
+    public void mouseExited(MouseEvent e) {
+        this.hover = false;
     }
 
 }

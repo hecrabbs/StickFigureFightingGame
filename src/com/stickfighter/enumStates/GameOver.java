@@ -25,4 +25,8 @@ public class GameOver extends GameStateManager{
         //g.setColor(Color.PINK);
         //g.fillRect(-3,-360,6,720);//line down the center of the screen, used for formatting
     }
+
+    public void init() {
+
+    }
 }

@@ -1,17 +1,10 @@
 package com.stickfighter.main;
 
-import com.stickfighter.enumStates.GameState;
-import com.stickfighter.enumStates.Help;
-import com.stickfighter.enumStates.Menu;
-import com.stickfighter.enumStates.Paused;
-import com.stickfighter.graphics.Assets;
+import com.stickfighter.enumStates.*;
 import com.stickfighter.graphics.HUD;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 import  java.util.LinkedList;
@@ -28,12 +21,9 @@ public class Game extends JPanel implements Runnable {
 
     //States declared here
     private static GameState state = GameState.Menu;
-//    private Menu menu = new Menu();
-//    private Paused pause = new Paused();
-//    private Help help = new Help();
-    private Menu menu;
-    private Paused pause;
-    private Help help;
+    private static GameMenu menu;
+    private static Paused pause;
+    private static Help help;
 
     private Thread thread;
     private boolean running = false;
@@ -54,7 +44,7 @@ public class Game extends JPanel implements Runnable {
         requestFocus();
         init();
         addKeyListener(new KeyInput(handler));
-        addMouseListener(new MouseInput());
+
         //This image contains everything being rendered to the screen
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_BGR);
         //This is the graphics of the image that we draw things to the image with
@@ -66,12 +56,12 @@ public class Game extends JPanel implements Runnable {
     public void init() {
         handler = new Handler();
         hud = new HUD();
-        menu = new Menu();
-        pause = new Paused();
+        menu = new GameMenu(this);
+        pause = new Paused(this);
         help = new Help();
-        gameObjects=handler.getObject();
+        gameObjects = handler.getObject();
 
-        Assets.init();
+//        Assets.init();
 
         r = new Random();
 
@@ -101,9 +91,6 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void run() {
-
-
-
         /* 1 billion nano seconds per second divided by frames per second = nanoSec/frames
          * timePerTick is max amount of time allowed to run tick and render methods per 1 frame
          */
@@ -150,9 +137,13 @@ public class Game extends JPanel implements Runnable {
     private void tick() {
         //GameState becomes 'Play' when the user: either exits the main menu or pause screen.
         //Refer to KeyInput class to see how the key input changes the game state.
-        if(state==GameState.Play){
+        if(state== GameState.Play){
             handler.tick();
             hud.tick();
+        } else if (state == GameState.Menu) {
+            menu.tick();
+        } else if (state == GameState.Paused) {
+            pause.tick();
         }
     }
 
@@ -177,9 +168,14 @@ public class Game extends JPanel implements Runnable {
 
     public static GameState getState() { return state; }
 
-    public static void setState(GameState gameState) { state=gameState; }
-
-
+    public static void setState(GameState gameState) {
+        state = gameState;
+        switch (gameState) {
+            case Menu -> menu.init();
+            case Help -> help.init();
+            case Paused -> pause.init();
+        }
+    }
 
     public static void main(String[] args) {
         //ThreadPool pool=new ThreadPool(2);//Using this to add music

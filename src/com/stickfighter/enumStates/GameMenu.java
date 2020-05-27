@@ -8,23 +8,27 @@ import java.awt.Font;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 
-public class Paused extends GameStateManager{
+public class GameMenu extends GameStateManager {
 
-    private int w = 400;
+    private int w = 100;
     private int h = 74;
 
-    private JLabelButton playLabel;
-    private JLabelButton helpLabel;
-    private JLabelButton quitLabel;
+    private final JLabelButton playLabel;
+    private final JLabelButton helpLabel;
+    private final JLabelButton quitLabel;
 
-    private final Rectangle playRect = new Rectangle(Game.WIDTH/2-200,300,400,74);
-    private final Rectangle helpRect = new Rectangle(Game.WIDTH/2-150,400,300,74);
-    private final Rectangle quitRect = new Rectangle(Game.WIDTH/2-150,500,300,74);
+    //adding buttons to the screen
+    private final Rectangle playRect = new Rectangle(Game.WIDTH/2-80,300,w,h);
+    private final Rectangle helpRect = new Rectangle(Game.WIDTH/2-80,400,w,h);
+    private final Rectangle quitRect = new Rectangle(Game.WIDTH/2-80,500,w,h);
 
-    public Paused(Game game) {
+    public GameMenu(Game game) {
         playLabel = new JLabelButton(game, playRect, GameState.Play);
         helpLabel = new JLabelButton(game, helpRect, GameState.Help);
         quitLabel = new JLabelButton(game, quitRect, null);
+        buttons.add(playLabel);
+        buttons.add(helpLabel);
+        buttons.add(quitLabel);
     }
 
     public void init() {
@@ -34,7 +38,6 @@ public class Paused extends GameStateManager{
     }
 
     public void renderScreen(Graphics g){
-        g.setColor(Color.WHITE);
         g.drawOval(80, 70, 150, 150);
         g.setColor(Color.YELLOW);
         g.fillOval(80, 70, 150, 150);
@@ -46,11 +49,11 @@ public class Paused extends GameStateManager{
         Font font=new Font("arial",Font.BOLD,60);
         g.setFont(font);
         g.setColor(Color.PINK);
-        g.drawString("Game Paused", Game.WIDTH/3+18,100);
+        g.drawString("Trouble in ChinaTown", Game.WIDTH/4,100);
 
         Font fnt=new Font("arial",Font.PLAIN,30);
         g.setFont(fnt);
-        g.setColor(Color.WHITE);
+
         Graphics2D g2d = (Graphics2D) g;
         if (playLabel.hover) {
             g.setColor(Color.GREEN);
@@ -58,31 +61,20 @@ public class Paused extends GameStateManager{
             g.setColor(Color.ORANGE);
         }
         g2d.draw(playRect);
-        g.drawString("Press SPC Bar to Resume", Game.WIDTH/2-170,350);
+        g.drawString("Play", Game.WIDTH/2-60,350);//Press space to play
         if (helpLabel.hover) {
             g.setColor(Color.GREEN);
         } else {
             g.setColor(Color.ORANGE);
         }
         g2d.draw(helpRect);
-        g.drawString("Press 'H' for Help", Game.WIDTH/2-115,450);//Need to Implement
+        g.drawString("Help", Game.WIDTH/2-60,450);//Press H for help
         if (quitLabel.hover) {
             g.setColor(Color.GREEN);
         } else {
             g.setColor(Color.ORANGE);
         }
         g2d.draw(quitRect);
-        g.drawString("Press 'ESC' to Quit", Game.WIDTH/2-125,550);
-
-        /* Moving the origin to the center of the screen
-        //g.translate(Game.WIDTH/2, Game.HEIGHT/2);
-        //g.setColor(Color.PINK);
-        //g.fillRect(-3,-360,6,720);//line down the center of the screen, used for formatting
-
-        //Font font=new Font("arial",Font.BOLD,60);//in Case we want to offset the Pause Screen Header.
-        //g.setFont(font);
-        //g.setColor(Color.PINK);
-        //g.drawString("Game Paused", -Game.WIDTH/3+40,-250);
-         */
+        g.drawString("Quit", Game.WIDTH/2-60,550);//Press ESC to quit
     }
 }

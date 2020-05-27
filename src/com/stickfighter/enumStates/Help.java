@@ -8,6 +8,10 @@ public class Help extends GameStateManager {
     Rectangle play=new Rectangle(Game.WIDTH/2-200,500,400,74);
     Rectangle quit=new Rectangle(Game.WIDTH/2-150,600,300,74);
 
+    public void init() {
+
+    }
+
     public void renderScreen(Graphics g){
         Font font=new Font("arial",Font.BOLD,60);
         g.setFont(font);
@@ -37,5 +41,4 @@ public class Help extends GameStateManager {
         //g.setColor(Color.PINK);
         //g.fillRect(-3,-360,6,720);//line down the center of the screen, used for formatting
     }
-
 }
