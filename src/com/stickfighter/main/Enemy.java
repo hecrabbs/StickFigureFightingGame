@@ -22,7 +22,7 @@ public class Enemy extends GameObject {
         //follow(this.player, delta);
         x += velX;
         y += velY;
-        velX=3;
+        velX=0;
         velY += 1.2;
         /*if(this.getBounds().intersects(player.getBounds())) {
             this.velX = 0;

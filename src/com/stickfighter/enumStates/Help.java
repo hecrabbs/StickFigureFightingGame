@@ -22,8 +22,8 @@ public class Help extends GameStateManager {
         g.setFont(fnt);
         g.setColor(Color.WHITE);
         g.drawString("Movement:", Game.WIDTH/5,200);
-        g.drawString("S: Stride Left", Game.WIDTH/5,230);
-        g.drawString("A: Stride Right", Game.WIDTH/5,260);
+        g.drawString("A: Stride Left", Game.WIDTH/5,230);
+        g.drawString("D: Stride Right", Game.WIDTH/5,260);
         g.drawString("SPC: Jump", Game.WIDTH/5,290);
         g.drawString("P: Pause", Game.WIDTH-450,200);
         //g.drawString("Press 'ESC' to Quit", Game.WIDTH/2-125,650);

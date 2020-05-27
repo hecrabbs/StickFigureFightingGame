@@ -1,9 +1,7 @@
 package com.stickfighter.main;
 
-import com.stickfighter.enumStates.GameState;
-import com.stickfighter.enumStates.Help;
+import com.stickfighter.enumStates.*;
 import com.stickfighter.enumStates.Menu;
-import com.stickfighter.enumStates.Paused;
 import com.stickfighter.graphics.Assets;
 import com.stickfighter.graphics.HUD;
 
@@ -30,6 +28,7 @@ public class Game extends Canvas implements Runnable {
     private final Menu menu;
     private Paused pause;
     private Help help;
+    private GameOver gameOver;
 
     private Thread thread;
     private boolean running = false;
@@ -44,7 +43,7 @@ public class Game extends Canvas implements Runnable {
     public Game() {
         handler = new Handler();
         hud = new HUD();
-        menu=new Menu();pause=new Paused();help=new Help();
+        menu=new Menu();pause=new Paused();help=new Help();gameOver=new GameOver();
         gameObjects=handler.getObject();
 
         this.addKeyListener(new KeyInput(handler));
@@ -153,6 +152,10 @@ public class Game extends Canvas implements Runnable {
         }
         else if(state==GameState.Help){
             help.renderScreen(g);
+        }
+        else if(state==GameState.GameOver){
+            gameOver.renderScreen(g);
+            running=false;
         }
         g.dispose();
         bs.show();
