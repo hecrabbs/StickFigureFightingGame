@@ -1,23 +1,20 @@
 package com.stickfighter.main;
 
-import com.stickfighter.enumStates.GameState;
-import com.stickfighter.enumStates.Help;
+import com.stickfighter.enumStates.*;
 import com.stickfighter.enumStates.Menu;
-import com.stickfighter.enumStates.Paused;
 import com.stickfighter.graphics.Assets;
 import com.stickfighter.graphics.HUD;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 import java.util.Random;
 import  java.util.LinkedList;
 
 //Run from src directory with: javac ./com/stickfighter/main/*.java && java com.stickfighter.main.Game
-public class Game extends JPanel implements Runnable {
+public class Game extends Canvas implements Runnable {
+    //generated serial version UID (whatever that is)
+    private static final long serialVersionUID = 1856390909208917103L;
 
     public static final int WIDTH = 1280;//changed from 1920
     public static final int HEIGHT = 720;//change from 1080
@@ -25,51 +22,33 @@ public class Game extends JPanel implements Runnable {
     private static double delta = 0;
     public static int FPS = 60;
     private static int frames = 0;
-
+    private double dt;
     //States declared here
     private static GameState state = GameState.Menu;
-//    private Menu menu = new Menu();
-//    private Paused pause = new Paused();
-//    private Help help = new Help();
-    private Menu menu;
+    private final Menu menu;
     private Paused pause;
     private Help help;
+    private GameOver gameOver;
 
     private Thread thread;
     private boolean running = false;
 
     private Random r;
-    public static Handler handler;
+    private Handler handler;
     public static Player p1;
     public static LinkedList<GameObject> gameObjects;
     private HUD hud;
 
-    private BufferedImage image;
-    private Graphics g;
-
+    //initializing thins ing constructor rn. Add init() method??
     public Game() {
-        super();
-        setPreferredSize(new Dimension(WIDTH,HEIGHT));
-        setFocusable(true);
-        requestFocus();
-        init();
-        addKeyListener(new KeyInput(handler));
-        addMouseListener(new MouseInput());
-        //This image contains everything being rendered to the screen
-        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_BGR);
-        //This is the graphics of the image that we draw things to the image with
-        g = image.createGraphics();
-
-        new Window(WIDTH, HEIGHT, "Stick Fighter", this);
-    }
-
-    public void init() {
         handler = new Handler();
         hud = new HUD();
-        menu = new Menu();
-        pause = new Paused();
-        help = new Help();
+        menu=new Menu();pause=new Paused();help=new Help();gameOver=new GameOver();
         gameObjects=handler.getObject();
+
+        this.addKeyListener(new KeyInput(handler));
+
+        new Window(WIDTH, HEIGHT, "Stick Fighter", this);
 
         Assets.init();
 
@@ -87,8 +66,8 @@ public class Game extends JPanel implements Runnable {
 
     public synchronized void start() {
         thread = new Thread(this);
-        running = true;
         thread.start();
+        running = true;
     }
 
     public synchronized void stop() {
@@ -101,9 +80,7 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void run() {
-
-
-
+        this.requestFocus();
         /* 1 billion nano seconds per second divided by frames per second = nanoSec/frames
          * timePerTick is max amount of time allowed to run tick and render methods per 1 frame
          */
@@ -116,6 +93,7 @@ public class Game extends JPanel implements Runnable {
             now = System.nanoTime();
             /* amount of time passed since this line was last run, divided by max time allowed
              */
+            dt = now - lastTime;
             delta += (now - lastTime) / timePerTick;
             lastTime = now;
 
@@ -123,9 +101,8 @@ public class Game extends JPanel implements Runnable {
              * tick, render, and start delta timer over
              */
             if (delta >= 1) {
-                tick();
-                render();
-                repaint();
+                tick(delta);
+                render(delta);
                 frames++;
                 delta--;
             }
@@ -139,29 +116,32 @@ public class Game extends JPanel implements Runnable {
         stop();
     }
 
-    @Override
-    protected void paintComponent(Graphics g2) {
-        super.paintComponent(g2);
-        if(image != null) {
-            g2.drawImage(image, 0, 0, this);
-        }
+    public static int getFrames() {
+        return frames;
     }
 
-    private void tick() {
+    private void tick(double dt) {
         //GameState becomes 'Play' when the user: either exits the main menu or pause screen.
         //Refer to KeyInput class to see how the key input changes the game state.
         if(state==GameState.Play){
-            handler.tick();
+            handler.tick(delta);
             hud.tick();
         }
     }
 
-    private void render() {
+    private void render(double dt) {
+        BufferStrategy bs = this.getBufferStrategy();
+        if (bs == null) {
+            this.createBufferStrategy(3);
+            return;
+        }
+
+        Graphics g = bs.getDrawGraphics();
+
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
-
         if(state==GameState.Play) {
-            handler.render(g);
+            handler.render(g, delta);
             hud.render(g);
         }
         else if(state==GameState.Menu){
@@ -173,6 +153,12 @@ public class Game extends JPanel implements Runnable {
         else if(state==GameState.Help){
             help.renderScreen(g);
         }
+        else if(state==GameState.GameOver){
+            gameOver.renderScreen(g);
+            running=false;
+        }
+        g.dispose();
+        bs.show();
     }
 
     public static GameState getState() { return state; }

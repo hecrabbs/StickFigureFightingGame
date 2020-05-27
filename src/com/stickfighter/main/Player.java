@@ -1,5 +1,6 @@
 package com.stickfighter.main;
 
+import com.stickfighter.enumStates.GameState;
 import com.stickfighter.graphics.Assets;
 
 import java.awt.*;
@@ -22,6 +23,7 @@ public class Player extends GameObject {
         velY += 1.2;
         //check collisions
         collision(Game.gameObjects);
+        isAlive();
     }
 
     public void render(Graphics g) {
@@ -36,6 +38,12 @@ public class Player extends GameObject {
         g2d.draw(getPBoundsL());
         g2d.draw(getPBoundsR());
         g.drawImage(Assets.playerRight[0], this.x-40, this.y-40, null);
+    }
+
+    public void isAlive(){
+        if(health<=0){
+            Game.setState(GameState.GameOver);
+        }
     }
 
     //This gets the bottom bounds of the rectangle

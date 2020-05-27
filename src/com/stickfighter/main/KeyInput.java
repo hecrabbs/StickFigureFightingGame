@@ -18,7 +18,6 @@ public class KeyInput extends KeyAdapter {
     public KeyInput(Handler handler) {
         this.handler = handler;
     }
-    //jumping is buggy
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
@@ -84,6 +83,13 @@ public class KeyInput extends KeyAdapter {
                     case KeyEvent.VK_ESCAPE -> System.exit(1);
                 }
             }
+            else if(Game.getState()==GameState.GameOver) {
+                switch (key) {
+                    case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
+                    case KeyEvent.VK_ESCAPE -> System.exit(1);
+                }
+            }
+
         }
 
     }
