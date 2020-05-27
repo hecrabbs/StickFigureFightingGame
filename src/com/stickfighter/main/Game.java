@@ -21,6 +21,10 @@ public class Game extends JPanel implements Runnable {
 
     //States declared here
     private static GameState state = GameState.Menu;
+//    private Menu menu = new Menu();
+//    private Paused pause = new Paused();
+//    private Help help = new Help();
+    private GameOver gameOver;
     private static GameMenu menu;
     private static Paused pause;
     private static Help help;
@@ -59,9 +63,10 @@ public class Game extends JPanel implements Runnable {
         menu = new GameMenu(this);
         pause = new Paused(this);
         help = new Help();
+        gameOver=new GameOver();
         gameObjects = handler.getObject();
 
-//        Assets.init();
+        //Assets.init();
 
         r = new Random();
 
@@ -137,7 +142,7 @@ public class Game extends JPanel implements Runnable {
     private void tick() {
         //GameState becomes 'Play' when the user: either exits the main menu or pause screen.
         //Refer to KeyInput class to see how the key input changes the game state.
-        if(state== GameState.Play){
+        if(state==GameState.Play){
             handler.tick();
             hud.tick();
         } else if (state == GameState.Menu) {
@@ -163,6 +168,9 @@ public class Game extends JPanel implements Runnable {
         }
         else if(state==GameState.Help){
             help.renderScreen(g);
+        }
+        else if(state==GameState.GameOver){
+            gameOver.renderScreen(g);
         }
     }
 

@@ -67,8 +67,9 @@ public class Enemy extends GameObject {
     public void enemyCollision(LinkedList<GameObject> object){
         for(int i=0;i<handler.gameObjects.size();i++){
             GameObject temp = object.get(i);
-            if(temp.getID()==ID.Platform){
+            if(temp.getID()!=ID.Enemy){//temp.getID()==ID.Platform || temp.getID()==ID.Player){
                 //this checks to see if the player object is overlapping the object in question
+                //System.out.println(temp.getID());
                 if(getEBoundsB().intersects(temp.getBounds())){//Bottom intersection
                     //System.out.println("Boom");
                     this.velY=0;
@@ -78,7 +79,7 @@ public class Enemy extends GameObject {
                         health--;
                     }*/
                 }
-                else if(getEBoundsTop().intersects(temp.getBounds())){//Top intersection
+                if(getEBoundsTop().intersects(temp.getBounds())){//Top intersection
                     //This is a little buggy, you can get pushed through the floor
                     //and possibly other objects if there is something on top of the player
                     this.y = temp.getY()+temp.height;
@@ -86,19 +87,25 @@ public class Enemy extends GameObject {
                         health--;
                     }*/
                 }
-                else if(getEBoundsL().intersects(temp.getBounds())){//Left intersection
+                if(getEBoundsL().intersects(temp.getBounds())){//Left intersection
                     //I'm pretty sure this is a little buggy, could be the right hand side
                     //the issue is the same as the top bounds. Could potentially push you through
                     //a boundary of some kind.
                     this.x = temp.getX() + temp.width;
-                    /*if(temp.getID()==ID.Enemy) {
-                        health--;
+                    /*if(temp.getID()==ID.Player) {
+                        this.x=temp.getX() + temp.width+10;
+                    }
+                    else{
+                        this.x=temp.getX() + temp.width;
                     }*/
                 }
-                else if(getEBoundsR().intersects(temp.getBounds())){//Right intersection
+                if(getEBoundsR().intersects(temp.getBounds())){//Right intersection
                     this.x = temp.getX() - this.width;
-                    /*if(temp.getID()==ID.Enemy) {
-                        health--;
+                    /*if(temp.getID()==ID.Player) {
+                        this.x = temp.getX() - this.width-10;
+                    }
+                    else{
+                        this.x = temp.getX() - this.width;
                     }*/
                 }
             }

@@ -12,6 +12,7 @@ public abstract class GameObject {
     protected int velX, velY;
     protected Rectangle rect;
     protected boolean falling = true, jumping = false;
+    protected boolean knockback;
 
     public GameObject(int x, int y, ID id) {
         this.x = x;
