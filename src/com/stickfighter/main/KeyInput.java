@@ -46,16 +46,30 @@ public class KeyInput extends KeyAdapter {
 //                        tempObject.setVelY(-5);
 //                        break;
                         case KeyEvent.VK_A:
-                            left = true;
-                            tempObject.setVelX(-8);
+                            if(!tempObject.knockback) {
+                                left = true;
+                                tempObject.setVelX(-8);
+                            }
+                            else if(tempObject.knockback){
+                                left=true;
+                                tempObject.jumping=true;
+                                //tempObject.setVelX(0);
+                            }
                             break;
 //                    case KeyEvent.VK_S:
 //                        down = true;
 //                        tempObject.setVelY(5);
 //                        break;
                         case KeyEvent.VK_D:
-                            right = true;
-                            tempObject.setVelX(8);
+                            if(!tempObject.knockback){
+                                right = true;
+                                tempObject.setVelX(8);
+                            }
+                            else if(tempObject.knockback) {
+                                right = true;
+                                tempObject.jumping=true;
+                                //tempObject.setVelX(0);
+                            }
                             break;
                     }
                 } else if (key == KeyEvent.VK_P) {

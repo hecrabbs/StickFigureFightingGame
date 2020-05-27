@@ -33,7 +33,7 @@ public class Player extends GameObject {
         //a collision will be detected.
         Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.RED);
-        g2d.draw(getBounds());
+        g2d.draw(getBoundsBottom());
         g2d.draw(getPBoundsTop());
         g2d.draw(getPBoundsL());
         g2d.draw(getPBoundsR());
@@ -90,13 +90,21 @@ public class Player extends GameObject {
                     //a boundary of some kind.
                     this.x = temp.getX() + temp.width;
                     if(temp.getID()==ID.Enemy) {
+                        //velY=-20;
+                        knockback=true;
+                        playerRebound(1);
                         health--;
+                        knockback=false;
                     }
                 }
                 else if(getPBoundsR().intersects(temp.getBounds())){//Right intersection
                     this.x = temp.getX() - this.width;
                     if(temp.getID()==ID.Enemy) {
+                        //velY=-20;
+                        knockback=true;
+                        playerRebound(0);
                         health--;
+                        knockback=false;
                     }
                 }
             }
@@ -104,6 +112,30 @@ public class Player extends GameObject {
         }
     }
 
+    //Depending on the number given, the player will
+    public void playerRebound(int num){
+        int del=6;
+        velX=0;velY=0;
+        if(num==0){
+            while(del>-1){//this is right side collisions
+                velY=-12;
+                velX=-7;
+                del--;
+            }
+        }
+        else if(num==1){//this is left side collisions
+            while(del>0){
+                velY=-12;
+                velX=7;
+                del--;
+            }
+        }
+        System.out.println("hit");
+        //knockback=false;
+    }
 
+    public void playerAttack(){
+
+    }
 
 }

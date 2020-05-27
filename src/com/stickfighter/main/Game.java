@@ -1,9 +1,7 @@
 package com.stickfighter.main;
 
-import com.stickfighter.enumStates.GameState;
-import com.stickfighter.enumStates.Help;
+import com.stickfighter.enumStates.*;
 import com.stickfighter.enumStates.Menu;
-import com.stickfighter.enumStates.Paused;
 import com.stickfighter.graphics.Assets;
 import com.stickfighter.graphics.HUD;
 
@@ -34,6 +32,7 @@ public class Game extends JPanel implements Runnable {
     private Menu menu;
     private Paused pause;
     private Help help;
+    private GameOver gameOver;
 
     private Thread thread;
     private boolean running = false;
@@ -69,9 +68,10 @@ public class Game extends JPanel implements Runnable {
         menu = new Menu();
         pause = new Paused();
         help = new Help();
+        gameOver=new GameOver();
         gameObjects=handler.getObject();
 
-        Assets.init();
+        //Assets.init();
 
         r = new Random();
 
@@ -101,9 +101,6 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void run() {
-
-
-
         /* 1 billion nano seconds per second divided by frames per second = nanoSec/frames
          * timePerTick is max amount of time allowed to run tick and render methods per 1 frame
          */
@@ -172,6 +169,9 @@ public class Game extends JPanel implements Runnable {
         }
         else if(state==GameState.Help){
             help.renderScreen(g);
+        }
+        else if(state==GameState.GameOver){
+            gameOver.renderScreen(g);
         }
     }
 
