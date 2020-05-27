@@ -16,7 +16,7 @@ public class Player extends GameObject {
         this.height = 64;
     }
 
-    public void tick(double dt) {
+    public void tick() {
         x += velX;
         y += velY;
         velY += 1.2;
@@ -24,7 +24,7 @@ public class Player extends GameObject {
         collision(Game.gameObjects);
     }
 
-    public void render(Graphics g, double delta) {
+    public void render(Graphics g) {
         g.setColor(Color.WHITE);
         g.fillRect(this.x, this.y, this.width, this.height);
         //The following lines basically show the points where

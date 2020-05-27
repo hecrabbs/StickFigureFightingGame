@@ -7,16 +7,17 @@ import com.stickfighter.enumStates.Paused;
 import com.stickfighter.graphics.Assets;
 import com.stickfighter.graphics.HUD;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 import  java.util.LinkedList;
 
 //Run from src directory with: javac ./com/stickfighter/main/*.java && java com.stickfighter.main.Game
-public class Game extends Canvas implements Runnable {
-    //generated serial version UID (whatever that is)
-    private static final long serialVersionUID = 1856390909208917103L;
+public class Game extends JPanel implements Runnable {
 
     public static final int WIDTH = 1280;//changed from 1920
     public static final int HEIGHT = 720;//change from 1080
@@ -24,10 +25,13 @@ public class Game extends Canvas implements Runnable {
     private static double delta = 0;
     public static int FPS = 60;
     private static int frames = 0;
-    private double dt;
+
     //States declared here
     private static GameState state = GameState.Menu;
-    private final Menu menu;
+//    private Menu menu = new Menu();
+//    private Paused pause = new Paused();
+//    private Help help = new Help();
+    private Menu menu;
     private Paused pause;
     private Help help;
 
@@ -35,21 +39,37 @@ public class Game extends Canvas implements Runnable {
     private boolean running = false;
 
     private Random r;
-    private Handler handler;
+    public static Handler handler;
     public static Player p1;
     public static LinkedList<GameObject> gameObjects;
     private HUD hud;
 
-    //initializing thins ing constructor rn. Add init() method??
-    public Game() {
-        handler = new Handler();
-        hud = new HUD();
-        menu=new Menu();pause=new Paused();help=new Help();
-        gameObjects=handler.getObject();
+    private BufferedImage image;
+    private Graphics g;
 
-        this.addKeyListener(new KeyInput(handler));
+    public Game() {
+        super();
+        setPreferredSize(new Dimension(WIDTH,HEIGHT));
+        setFocusable(true);
+        requestFocus();
+        init();
+        addKeyListener(new KeyInput(handler));
+        addMouseListener(new MouseInput());
+        //This image contains everything being rendered to the screen
+        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_BGR);
+        //This is the graphics of the image that we draw things to the image with
+        g = image.createGraphics();
 
         new Window(WIDTH, HEIGHT, "Stick Fighter", this);
+    }
+
+    public void init() {
+        handler = new Handler();
+        hud = new HUD();
+        menu = new Menu();
+        pause = new Paused();
+        help = new Help();
+        gameObjects=handler.getObject();
 
         Assets.init();
 
@@ -67,8 +87,8 @@ public class Game extends Canvas implements Runnable {
 
     public synchronized void start() {
         thread = new Thread(this);
-        thread.start();
         running = true;
+        thread.start();
     }
 
     public synchronized void stop() {
@@ -81,7 +101,9 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void run() {
-        this.requestFocus();
+
+
+
         /* 1 billion nano seconds per second divided by frames per second = nanoSec/frames
          * timePerTick is max amount of time allowed to run tick and render methods per 1 frame
          */
@@ -94,7 +116,6 @@ public class Game extends Canvas implements Runnable {
             now = System.nanoTime();
             /* amount of time passed since this line was last run, divided by max time allowed
              */
-            dt = now - lastTime;
             delta += (now - lastTime) / timePerTick;
             lastTime = now;
 
@@ -102,8 +123,9 @@ public class Game extends Canvas implements Runnable {
              * tick, render, and start delta timer over
              */
             if (delta >= 1) {
-                tick(delta);
-                render(delta);
+                tick();
+                render();
+                repaint();
                 frames++;
                 delta--;
             }
@@ -117,32 +139,29 @@ public class Game extends Canvas implements Runnable {
         stop();
     }
 
-    public static int getFrames() {
-        return frames;
+    @Override
+    protected void paintComponent(Graphics g2) {
+        super.paintComponent(g2);
+        if(image != null) {
+            g2.drawImage(image, 0, 0, this);
+        }
     }
 
-    private void tick(double dt) {
+    private void tick() {
         //GameState becomes 'Play' when the user: either exits the main menu or pause screen.
         //Refer to KeyInput class to see how the key input changes the game state.
         if(state==GameState.Play){
-            handler.tick(delta);
+            handler.tick();
             hud.tick();
         }
     }
 
-    private void render(double dt) {
-        BufferStrategy bs = this.getBufferStrategy();
-        if (bs == null) {
-            this.createBufferStrategy(3);
-            return;
-        }
-
-        Graphics g = bs.getDrawGraphics();
-
+    private void render() {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
+
         if(state==GameState.Play) {
-            handler.render(g, delta);
+            handler.render(g);
             hud.render(g);
         }
         else if(state==GameState.Menu){
@@ -154,8 +173,6 @@ public class Game extends Canvas implements Runnable {
         else if(state==GameState.Help){
             help.renderScreen(g);
         }
-        g.dispose();
-        bs.show();
     }
 
     public static GameState getState() { return state; }

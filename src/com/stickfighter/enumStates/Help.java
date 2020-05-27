@@ -9,7 +9,6 @@ public class Help extends GameStateManager {
     Rectangle quit=new Rectangle(Game.WIDTH/2-150,600,300,74);
 
     public void renderScreen(Graphics g){
-
         Font font=new Font("arial",Font.BOLD,60);
         g.setFont(font);
         g.setColor(Color.PINK);

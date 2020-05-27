@@ -17,14 +17,14 @@ public class Enemy extends GameObject {
         this.velX = 3;
     }
 
-    public void tick(double delta) {
+    public void tick() {
         y += velY;
         velY += 1.2;
         follow(this.player);
         enemyCollision(Game.gameObjects);
     }
 
-    public void render(Graphics g, double delta) {
+    public void render(Graphics g) {
         g.setColor(Color.RED);
         g.fillRect(this.x, this.y, this.width, this.height);
 

@@ -19,9 +19,9 @@ public abstract class GameObject {
         this.id = id;
     }
 
-    public abstract void tick(double delta);
+    public abstract void tick();
 
-    public abstract void render(Graphics g, double delta);
+    public abstract void render(Graphics g);
 
     public Rectangle getBounds() {
         return new Rectangle(this.x, this.y, width, height);

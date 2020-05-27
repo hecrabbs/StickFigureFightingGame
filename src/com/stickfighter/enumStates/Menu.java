@@ -1,11 +1,16 @@
 package com.stickfighter.enumStates;
 import java.awt.*;
 import com.stickfighter.main.Game;
+
+import javax.swing.*;
 import java.awt.Graphics;
 import java.awt.Font;
 import java.awt.Rectangle;
 
 public class Menu extends GameStateManager {
+
+    public static JLabel label;
+
     //adding buttons to the screen
     Rectangle play=new Rectangle(Game.WIDTH/2-80,300,100,74);
     Rectangle help=new Rectangle(Game.WIDTH/2-80,400,100,74);
@@ -35,6 +40,7 @@ public class Menu extends GameStateManager {
         g.drawString("Play", Game.WIDTH/2-60,350);//Press space to play
         g.drawString("Help", Game.WIDTH/2-60,450);//Need to Implement
         g.drawString("Quit", Game.WIDTH/2-60,550);//Press ESC to quit
+
     }
 
 }
