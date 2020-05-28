@@ -1,12 +1,13 @@
 package com.stickfighter.enumStates;
-import java.awt.*;
+
 import com.stickfighter.main.Game;
 import com.stickfighter.main.JLabelButton;
 
+import java.awt.*;
 import java.awt.Graphics;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.util.LinkedList;
+
 
 public class GameMenu extends GameStateManager {
 
@@ -17,7 +18,6 @@ public class GameMenu extends GameStateManager {
     private final JLabelButton helpLabel;
     private final JLabelButton quitLabel;
 
-    //adding buttons to the screen
     private final Rectangle playRect = new Rectangle(Game.WIDTH/2-80,300,w,h);
     private final Rectangle helpRect = new Rectangle(Game.WIDTH/2-80,400,w,h);
     private final Rectangle quitRect = new Rectangle(Game.WIDTH/2-80,500,w,h);
@@ -26,15 +26,15 @@ public class GameMenu extends GameStateManager {
         playLabel = new JLabelButton(game, playRect, GameState.Play);
         helpLabel = new JLabelButton(game, helpRect, GameState.Help);
         quitLabel = new JLabelButton(game, quitRect, null);
-        buttons.add(playLabel);
-        buttons.add(helpLabel);
-        buttons.add(quitLabel);
+        this.buttons.add(playLabel);
+        this.buttons.add(helpLabel);
+        this.buttons.add(quitLabel);
     }
 
     public void init() {
-        buttons.add(playLabel);
-        buttons.add(helpLabel);
-        buttons.add(quitLabel);
+        for (JLabelButton button : buttons) {
+            button.addButton();
+        }
     }
 
     public void renderScreen(Graphics g){

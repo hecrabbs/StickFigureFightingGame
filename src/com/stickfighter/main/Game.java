@@ -21,9 +21,6 @@ public class Game extends JPanel implements Runnable {
 
     //States declared here
     private static GameState state = GameState.Menu;
-//    private Menu menu = new Menu();
-//    private Paused pause = new Paused();
-//    private Help help = new Help();
     private GameOver gameOver;
     private static GameMenu menu;
     private static Paused pause;
@@ -61,8 +58,9 @@ public class Game extends JPanel implements Runnable {
         handler = new Handler();
         hud = new HUD();
         menu = new GameMenu(this);
+        menu.init();
         pause = new Paused(this);
-        help = new Help();
+        help = new Help(this);
         gameOver=new GameOver();
         gameObjects = handler.getObject();
 
@@ -106,14 +104,11 @@ public class Game extends JPanel implements Runnable {
 
         while (running) {
             now = System.nanoTime();
-            /* amount of time passed since this line was last run, divided by max time allowed
-             */
+            //amount of time passed since this line was last run, divided by max time allowed
             delta += (now - lastTime) / timePerTick;
             lastTime = now;
-
             /* once the time that has passed is greater than or equal to the max time allowed
-             * tick, render, and start delta timer over
-             */
+             * tick, render, and start delta timer over */
             if (delta >= 1) {
                 tick();
                 render();
@@ -121,7 +116,7 @@ public class Game extends JPanel implements Runnable {
                 frames++;
                 delta--;
             }
-
+            //Prints fps to console
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
                 System.out.println("FPS: " + frames);
@@ -149,6 +144,8 @@ public class Game extends JPanel implements Runnable {
             menu.tick();
         } else if (state == GameState.Paused) {
             pause.tick();
+        } else if (state == GameState.Help) {
+            help.tick();
         }
     }
 

@@ -1,15 +1,29 @@
 package com.stickfighter.enumStates;
 
-import java.awt.*;
 import com.stickfighter.main.Game;
+import com.stickfighter.main.JLabelButton;
+
+import java.awt.*;
 
 public class Help extends GameStateManager {
 
-    Rectangle play=new Rectangle(Game.WIDTH/2-200,500,400,74);
-    Rectangle quit=new Rectangle(Game.WIDTH/2-150,600,300,74);
+    private final JLabelButton playLabel;
+    private final JLabelButton quitLabel;
+
+    private final Rectangle playRect = new Rectangle(Game.WIDTH/2-200,500,400,74);
+    private final Rectangle quitRect = new Rectangle(Game.WIDTH/2-150,600,300,74);
+
+    public Help(Game game) {
+        playLabel = new JLabelButton(game, playRect, GameState.Play);
+        quitLabel = new JLabelButton(game, quitRect, null);
+        this.buttons.add(playLabel);
+        this.buttons.add(quitLabel);
+    }
 
     public void init() {
-
+        for (JLabelButton button : buttons) {
+            button.addButton();
+        }
     }
 
     public void renderScreen(Graphics g){
@@ -29,12 +43,20 @@ public class Help extends GameStateManager {
         g.drawString("D: Stride Right", Game.WIDTH/5,260);
         g.drawString("SPC: Jump", Game.WIDTH/5,290);
         g.drawString("P: Pause", Game.WIDTH-450,200);
-        //g.drawString("Press 'ESC' to Quit", Game.WIDTH/2-125,650);
-        g.setColor(Color.ORANGE);
         Graphics2D g2d = (Graphics2D) g;
-        g2d.draw(play);
-        g2d.draw(quit);
+        if (playLabel.hover) {
+            g.setColor(Color.GREEN);
+        } else {
+            g.setColor(Color.ORANGE);
+        }
+        g2d.draw(playRect);
         g.drawString("Press SPC Bar to Resume", Game.WIDTH/2-170,550);
+        if (quitLabel.hover) {
+            g.setColor(Color.GREEN);
+        } else {
+            g.setColor(Color.ORANGE);
+        }
+        g2d.draw(quitRect);
         g.drawString("Press 'ESC' to Quit", Game.WIDTH/2-125,650);
 
         //g.translate(Game.WIDTH/2, Game.HEIGHT/2);

@@ -10,7 +10,7 @@ import java.util.LinkedList;
 
 public class JLabelButton extends MouseAdapter {
 
-    private final Game game;
+    public final Game game;
     private JLabel label;
     public final GameState gameState;
     public boolean hover = false;
@@ -22,7 +22,6 @@ public class JLabelButton extends MouseAdapter {
         label = new JLabel();
         label.setBounds(rect);
         label.addMouseListener(this);
-        game.add(label);
     }
 
     public void mouseEntered(MouseEvent e) {
@@ -37,11 +36,8 @@ public class JLabelButton extends MouseAdapter {
         clicked = true;
     }
 
-    public void mouseReleased(MouseEvent e) {
-        clicked = false;
-    }
-
     public void removeButton() {
         game.remove(label);
     }
+    public void addButton() { game.add(label);}
 }

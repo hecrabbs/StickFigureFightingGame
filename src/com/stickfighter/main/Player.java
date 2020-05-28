@@ -114,6 +114,7 @@ public class Player extends GameObject {
 
     //Depending on the number given, the player will
     public void playerRebound(int num){
+
         int del=6;
         velX=0;velY=0;
         if(num==0){

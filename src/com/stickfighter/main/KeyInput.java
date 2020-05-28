@@ -28,18 +28,12 @@ public class KeyInput extends KeyAdapter {
                 //player movement.  Could add another player with different ID but would need multiple threads for them to move at the same time.
                 if (tempObject.getID() == ID.Player) {
                     switch (key) {
-//                        case KeyEvent.VK_P:
-//                            pause = !pause;
-//                            break;
                         case KeyEvent.VK_SPACE://For Jumping
                             if (!tempObject.jumping && !tempObject.falling) {
                                 tempObject.setVelY(-30);
                                 tempObject.jumping = true;
                                 tempObject.falling = true;
                             }
-                            break;
-                        case KeyEvent.VK_ESCAPE:
-                            System.exit(1);
                             break;
 //                    case KeyEvent.VK_W:
 //                        up = true;
@@ -50,11 +44,11 @@ public class KeyInput extends KeyAdapter {
                                 left = true;
                                 tempObject.setVelX(-8);
                             }
-                            else if(tempObject.knockback){
-                                left=true;
-                                tempObject.jumping=true;
-                                //tempObject.setVelX(0);
-                            }
+//                            else if(tempObject.knockback){
+//                                left=true;
+//                                tempObject.jumping=true;
+//                                //tempObject.setVelX(0);
+//                            }
                             break;
 //                    case KeyEvent.VK_S:
 //                        down = true;
@@ -65,16 +59,13 @@ public class KeyInput extends KeyAdapter {
                                 right = true;
                                 tempObject.setVelX(8);
                             }
-                            else if(tempObject.knockback) {
-                                right = true;
-                                tempObject.jumping=true;
-                                //tempObject.setVelX(0);
-                            }
+//                            else if(tempObject.knockback) {
+//                                right = true;
+//                                tempObject.jumping=true;
+//                                //tempObject.setVelX(0);
+//                            }
                             break;
                     }
-                }
-                if (key == KeyEvent.VK_P) {
-                    Game.setState(GameState.Paused);
                 }
             }
             //Enhanced Switch Statements. Similar to pattern matching in OCaml.
@@ -109,6 +100,13 @@ public class KeyInput extends KeyAdapter {
 
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
+
+        if(Game.getState()==GameState.Play) {
+            switch (key) {
+                case KeyEvent.VK_P -> Game.setState(GameState.Paused);
+                case KeyEvent.VK_ESCAPE -> System.exit(0);
+            }
+        }
 
         for (int i = 0; i < handler.gameObjects.size(); i++) {
             GameObject tempObject = handler.gameObjects.get(i);
@@ -155,6 +153,6 @@ public class KeyInput extends KeyAdapter {
         }
     }
 
-    public void keyTyped(KeyEvent e) {
-    }
+    public void keyTyped(KeyEvent e) {}
+
 }

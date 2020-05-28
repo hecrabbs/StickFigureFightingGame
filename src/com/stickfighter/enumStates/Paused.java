@@ -1,21 +1,21 @@
 package com.stickfighter.enumStates;
-import java.awt.*;
+
 import com.stickfighter.main.Game;
 import com.stickfighter.main.JLabelButton;
 
+import java.awt.*;
 import java.awt.Graphics;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.util.LinkedList;
 
 public class Paused extends GameStateManager{
 
     private int w = 400;
     private int h = 74;
 
-    private JLabelButton playLabel;
-    private JLabelButton helpLabel;
-    private JLabelButton quitLabel;
+    private final JLabelButton playLabel;
+    private final JLabelButton helpLabel;
+    private final JLabelButton quitLabel;
 
     private final Rectangle playRect = new Rectangle(Game.WIDTH/2-200,300,400,74);
     private final Rectangle helpRect = new Rectangle(Game.WIDTH/2-150,400,300,74);
@@ -25,12 +25,15 @@ public class Paused extends GameStateManager{
         playLabel = new JLabelButton(game, playRect, GameState.Play);
         helpLabel = new JLabelButton(game, helpRect, GameState.Help);
         quitLabel = new JLabelButton(game, quitRect, null);
+        this.buttons.add(playLabel);
+        this.buttons.add(helpLabel);
+        this.buttons.add(quitLabel);
     }
 
     public void init() {
-        buttons.add(playLabel);
-        buttons.add(helpLabel);
-        buttons.add(quitLabel);
+        for (JLabelButton button : buttons) {
+            button.addButton();
+        }
     }
 
     public void renderScreen(Graphics g){

@@ -26,6 +26,8 @@ public abstract class GameStateManager {
                     System.exit(0);
                 } else {
                     Game.setState(tempButton.gameState);
+                    tempButton.clicked = false;
+                    tempButton.hover = false;
                 }
             }
         }
