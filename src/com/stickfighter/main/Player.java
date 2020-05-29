@@ -15,29 +15,34 @@ public class Player extends GameObject {
         this.handler = handler;
         this.width = 32;
         this.height = 64;
+        this.movingLeft = false;
+        this.movingRight = false;
     }
 
     public void tick() {
-        x += velX;
+        x += velX ;
         y += velY;
-        velY += 1.2;
-        //check collisions
+        if (this.falling || this.jumping) {
+            velY += gravity;
+        }
         collision(Game.gameObjects);
+        playerRebound();
         isAlive();
     }
 
     public void render(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.fillRect(this.x, this.y, this.width, this.height);
-        //The following lines basically show the points where
-        //a collision will be detected.
         Graphics2D g2d = (Graphics2D) g;
+        g.setColor(Color.WHITE);
+        //player's rectangle
+        g.fillRect((int)this.x, (int)this.y, this.width, this.height);
+
         g.setColor(Color.RED);
-        g2d.draw(getBoundsBottom());
-        g2d.draw(getPBoundsTop());
-        g2d.draw(getPBoundsL());
-        g2d.draw(getPBoundsR());
-        g.drawImage(Assets.playerRight[0], this.x-40, this.y-40, null);
+        //hitbox rectangles
+        g2d.draw(this.getBoundsB());
+        g2d.draw(this.getBoundsT());
+        g2d.draw(this.getBoundsL());
+        g2d.draw(this.getBoundsR());
+//        g.drawImage(Assets.playerRight[0], this.x-40, this.y-40, null);
     }
 
     public void isAlive(){
@@ -46,65 +51,50 @@ public class Player extends GameObject {
         }
     }
 
-    //This gets the bottom bounds of the rectangle
-    public Rectangle getBoundsBottom(){
-        return new Rectangle (this.x+(this.width/2)-((this.width/2)/2),this.y+(this.height/2),this.width/2,this.height/2);
-    }
-    //This gets the top bounds of the rectangle
-    public Rectangle getPBoundsTop(){
-        return new Rectangle (this.x+(this.width/2)-((this.width/2)/2),this.y,this.width/2,this.height/2);
-    }
-    //This gets the right bounds of the rectangle
-    public Rectangle getPBoundsR(){
-        return new Rectangle (this.x+this.width-5,this.y+5,5,this.height-10);
-    }
-    //This gets the left bounds of the rectangle
-    public Rectangle getPBoundsL(){
-        return new Rectangle (this.x,this.y+5,5,this.height-10);
-    }
-
     public void collision(LinkedList<GameObject> object){
         for(int i=0;i<handler.gameObjects.size();i++){
             GameObject temp = object.get(i);
             if(temp.getID()==ID.Platform || temp.getID()==ID.Enemy){
                 //this checks to see if the player object is overlapping the object in question
-                if(getBoundsBottom().intersects(temp.getBounds())){//Bottom intersection
-                    this.velY=0;
+                if(this.getBoundsB().intersects(temp.getBounds())){//Bottom intersection
                     this.y = temp.getY()-this.height;
-                    falling=false;jumping=false;
+                    this.velY=0;
+                    this.falling = false;
+                    this.jumping = false;
                     if(temp.getID()==ID.Enemy) {
                         health--;
                     }
+                } else {
+                    this.falling = true;
                 }
-                else if(getPBoundsTop().intersects(temp.getBounds())){//Top intersection
+
+                if(this.getBoundsT().intersects(temp.getBounds())){//Top intersection
                     //This is a little buggy, you can get pushed through the floor
                     //and possibly other objects if there is something on top of the player
-                    this.y = temp.getY()+temp.height;
+                    this.y = temp.getY() + temp.height;
+                    this.velY = 0;
                     if(temp.getID()==ID.Enemy) {
                         health--;
                     }
                 }
-                else if(getPBoundsL().intersects(temp.getBounds())){//Left intersection
-                    //I'm pretty sure this is a little buggy, could be the right hand side
-                    //the issue is the same as the top bounds. Could potentially push you through
-                    //a boundary of some kind.
+
+                if(this.getBoundsL().intersects(temp.getBounds())){
                     this.x = temp.getX() + temp.width;
                     if(temp.getID()==ID.Enemy) {
-                        //velY=-20;
-                        knockback=true;
-                        playerRebound(1);
+                        velY = -10;
+                        velX = 15;
+                        knockback = true;
                         health--;
-                        knockback=false;
                     }
                 }
-                else if(getPBoundsR().intersects(temp.getBounds())){//Right intersection
+
+                if(this.getBoundsR().intersects(temp.getBounds())){//Right intersection
                     this.x = temp.getX() - this.width;
                     if(temp.getID()==ID.Enemy) {
-                        //velY=-20;
-                        knockback=true;
-                        playerRebound(0);
+                        velY = -10;
+                        velX = -15;
+                        knockback = true;
                         health--;
-                        knockback=false;
                     }
                 }
             }
@@ -113,26 +103,16 @@ public class Player extends GameObject {
     }
 
     //Depending on the number given, the player will
-    public void playerRebound(int num){
-
-        int del=6;
-        velX=0;velY=0;
-        if(num==0){
-            while(del>-1){//this is right side collisions
-                velY=-12;
-                velX=-7;
-                del--;
+    public void playerRebound(){
+        if (knockback) {
+           velX -= (float) velX/(1+20);
+            if (Math.abs(velX) <= 5) {
+                velX = 0;
+                knockback = false;
+                this.movingRight = false;
+                this.movingLeft = false;
             }
         }
-        else if(num==1){//this is left side collisions
-            while(del>0){
-                velY=-12;
-                velX=7;
-                del--;
-            }
-        }
-        System.out.println("hit");
-        //knockback=false;
     }
 
     public void playerAttack(){

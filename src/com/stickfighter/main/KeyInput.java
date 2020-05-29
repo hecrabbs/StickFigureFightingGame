@@ -18,81 +18,64 @@ public class KeyInput extends KeyAdapter {
     public KeyInput(Handler handler) {
         this.handler = handler;
     }
+
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        for (int i = 0; i < handler.gameObjects.size(); i++) {
-            GameObject tempObject = handler.gameObjects.get(i);
-            //adding conditional for if the game state is "Play".
-            if(Game.getState()==GameState.Play) {
-                //player movement.  Could add another player with different ID but would need multiple threads for them to move at the same time.
-                if (tempObject.getID() == ID.Player) {
+        if(Game.getState()==GameState.Menu){
+            switch (key) {
+                case KeyEvent.VK_H -> Game.setState(GameState.Help);
+                case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
+                case KeyEvent.VK_ESCAPE -> System.exit(1);
+            }
+        }
+        else if(Game.getState()==GameState.Paused){
+            switch (key) {
+                case KeyEvent.VK_H -> Game.setState(GameState.Help);
+                case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
+                case KeyEvent.VK_ESCAPE -> System.exit(1);
+            }
+        }
+        else if(Game.getState()==GameState.Help){
+            switch (key) {
+                case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
+                case KeyEvent.VK_ESCAPE -> System.exit(1);
+            }
+        }
+        else if(Game.getState()==GameState.GameOver) {
+            switch (key) {
+                case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
+                case KeyEvent.VK_ESCAPE -> System.exit(1);
+            }
+        }
+        else if(Game.getState()==GameState.Play) {
+            for (int i = 0; i < handler.gameObjects.size(); i++) {
+                GameObject tempObject = handler.gameObjects.get(i);
+                if (tempObject.getID() == ID.Player && !tempObject.knockback) {
                     switch (key) {
-                        case KeyEvent.VK_SPACE://For Jumping
-                            if (!tempObject.jumping && !tempObject.falling) {
-                                tempObject.setVelY(-30);
+                        case KeyEvent.VK_SPACE:
+                            if (!tempObject.jumping) {
                                 tempObject.jumping = true;
-                                tempObject.falling = true;
+                                tempObject.setVelY(-20);
                             }
                             break;
-//                    case KeyEvent.VK_W:
+                        case KeyEvent.VK_A:
+                            tempObject.movingLeft = true;
+                            tempObject.setVelX(-8);
+                            break;
+                        case KeyEvent.VK_D:
+                            tempObject.movingRight = true;
+                            tempObject.setVelX(8);
+                            break;
+//                      case KeyEvent.VK_W:
 //                        up = true;
 //                        tempObject.setVelY(-5);
 //                        break;
-                        case KeyEvent.VK_A:
-                            if(!tempObject.knockback) {
-                                left = true;
-                                tempObject.setVelX(-8);
-                            }
-//                            else if(tempObject.knockback){
-//                                left=true;
-//                                tempObject.jumping=true;
-//                                //tempObject.setVelX(0);
-//                            }
-                            break;
-//                    case KeyEvent.VK_S:
+//                      case KeyEvent.VK_S:
 //                        down = true;
 //                        tempObject.setVelY(5);
 //                        break;
-                        case KeyEvent.VK_D:
-                            if(!tempObject.knockback){
-                                right = true;
-                                tempObject.setVelX(8);
-                            }
-//                            else if(tempObject.knockback) {
-//                                right = true;
-//                                tempObject.jumping=true;
-//                                //tempObject.setVelX(0);
-//                            }
-                            break;
                     }
-                }
-            }
-            //Enhanced Switch Statements. Similar to pattern matching in OCaml.
-            else if(Game.getState()==GameState.Menu){
-                switch (key) {
-                    case KeyEvent.VK_H -> Game.setState(GameState.Help);
-                    case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
-                    case KeyEvent.VK_ESCAPE -> System.exit(1);
-                }
-            }
-            else if(Game.getState()==GameState.Paused){
-                switch (key) {
-                    case KeyEvent.VK_H -> Game.setState(GameState.Help);
-                    case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
-                    case KeyEvent.VK_ESCAPE -> System.exit(1);
-                }
-            }
-            else if(Game.getState()==GameState.Help){
-                switch (key) {
-                    case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
-                    case KeyEvent.VK_ESCAPE -> System.exit(1);
-                }
-            }
-            else if(Game.getState()==GameState.GameOver) {
-                switch (key) {
-                    case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
-                    case KeyEvent.VK_ESCAPE -> System.exit(1);
                 }
             }
         }
@@ -106,32 +89,35 @@ public class KeyInput extends KeyAdapter {
                 case KeyEvent.VK_P -> Game.setState(GameState.Paused);
                 case KeyEvent.VK_ESCAPE -> System.exit(0);
             }
-        }
-
-        for (int i = 0; i < handler.gameObjects.size(); i++) {
-            GameObject tempObject = handler.gameObjects.get(i);
-            //player movement
-            if (tempObject.getID() == ID.Player) {
-                switch (key) {
-                    case KeyEvent.VK_SPACE:
-                        tempObject.jumping = false;
-                        break;
-//                    case KeyEvent.VK_W:
-//                        up = false;
-//                        if (down) {
+            for (int i = 0; i < handler.gameObjects.size(); i++) {
+                GameObject tempObject = handler.gameObjects.get(i);
+                //player movement
+                if (tempObject.getID() == ID.Player && !tempObject.knockback) {
+                    switch (key) {
+                        case KeyEvent.VK_A:
+                            tempObject.movingLeft = false;
+                            if (tempObject.movingRight) {
+                                tempObject.setVelX(8);
+                            } else {
+                                tempObject.setVelX(0);
+                            }
+                            break;
+                        case KeyEvent.VK_D:
+                            tempObject.movingRight = false;
+                            if (tempObject.movingLeft) {
+                                tempObject.setVelX(-8);
+                            } else {
+                                tempObject.setVelX(0);
+                            }
+                            break;
+//                      case KeyEvent.VK_W:
+//                          up = false;
+//                          if (down) {
 //                            tempObject.setVelY(5);
-//                        } else {
+//                          } else {
 //                            tempObject.setVelY(0);
-//                        }
-//                        break;
-                    case KeyEvent.VK_A:
-                        left = false;
-                        if (right) {
-                            tempObject.setVelX(8);
-                        } else {
-                            tempObject.setVelX(0);
-                        }
-                        break;
+//                          }
+//                          break;
 //                    case KeyEvent.VK_S:
 //                        down = false;
 //                        if (up) {
@@ -140,14 +126,7 @@ public class KeyInput extends KeyAdapter {
 //                            tempObject.setVelY(0);
 //                        }
 //                        break;
-                    case KeyEvent.VK_D:
-                        right = false;
-                        if (left) {
-                            tempObject.setVelX(-8);
-                        } else {
-                            tempObject.setVelX(0);
-                        }
-                        break;
+                    }
                 }
             }
         }

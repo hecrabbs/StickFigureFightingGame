@@ -5,14 +5,16 @@ import java.awt.Rectangle;
 
 public abstract class GameObject {
 
-    protected int x, y;
-    protected int centerX, centerY;
+
     protected int width, height;
+    protected float x, y;
+    protected float velX, velY;
     protected ID id;
-    protected int velX, velY;
-    protected Rectangle rect;
-    protected boolean falling = true, jumping = false;
-    protected boolean knockback;
+    protected boolean falling = true, jumping = true, knockback = false;
+    protected float gravity = 1;
+    protected boolean movingLeft;
+    protected boolean movingRight;
+
 
     public GameObject(int x, int y, ID id) {
         this.x = x;
@@ -25,12 +27,19 @@ public abstract class GameObject {
     public abstract void render(Graphics g);
 
     public Rectangle getBounds() {
-        return new Rectangle(this.x, this.y, width, height);
+        return new Rectangle((int)this.x, (int)this.y, this.width, this.height);
     };
-
-    public void updateCenter() {
-        this.centerX = this.x + this.width/2;
-        this.centerY = this.y + this.height/2;
+    public Rectangle getBoundsB() {
+        return new Rectangle ((int)this.x+(this.width/2)-(this.width/4),(int)this.y+(this.height/2),this.width/2,this.height/2);
+    }
+    public Rectangle getBoundsT(){
+        return new Rectangle ((int)this.x+(this.width/2)-(this.width/4),(int)this.y,this.width/2,this.height/2);
+    }
+    public Rectangle getBoundsR(){
+        return new Rectangle ((int)this.x+this.width-5,(int)this.y+5,5,this.height-10);
+    }
+    public Rectangle getBoundsL(){
+        return new Rectangle ((int)this.x,(int)this.y+5,5,this.height-10);
     }
 
 //    public void follow(GameObject gameObject, double delta) {
@@ -65,19 +74,19 @@ public abstract class GameObject {
         }
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
@@ -89,19 +98,19 @@ public abstract class GameObject {
         return id;
     }
 
-    public void setVelX(int velX) {
+    public void setVelX(float velX) {
         this.velX = velX;
     }
 
-    public void setVelY(int velY) {
+    public void setVelY(float velY) {
         this.velY = velY;
     }
 
-    public int getVelX() {
+    public float getVelX() {
         return velX;
     }
 
-    public int getVelY() {
+    public float getVelY() {
         return velY;
     }
 

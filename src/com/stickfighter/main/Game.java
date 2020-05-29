@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
-import  java.util.LinkedList;
+import java.util.LinkedList;
 
 //Run from src directory with: javac ./com/stickfighter/main/*.java && java com.stickfighter.main.Game
 public class Game extends JPanel implements Runnable {
@@ -16,6 +16,7 @@ public class Game extends JPanel implements Runnable {
     public static final int HEIGHT = 720;//change from 1080
 
     private static double delta = 0;
+    public static double dt = 0;
     public static int FPS = 60;
     private static int frames = 0;
 
@@ -29,8 +30,8 @@ public class Game extends JPanel implements Runnable {
     private Thread thread;
     private boolean running = false;
 
-    private Random r;
     public static Handler handler;
+    public static Camera cam;
     public static Player p1;
     public static LinkedList<GameObject> gameObjects;
     private HUD hud;
@@ -40,7 +41,7 @@ public class Game extends JPanel implements Runnable {
 
     public Game() {
         super();
-        setPreferredSize(new Dimension(WIDTH,HEIGHT));
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setFocusable(true);
         requestFocus();
         init();
@@ -56,26 +57,26 @@ public class Game extends JPanel implements Runnable {
 
     public void init() {
         handler = new Handler();
+        cam = new Camera(0, 0);
         hud = new HUD();
         menu = new GameMenu(this);
         menu.init();
         pause = new Paused(this);
         help = new Help(this);
-        gameOver=new GameOver();
+        gameOver = new GameOver();
         gameObjects = handler.getObject();
 
         //Assets.init();
 
-        r = new Random();
-
-        p1=new Player(10, 10, handler, ID.Player);
+        p1 = new Player(10, 10, handler, ID.Player);
         handler.addObject(p1);
         for (int i = 0; i < 1; i++) {
-            handler.addObject((new Enemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), handler, ID.Enemy, p1)));
+//            handler.addObject((new Enemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), handler, ID.Enemy, p1)));
+            handler.addObject((new Enemy(WIDTH / 2, 0, handler, ID.Enemy, p1)));
         }
-        handler.addObject((new Platform(0, HEIGHT-50, WIDTH, 20, ID.Platform)));
-        handler.addObject((new Platform(0, 2*HEIGHT/3, WIDTH/3, 50, ID.Platform)));
-        handler.addObject((new Platform(WIDTH/2, HEIGHT-110, 50, 80, ID.Platform)));
+        handler.addObject((new Platform(0, HEIGHT - 50, WIDTH, 20, ID.Platform)));
+        handler.addObject((new Platform(0, 2 * HEIGHT / 3, WIDTH / 5, 50, ID.Platform)));
+//        handler.addObject((new Platform(WIDTH/2, HEIGHT-110, 50, 80, ID.Platform)));
     }
 
     public synchronized void start() {
@@ -105,6 +106,7 @@ public class Game extends JPanel implements Runnable {
         while (running) {
             now = System.nanoTime();
             //amount of time passed since this line was last run, divided by max time allowed
+            dt = now - lastTime;
             delta += (now - lastTime) / timePerTick;
             lastTime = now;
             /* once the time that has passed is greater than or equal to the max time allowed
@@ -129,7 +131,7 @@ public class Game extends JPanel implements Runnable {
     @Override
     protected void paintComponent(Graphics g2) {
         super.paintComponent(g2);
-        if(image != null) {
+        if (image != null) {
             g2.drawImage(image, 0, 0, this);
         }
     }
@@ -137,8 +139,9 @@ public class Game extends JPanel implements Runnable {
     private void tick() {
         //GameState becomes 'Play' when the user: either exits the main menu or pause screen.
         //Refer to KeyInput class to see how the key input changes the game state.
-        if(state==GameState.Play){
+        if (state == GameState.Play) {
             handler.tick();
+            cam.tick(p1);
             hud.tick();
         } else if (state == GameState.Menu) {
             menu.tick();
@@ -150,28 +153,31 @@ public class Game extends JPanel implements Runnable {
     }
 
     private void render() {
+        Graphics2D g2d = (Graphics2D) g;
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        if(state==GameState.Play) {
+        if (state == GameState.Play) {
+            //Set origin at the camera position
+            g2d.translate(cam.getX(), cam.getY()); //start camera.
             handler.render(g);
+            //reset origin back to normal
+            g2d.translate(-cam.getX(), -cam.getY()); //end camera. Everything after this will move with camera
             hud.render(g);
-        }
-        else if(state==GameState.Menu){
+        } else if (state == GameState.Menu) {
             menu.renderScreen(g);
-        }
-        else if(state==GameState.Paused){
+        } else if (state == GameState.Paused) {
             pause.renderScreen(g);
-        }
-        else if(state==GameState.Help){
+        } else if (state == GameState.Help) {
             help.renderScreen(g);
-        }
-        else if(state==GameState.GameOver){
+        } else if (state == GameState.GameOver) {
             gameOver.renderScreen(g);
         }
     }
 
-    public static GameState getState() { return state; }
+    public static GameState getState() {
+        return state;
+    }
 
     public static void setState(GameState gameState) {
         state = gameState;
