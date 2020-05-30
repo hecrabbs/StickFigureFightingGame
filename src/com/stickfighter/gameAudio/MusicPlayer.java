@@ -4,6 +4,7 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.util.ArrayList;
 
+
 public class MusicPlayer implements Runnable{
     private ArrayList<String> songs;
     private int song_idx;
@@ -11,7 +12,7 @@ public class MusicPlayer implements Runnable{
     public MusicPlayer(String[] files){
         songs=new ArrayList<String>();
         for(String file : files){//For all files in 'files', we add them to out music playlist.
-            songs.add("./res/audio/"+file+".mp3");
+            songs.add("./res/audio/"+file+".wav");
         }
     }
 
@@ -33,6 +34,6 @@ public class MusicPlayer implements Runnable{
     }
 
     public void run() {
-        playSound(songs.get(song_idx));
+        playSound("./res/audio/8 bit.wav");//songs.get(song_idx));
     }
 }

@@ -72,7 +72,7 @@ public class Game extends JPanel implements Runnable {
         handler.addObject(p1);
         for (int i = 0; i < 1; i++) {
 //            handler.addObject((new Enemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), handler, ID.Enemy, p1)));
-            handler.addObject((new Enemy(WIDTH / 2, 0, handler, ID.Enemy, p1)));
+            handler.addObject((new Enemy(WIDTH / 2+100, 100, handler, ID.Enemy, p1)));
         }
         handler.addObject((new Platform(0, HEIGHT - 50, WIDTH, 20, ID.Platform)));
         handler.addObject((new Platform(0, 2 * HEIGHT / 3, WIDTH / 5, 50, ID.Platform)));

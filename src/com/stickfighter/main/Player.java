@@ -2,6 +2,7 @@ package com.stickfighter.main;
 
 import com.stickfighter.enumStates.GameState;
 import com.stickfighter.graphics.Assets;
+import org.w3c.dom.css.Rect;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -9,6 +10,8 @@ import java.util.LinkedList;
 public class Player extends GameObject {
     private Handler handler;
     public static int health = 100;
+    public Rectangle attackL=new Rectangle((int) this.x-32,(int) this.y,32,10);
+    public Rectangle attackR=new Rectangle((int) this.x+32,(int) this.y,32,10);
 
     public Player(int x, int y, Handler handler, ID id) {
         super(x, y, id);
@@ -28,6 +31,8 @@ public class Player extends GameObject {
         collision(Game.gameObjects);
         playerRebound();
         isAlive();
+        hitEnemy(Game.gameObjects);
+        //System.out.println("Player Falling: "+this.falling);
     }
 
     public void render(Graphics g) {
@@ -43,6 +48,9 @@ public class Player extends GameObject {
         g2d.draw(this.getBoundsL());
         g2d.draw(this.getBoundsR());
 //        g.drawImage(Assets.playerRight[0], this.x-40, this.y-40, null);
+        if(this.isAttacking) {
+            g2d.draw(this.playerLightAttack());
+        }
     }
 
     public void isAlive(){
@@ -102,9 +110,9 @@ public class Player extends GameObject {
         }
     }
 
-    //Depending on the number given, the player will
     public void playerRebound(){
         if (knockback) {
+
            velX -= (float) velX/(1+20);
             if (Math.abs(velX) <= 5) {
                 velX = 0;
@@ -115,8 +123,45 @@ public class Player extends GameObject {
         }
     }
 
-    public void playerAttack(){
-
+    public Rectangle playerLightAttack(){
+        /*TODO: If the player holds down the 'J' key they can always be attacking. This needs to be fixed.
+              The reach of the player does not really matter at this moment. We need to make sure that
+              upon full extension of the player's reach we attack the bad guy; currently, the bad guy does
+              get hit/damaged and the player receives no damage, but only when he comes into contact with
+              the player.
+        */
+        if(this.movingLeft){
+            Rectangle attackL=new Rectangle((int) this.x-42,(int) this.y+20,42,10);
+            strikeRange=attackL;
+            return attackL;//this.isAttacking=false;
+        }
+        else /*if(this.movingRight)*/{
+            Rectangle attackR=new Rectangle((int) this.x+32,(int) this.y+20,42,10);
+            strikeRange=attackR;
+            return attackR;
+        }
     }
+
+    public void hitEnemy(LinkedList<GameObject> object) {
+        for (int i=0;i<handler.gameObjects.size();i++) {
+            if (object.get(i).getID() == ID.Enemy) {
+                GameObject temp = object.get(i);
+                if (this.isAttacking) {
+                    //System.out.println("attacking");
+                    if (this.playerLightAttack().getBounds().intersects(temp.getBounds())) {
+                        this.knockback=false;
+                        temp.knockback = true;
+                        temp.x = (float) strikeRange.getX() + (float) strikeRange.getWidth();
+                        temp.setVelY(-10);temp.setVelX(temp.getVelX()*-1);
+                        //temp.knockback = true;
+                        //System.out.println(temp.knockback);
+                        temp.health-=8;
+                        System.out.println("Hit Enemy");
+                    }
+                }
+            }
+        }
+    }
+
 
 }
