@@ -1,6 +1,7 @@
 package com.stickfighter.graphics;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,7 @@ public class Assets {
 
     public static BufferedImage[] playerRight = new BufferedImage[columns];
     public static BufferedImage[] playerLeft = new BufferedImage[columns];
+    public static BufferedImage level1;
 
     public static void init() {
         SpriteSheet sheet = new SpriteSheet(loadImage("./res/textures/testSheet.png"));
@@ -26,6 +28,8 @@ public class Assets {
             playerLeft[i] = sheet.crop(x,y,width,height);
             x-=width;
         }
+
+        level1 = loadImage("./res/levels/level1.png ");
     }
 
     public static BufferedImage loadImage(String path){

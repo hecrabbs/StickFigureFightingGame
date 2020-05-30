@@ -29,7 +29,6 @@ public class HUD {
         g.fillRect(x, y, healthWidth, height);
         g.setColor(Color.WHITE);
         g.drawRect(x, y, width, height);
-        g.setColor(Color.GREEN);
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.PLAIN, 20));
         g.drawString("Health", x, y);

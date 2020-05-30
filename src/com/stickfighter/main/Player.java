@@ -1,6 +1,7 @@
 package com.stickfighter.main;
 
 import com.stickfighter.enumStates.GameState;
+import com.stickfighter.graphics.Animation;
 import com.stickfighter.graphics.Assets;
 
 import java.awt.*;
@@ -9,6 +10,8 @@ import java.util.LinkedList;
 public class Player extends GameObject {
     private Handler handler;
     public static int health = 100;
+    private Animation playerRight;
+    private Animation playerLeft;
 
     public Player(int x, int y, Handler handler, ID id) {
         super(x, y, id);
@@ -17,17 +20,29 @@ public class Player extends GameObject {
         this.height = 64;
         this.movingLeft = false;
         this.movingRight = false;
+        this.falling = true;
+        this.jumping = false;
+        this.knockback = false;
+
+        playerRight = new Animation(5, Assets.playerRight);
+        playerLeft = new Animation(5, Assets.playerLeft);
     }
 
     public void tick() {
         x += velX ;
         y += velY;
-        if (this.falling || this.jumping) {
+        if (falling || jumping) {
             velY += gravity;
         }
         collision(Game.gameObjects);
+
         playerRebound();
         isAlive();
+        if (velX > 0) {
+            playerRight.runAnimation();
+        } else if (velX < 0) {
+            playerLeft.runAnimation();
+        }
     }
 
     public void render(Graphics g) {
@@ -42,7 +57,15 @@ public class Player extends GameObject {
         g2d.draw(this.getBoundsT());
         g2d.draw(this.getBoundsL());
         g2d.draw(this.getBoundsR());
-//        g.drawImage(Assets.playerRight[0], this.x-40, this.y-40, null);
+
+        if(velX > 0) {
+            playerRight.drawAnimation(g, (int) x-25, (int) y-25, 100, 100);
+        } else if (velX < 0) {
+            playerLeft.drawAnimation(g, (int) x-25, (int) y-25, 100, 100);
+        } else
+         {
+            g.drawImage(Assets.playerRight[0], (int) x-25, (int) y-25, 100, 100, null);
+        }
     }
 
     public void isAlive(){
@@ -64,8 +87,9 @@ public class Player extends GameObject {
                     if(temp.getID()==ID.Enemy) {
                         health--;
                     }
-                } else {
-                    this.falling = true;
+                }
+                else {
+                    falling = true;
                 }
 
                 if(this.getBoundsT().intersects(temp.getBounds())){//Top intersection

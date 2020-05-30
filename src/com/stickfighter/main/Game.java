@@ -1,6 +1,7 @@
 package com.stickfighter.main;
 
 import com.stickfighter.enumStates.*;
+import com.stickfighter.graphics.Assets;
 import com.stickfighter.graphics.HUD;
 
 import javax.swing.*;
@@ -44,7 +45,10 @@ public class Game extends JPanel implements Runnable {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setFocusable(true);
         requestFocus();
+        Assets.init();
         init();
+        new Level1();
+        Level1.makeLevelFromImage(handler);
         addKeyListener(new KeyInput(handler));
 
         //This image contains everything being rendered to the screen
@@ -57,6 +61,7 @@ public class Game extends JPanel implements Runnable {
 
     public void init() {
         handler = new Handler();
+        p1 = new Player(64, 0, handler, ID.Player);
         cam = new Camera(0, 0);
         hud = new HUD();
         menu = new GameMenu(this);
@@ -66,17 +71,12 @@ public class Game extends JPanel implements Runnable {
         gameOver = new GameOver();
         gameObjects = handler.getObject();
 
-        //Assets.init();
-
-        p1 = new Player(10, 10, handler, ID.Player);
         handler.addObject(p1);
-        for (int i = 0; i < 1; i++) {
-//            handler.addObject((new Enemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), handler, ID.Enemy, p1)));
-            handler.addObject((new Enemy(WIDTH / 2, 0, handler, ID.Enemy, p1)));
-        }
-        handler.addObject((new Platform(0, HEIGHT - 50, WIDTH, 20, ID.Platform)));
-        handler.addObject((new Platform(0, 2 * HEIGHT / 3, WIDTH / 5, 50, ID.Platform)));
-//        handler.addObject((new Platform(WIDTH/2, HEIGHT-110, 50, 80, ID.Platform)));
+//        for (int i = 0; i < 1; i++) {
+//            handler.addObject((new Enemy(WIDTH / 2, 0, handler, ID.Enemy, p1)));
+//        }
+//        handler.addObject((new Platform(0, HEIGHT - 50, WIDTH, 20, ID.Platform)));
+//        handler.addObject((new Platform(0, 2 * HEIGHT / 3, WIDTH / 5, 50, ID.Platform)));
     }
 
     public synchronized void start() {

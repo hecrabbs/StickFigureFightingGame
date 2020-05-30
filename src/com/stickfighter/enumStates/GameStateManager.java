@@ -18,7 +18,7 @@ public abstract class GameStateManager {
     public void tick() {
         for (int i = 0; i < buttons.size(); i++) {
             JLabelButton tempButton = buttons.get(i);
-            if(tempButton.clicked) {
+            if (tempButton.clicked) {
                 for (JLabelButton button : buttons) {
                     button.removeButton();
                 }

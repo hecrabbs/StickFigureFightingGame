@@ -10,7 +10,7 @@ public abstract class GameObject {
     protected float x, y;
     protected float velX, velY;
     protected ID id;
-    protected boolean falling = true, jumping = true, knockback = false;
+    protected boolean falling, jumping, knockback;
     protected float gravity = 1;
     protected boolean movingLeft;
     protected boolean movingRight;
