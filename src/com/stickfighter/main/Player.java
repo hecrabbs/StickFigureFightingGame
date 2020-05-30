@@ -12,6 +12,8 @@ public class Player extends GameObject {
     public static int health = 100;
     private Animation playerRight;
     private Animation playerLeft;
+    public Rectangle attackL=new Rectangle((int) this.x-32,(int) this.y,32,10);
+    public Rectangle attackR=new Rectangle((int) this.x+32,(int) this.y,32,10);
 
     public Player(int x, int y, Handler handler, ID id) {
         super(x, y, id);
@@ -31,7 +33,7 @@ public class Player extends GameObject {
     public void tick() {
         x += velX ;
         y += velY;
-        if (falling || jumping) {
+        if (this.falling || this.jumping) {
             velY += gravity;
         }
         collision(Game.gameObjects);
@@ -43,6 +45,8 @@ public class Player extends GameObject {
         } else if (velX < 0) {
             playerLeft.runAnimation();
         }
+        hitEnemy(Game.gameObjects);
+        //System.out.println("Player Falling: "+this.falling);
     }
 
     public void render(Graphics g) {
@@ -66,6 +70,10 @@ public class Player extends GameObject {
          {
             g.drawImage(Assets.playerRight[0], (int) x-25, (int) y-25, 100, 100, null);
         }
+//        g.drawImage(Assets.playerRight[0], this.x-40, this.y-40, null);
+        if(this.isAttacking) {
+            g2d.draw(this.playerLightAttack());
+        }
     }
 
     public void isAlive(){
@@ -87,9 +95,8 @@ public class Player extends GameObject {
                     if(temp.getID()==ID.Enemy) {
                         health--;
                     }
-                }
-                else {
-                    falling = true;
+                } else {
+                    this.falling = true;
                 }
 
                 if(this.getBoundsT().intersects(temp.getBounds())){//Top intersection
@@ -126,9 +133,9 @@ public class Player extends GameObject {
         }
     }
 
-    //Depending on the number given, the player will
     public void playerRebound(){
         if (knockback) {
+
            velX -= (float) velX/(1+20);
             if (Math.abs(velX) <= 5) {
                 velX = 0;
@@ -139,8 +146,45 @@ public class Player extends GameObject {
         }
     }
 
-    public void playerAttack(){
-
+    public Rectangle playerLightAttack(){
+        /*TODO: If the player holds down the 'J' key they can always be attacking. This needs to be fixed.
+              The reach of the player does not really matter at this moment. We need to make sure that
+              upon full extension of the player's reach we attack the bad guy; currently, the bad guy does
+              get hit/damaged and the player receives no damage, but only when he comes into contact with
+              the player.
+        */
+        if(this.movingLeft){
+            Rectangle attackL=new Rectangle((int) this.x-42,(int) this.y+20,42,10);
+            strikeRange=attackL;
+            return attackL;//this.isAttacking=false;
+        }
+        else /*if(this.movingRight)*/{
+            Rectangle attackR=new Rectangle((int) this.x+32,(int) this.y+20,42,10);
+            strikeRange=attackR;
+            return attackR;
+        }
     }
+
+    public void hitEnemy(LinkedList<GameObject> object) {
+        for (int i=0;i<handler.gameObjects.size();i++) {
+            if (object.get(i).getID() == ID.Enemy) {
+                GameObject temp = object.get(i);
+                if (this.isAttacking) {
+                    //System.out.println("attacking");
+                    if (this.playerLightAttack().getBounds().intersects(temp.getBounds())) {
+                        this.knockback=false;
+                        temp.knockback = true;
+                        temp.x = (float) strikeRange.getX() + (float) strikeRange.getWidth();
+                        temp.setVelY(-10);temp.setVelX(temp.getVelX()*-1);
+                        //temp.knockback = true;
+                        //System.out.println(temp.knockback);
+                        temp.health-=8;
+                        System.out.println("Hit Enemy");
+                    }
+                }
+            }
+        }
+    }
+
 
 }

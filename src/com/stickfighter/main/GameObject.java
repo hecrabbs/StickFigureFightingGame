@@ -1,7 +1,6 @@
 package com.stickfighter.main;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 
 public abstract class GameObject {
 
@@ -14,6 +13,7 @@ public abstract class GameObject {
     protected float gravity = 1;
     protected boolean movingLeft;
     protected boolean movingRight;
+    protected boolean isAttacking;
 
 
     public GameObject(int x, int y, ID id) {
@@ -129,5 +129,11 @@ public abstract class GameObject {
     public int getHeight() {
         return height;
     }
+
+    protected int health;
+    protected Rectangle strikeRange;
+    public int getHealth(){ return this.health; }
+    public void setHealth(int h){ this.health=h; }
+    public void collidedDam(){ this.health--;}
 
 }

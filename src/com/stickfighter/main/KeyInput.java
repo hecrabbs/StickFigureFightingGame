@@ -67,6 +67,9 @@ public class KeyInput extends KeyAdapter {
                             tempObject.movingRight = true;
                             tempObject.setVelX(8);
                             break;
+                        case KeyEvent.VK_J:
+                            tempObject.isAttacking=true;
+                            break;
 //                      case KeyEvent.VK_W:
 //                        up = true;
 //                        tempObject.setVelY(-5);
@@ -109,6 +112,9 @@ public class KeyInput extends KeyAdapter {
                             } else {
                                 tempObject.setVelX(0);
                             }
+                            break;
+                        case KeyEvent.VK_J:
+                            tempObject.isAttacking=false;
                             break;
 //                      case KeyEvent.VK_W:
 //                          up = false;
