@@ -35,6 +35,9 @@ public class Level1 extends GameStateManager {
                     Game.p1.setX(x*32);
                     Game.p1.setY(y*32);
                 }
+                if (c.getRed() == 255 && c.getGreen() == 0 && c.getBlue() == 0) {
+                    handler.addObject(new Enemy(x*32, y*32, handler, ID.Enemy, Game.p1));
+                }
             }
         }
     }
