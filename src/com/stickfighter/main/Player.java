@@ -83,6 +83,7 @@ public class Player extends GameObject {
             Game.setState(GameState.GameOver);
         }
     }
+    public void revive(){ this.health=75; }
 
     public void collision(LinkedList<GameObject> object) {
         for (int i = 0; i < handler.gameObjects.size(); i++) {
@@ -95,21 +96,17 @@ public class Player extends GameObject {
                     this.falling = false;
                     this.jumping = false;
                     if (temp.getID() == ID.Enemy) {
-                        health--;
-                    }
-                } else {
-                    this.falling = true;
+                        health--; }
                 }
-
-                if (this.getBoundsT().intersects(temp.getBounds())) {//Top intersection
-                    //This is a little buggy, you can get pushed through the floor
-                    //and possibly other objects if there is something on top of the player
+                if(!this.getBoundsB().intersects(temp.getBounds())){
+                    this.falling = true; }
+                //else { this.falling = true; }
+                //Top intersection
+                if (this.getBoundsT().intersects(temp.getBounds())) {
                     this.y = temp.getY() + temp.height;
                     this.velY = 0;
                     if (temp.getID() == ID.Enemy) {
-                        health--;
-                    }
-                }
+                        health--; } }
 
                 if (this.getBoundsL().intersects(temp.getBounds())) {
                     this.x = temp.getX() + temp.width;
@@ -118,8 +115,7 @@ public class Player extends GameObject {
                         velX = 15;
                         knockback = true;
                         health--;
-                    }
-                }
+                    } else{ velX=0; } }
 
                 if (this.getBoundsR().intersects(temp.getBounds())) {//Right intersection
                     this.x = temp.getX() - this.width;
@@ -128,16 +124,14 @@ public class Player extends GameObject {
                         velX = -15;
                         knockback = true;
                         health--;
-                    }
-                }
-            }
-
-        }
+                    } }
+                if(this.getBoundsR().intersects(temp.getBounds()) && this.getBoundsL().intersects(temp.getBounds())){
+                    velX=0;
+                } } }
     }
 
     public void playerRebound() {
         if (knockback) {
-
             velX -= (float) velX / (1 + 20);
             if (Math.abs(velX) <= 5) {
                 velX = 0;
@@ -162,8 +156,7 @@ public class Player extends GameObject {
         } else /*if(this.movingRight)*/ {
             Rectangle attackR = new Rectangle((int) this.x + 32, (int) this.y + 20, 42, 10);
             strikeRange = attackR;
-            return attackR;
-        }
+            return attackR; }
     }
 
     public void hitEnemy(LinkedList<GameObject> object) {
@@ -175,13 +168,17 @@ public class Player extends GameObject {
                     if (this.playerLightAttack().getBounds().intersects(temp.getBounds())) {
                         this.knockback = false;
                         temp.knockback = true;
-                        temp.x = (float) strikeRange.getX() + (float) strikeRange.getWidth();
+                        if(temp.getX()>this.x){//knocks to the right side
+                            temp.x = (float) ((strikeRange.getX()+strikeRange.getWidth()));
+                            //System.out.println("hit right: "+strikeRange.getX()+"+"+strikeRange.getWidth());
+                        }
+                        if(temp.getX()<this.x){//knocks to the left side
+                            temp.x = (float) (this.x-84);
+                        }
                         temp.setVelY(-10);
-                        temp.setVelX(temp.getVelX() * -1);
-                        //temp.knockback = true;
-                        //System.out.println(temp.knockback);
+                        temp.setVelX( ( ((int) temp.getVelX()>>1) + temp.getVelX()) * -1 );
                         temp.health -= 8;
-                        System.out.println("Hit Enemy");
+                        //System.out.println("Hit Enemy");
                     }
                 }
             }

@@ -34,6 +34,10 @@ public class Handler {
         this.gameObjects.remove(gameObjects);
     }
 
+    public void removeAll(){
+        for(int i=0;i<this.gameObjects.size();i++){// Time Complexity: O(n).
+            this.gameObjects.remove(i); } }
+
     public LinkedList<GameObject> getObject() {
         return gameObjects;
     }

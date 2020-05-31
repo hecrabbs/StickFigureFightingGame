@@ -59,8 +59,9 @@ public class Help extends GameStateManager {
         g2d.draw(quitRect);
         g.drawString("Press 'ESC' to Quit", Game.WIDTH/2-125,650);
 
-        //g.translate(Game.WIDTH/2, Game.HEIGHT/2);
-        //g.setColor(Color.PINK);
-        //g.fillRect(-3,-360,6,720);//line down the center of the screen, used for formatting
+        /*g.translate(Game.WIDTH/2, Game.HEIGHT/2);
+        g.setColor(Color.PINK);
+        g.fillRect(-3,-360,6,720);//line down the center of the screen, used for formatting
+         */
     }
 }

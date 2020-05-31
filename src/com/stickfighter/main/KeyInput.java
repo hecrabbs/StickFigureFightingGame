@@ -44,7 +44,7 @@ public class KeyInput extends KeyAdapter {
         }
         else if(Game.getState()==GameState.GameOver) {
             switch (key) {
-                case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
+                case KeyEvent.VK_SPACE -> Game.restartGame();//Game.handler.addLevel1(); //Game.setState(GameState.Play);
                 case KeyEvent.VK_ESCAPE -> System.exit(1);
             }
         }

@@ -190,6 +190,15 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
+    public static void restartGame(){
+        handler.removeAll();// Preps handler for re-initialization.
+        p1.revive();// Restores player health to 75.
+        handler.addObject(p1);// Adding all of the game components again.
+        new Level1();// As we add levels we should keep track of what level is currently being played.
+        Level1.makeLevelFromImage(Game.handler);
+        setState(GameState.Play);
+    }
+
     public static void main(String[] args) {
         //ThreadPool pool=new ThreadPool(2);//Using this to add music
         new Game();
