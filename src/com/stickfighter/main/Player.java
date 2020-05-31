@@ -115,7 +115,8 @@ public class Player extends GameObject {
                         velX = 15;
                         knockback = true;
                         health--;
-                    } else{ velX=0; } }
+                    }// else{ velX=0; }
+                }
 
                 if (this.getBoundsR().intersects(temp.getBounds())) {//Right intersection
                     this.x = temp.getX() - this.width;
@@ -126,7 +127,7 @@ public class Player extends GameObject {
                         health--;
                     } }
                 if(this.getBoundsR().intersects(temp.getBounds()) && this.getBoundsL().intersects(temp.getBounds())){
-                    velX=0;
+                    //velX=0;
                     System.out.println("Yabba dabba ding dong");
                 } } }
     }
