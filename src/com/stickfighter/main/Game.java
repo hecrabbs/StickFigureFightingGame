@@ -158,6 +158,8 @@ public class Game extends JPanel implements Runnable {
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         if (state == GameState.Play) {
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, WIDTH, HEIGHT);
             //Set origin at the camera position
             g2d.translate(cam.getX(), cam.getY()); //start camera.
             handler.render(g);

@@ -114,7 +114,7 @@ public class KeyInput extends KeyAdapter {
                             }
                             break;
                         case KeyEvent.VK_J:
-                            tempObject.isAttacking=false;
+//                            tempObject.isAttacking=false;
                             break;
 //                      case KeyEvent.VK_W:
 //                          up = false;

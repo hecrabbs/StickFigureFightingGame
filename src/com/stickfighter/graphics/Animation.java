@@ -12,6 +12,7 @@ public class Animation {
 
     private BufferedImage[] images;
     private BufferedImage currentImg;
+    public static boolean done = false;
 
     public Animation(int speed, BufferedImage[] imageArray) {
         this.speed = speed;
@@ -39,11 +40,19 @@ public class Animation {
             count++;
             if(count > frames) {
                 count = 0;
+                done = true;
             }
     }
 
     public void drawAnimation(Graphics g, int x, int y, int scaleX, int scaleY) {
         g.drawImage(currentImg, x, y, scaleX, scaleY, null);
+    }
+
+    public void drawEntireAnimation(Boolean b, Graphics g, int x, int y, int scaleX, int scaleY) {
+        if(b == true) {
+            runAnimation();
+            drawAnimation(g,x,y,scaleX,scaleY);
+        }
     }
 
 }
