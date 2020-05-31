@@ -127,6 +127,7 @@ public class Player extends GameObject {
                     } }
                 if(this.getBoundsR().intersects(temp.getBounds()) && this.getBoundsL().intersects(temp.getBounds())){
                     velX=0;
+                    System.out.println("Yabba dabba ding dong");
                 } } }
     }
 

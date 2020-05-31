@@ -1,8 +1,10 @@
 package com.stickfighter.main;
 
 import com.stickfighter.enumStates.*;
+import com.stickfighter.gameAudio.MusicPlayer;
 import com.stickfighter.graphics.Assets;
 import com.stickfighter.graphics.HUD;
+import com.stickfighter.utilities.multiThread;
 
 import javax.swing.*;
 import java.awt.*;
@@ -200,7 +202,11 @@ public class Game extends JPanel implements Runnable {
     }
 
     public static void main(String[] args) {
-        //ThreadPool pool=new ThreadPool(2);//Using this to add music
+        multiThread pool=new multiThread(2);//Using this to add music
         new Game();
+        MusicPlayer music=new MusicPlayer("8 bit");
+        pool.runTask(music);
+        //pool.runTask(game);
+        pool.join();
     }
 }

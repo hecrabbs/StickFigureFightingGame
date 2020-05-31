@@ -143,7 +143,7 @@ public class Enemy extends GameObject {
             if (this.x == this.rangeLeft) {
                 velX = 5;
                 //this.x+=velX;
-                System.out.println("left");
+                //System.out.println("left");
             } else if (this.x == this.rangeRight+100) {
                 velX = 5;
             } else {

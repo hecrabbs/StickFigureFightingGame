@@ -9,7 +9,7 @@ public class MusicPlayer implements Runnable{
     private ArrayList<String> songs;
     private int song_idx;
 
-    public MusicPlayer(String[] files){
+    public MusicPlayer(String... files){
         songs=new ArrayList<String>();
         for(String file : files){//For all files in 'files', we add them to out music playlist.
             songs.add("./res/audio/"+file+".wav");
