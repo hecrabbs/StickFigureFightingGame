@@ -13,6 +13,7 @@ public abstract class GameObject {
     protected float gravity = 1;
     protected boolean movingLeft;
     protected boolean movingRight;
+    protected boolean facingRight;
     protected boolean isAttacking;
 
 

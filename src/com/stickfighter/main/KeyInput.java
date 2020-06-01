@@ -13,7 +13,7 @@ public class KeyInput extends KeyAdapter {
     private boolean down = false;
     private boolean left = false;
     private boolean right = false;
-    public static boolean pause=false;
+    public static boolean pause = false;
 
     public KeyInput(Handler handler) {
         this.handler = handler;
@@ -22,33 +22,29 @@ public class KeyInput extends KeyAdapter {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        if(Game.getState()==GameState.Menu){
+        if (Game.getState() == GameState.Menu) {
             switch (key) {
                 case KeyEvent.VK_H -> Game.setState(GameState.Help);
                 case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
                 case KeyEvent.VK_ESCAPE -> System.exit(1);
             }
-        }
-        else if(Game.getState()==GameState.Paused){
+        } else if (Game.getState() == GameState.Paused) {
             switch (key) {
                 case KeyEvent.VK_H -> Game.setState(GameState.Help);
                 case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
                 case KeyEvent.VK_ESCAPE -> System.exit(1);
             }
-        }
-        else if(Game.getState()==GameState.Help){
+        } else if (Game.getState() == GameState.Help) {
             switch (key) {
                 case KeyEvent.VK_SPACE -> Game.setState(GameState.Play);
                 case KeyEvent.VK_ESCAPE -> System.exit(1);
             }
-        }
-        else if(Game.getState()==GameState.GameOver) {
+        } else if (Game.getState() == GameState.GameOver) {
             switch (key) {
                 case KeyEvent.VK_SPACE -> Game.restartGame();//Game.handler.addLevel1(); //Game.setState(GameState.Play);
                 case KeyEvent.VK_ESCAPE -> System.exit(1);
             }
-        }
-        else if(Game.getState()==GameState.Play) {
+        } else if (Game.getState() == GameState.Play) {
             for (int i = 0; i < handler.gameObjects.size(); i++) {
                 GameObject tempObject = handler.gameObjects.get(i);
                 if (tempObject.getID() == ID.Player && !tempObject.knockback) {
@@ -60,15 +56,17 @@ public class KeyInput extends KeyAdapter {
                             }
                             break;
                         case KeyEvent.VK_A:
+                            tempObject.facingRight = false;
                             tempObject.movingLeft = true;
                             tempObject.setVelX(-8);
                             break;
                         case KeyEvent.VK_D:
+                            tempObject.facingRight = true;
                             tempObject.movingRight = true;
                             tempObject.setVelX(8);
                             break;
                         case KeyEvent.VK_J:
-                            tempObject.isAttacking=true;
+                            tempObject.isAttacking = true;
                             break;
 //                      case KeyEvent.VK_W:
 //                        up = true;
@@ -87,7 +85,7 @@ public class KeyInput extends KeyAdapter {
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
 
-        if(Game.getState()==GameState.Play) {
+        if (Game.getState() == GameState.Play) {
             switch (key) {
                 case KeyEvent.VK_P -> Game.setState(GameState.Paused);
                 case KeyEvent.VK_ESCAPE -> System.exit(0);
@@ -138,6 +136,7 @@ public class KeyInput extends KeyAdapter {
         }
     }
 
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {
+    }
 
 }

@@ -8,38 +8,19 @@ import java.io.IOException;
 
 public class Assets {
 
-    private static final int width = 64, height = 64;
-    private static final int rows = 2, columns = 12;
-    private static int x=0,y=0;
-
-    public static BufferedImage[] playerRight = new BufferedImage[columns];
-    public static BufferedImage[] playerLeft = new BufferedImage[columns];
-    public static BufferedImage[] pAttackR = new BufferedImage[3];
+    public static BufferedImage[] pMoveR = new BufferedImage[12];
+    public static BufferedImage[] pMoveL = new BufferedImage[12];
+    public static BufferedImage[] pAttackR = new BufferedImage[6];
+    public static BufferedImage[] pAttackL = new BufferedImage[6];
+    public static BufferedImage[] pIdle = new BufferedImage[6];
     public static BufferedImage level1;
 
     public static void init() {
-        SpriteSheet sheet = new SpriteSheet(loadImage("./res/textures/playerSheet.png"));
-        for (int i = 0; i < columns; i++ ) {
-            playerRight[i] = sheet.crop(x,y,width,height);
-            x+=width;
-        }
-        y=height;
-        x=width*(columns-1);
-        for (int i = 0; i < columns; i++ ) {
-            playerLeft[i] = sheet.crop(x,y,width,height);
-            x-=width;
-        }
-        y=height*2;
-        x=0;
-        for (int i=0;i<pAttackR.length;i++) {
-            pAttackR[i] = sheet.crop(x,y,width,height);
-            x+=width;
-        }
-
+        loadPlayerImages();
         level1 = loadImage("./res/levels/level1.png ");
     }
 
-    public static BufferedImage loadImage(String path){
+    public static BufferedImage loadImage(String path) {
         try {
             return ImageIO.read(new File(path));
         } catch (IOException e) {
@@ -47,6 +28,40 @@ public class Assets {
             System.exit(1);
         }
         return null;
+    }
+
+    public static void loadPlayerImages() {
+        SpriteSheet sheet = new SpriteSheet(loadImage("./res/textures/playerSheet.png"));
+        int w = 64, h = 64;
+        int x = 0, y = 0;
+        int r = 3, c = 12;
+        for (int i = 0; i < pMoveR.length; i++) {
+            pMoveR[i] = sheet.crop(x, y, w, h);
+            x += w;
+        }
+        y = h;
+        x = w * (pMoveL.length - 1);
+        for (int i = 0; i < pMoveL.length; i++) {
+            pMoveL[i] = sheet.crop(x, y, w, h);
+            x -= w;
+        }
+        y = h * 2;
+        x = 0;
+        for (int i = 0; i < pAttackR.length; i++) {
+            pAttackR[i] = sheet.crop(x, y, w, h);
+            x += w;
+        }
+        x = w * (c - 1);
+        for (int i = 0; i < pAttackL.length; i++) {
+            pAttackL[i] = sheet.crop(x, y, w, h);
+            x -= w;
+        }
+        y = h * 3;
+        x = 0;
+        for (int i = 0; i < pIdle.length; i++) {
+            pIdle[i] = sheet.crop(x, y, w, h);
+            x += w;
+        }
     }
 
 }

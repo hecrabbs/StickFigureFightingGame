@@ -4,55 +4,47 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Animation {
-    private int speed;
-    private int frames;
-
-    private int index = 0;
-    private int count = 0;
+    private int index;
+    private float interval;
+    private long timer, now, lastTime;
 
     private BufferedImage[] images;
     private BufferedImage currentImg;
-    public static boolean done = false;
+    public boolean done;
 
-    public Animation(int speed, BufferedImage[] imageArray) {
-        this.speed = speed;
-        images = new BufferedImage[imageArray.length];
-        for (int i = 0; i < imageArray.length; i++) {
-            images[i] = imageArray[i];
-        }
-        frames = imageArray.length;
+    public Animation(float interval, BufferedImage[] images) {
+        this.interval = interval;
+        this.images = images;
+        index = 0;
+        timer = 0;
+        now = 0;
+        lastTime = System.currentTimeMillis();
+        done = false;
     }
 
-    public void runAnimation() {
-        index++;
-        if (index > speed) {
-            index = 0;
-            nextFrame();
-        }
-    }
+    public void tick() {
+        now = System.currentTimeMillis();
+        timer += now - lastTime;
+        lastTime = now;
 
-    private void nextFrame() {
-        for (int i = 0; i < frames; i++) {
-            if (count == i) {
-                currentImg = images[i];
-            }
-        }
-            count++;
-            if(count > frames) {
-                count = 0;
+        if (timer >= interval) {
+            index++;
+            timer = 0;
+
+            if (index >= images.length) {
                 done = true;
+                index = 0;
             }
-    }
-
-    public void drawAnimation(Graphics g, int x, int y, int scaleX, int scaleY) {
-        g.drawImage(currentImg, x, y, scaleX, scaleY, null);
-    }
-
-    public void drawEntireAnimation(Boolean b, Graphics g, int x, int y, int scaleX, int scaleY) {
-        if(b == true) {
-            runAnimation();
-            drawAnimation(g,x,y,scaleX,scaleY);
         }
     }
+
+    public void render(Graphics g, int x, int y, int scaleX, int scaleY) {
+        g.drawImage(images[index], x-15, y, scaleX, scaleY, null);
+    }
+
+//
+//    public void renderEntireAnimation(Graphics g, int x, int y, int scaleX, int scaleY) {
+//
+//    }
 
 }
