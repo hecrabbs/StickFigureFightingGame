@@ -4,6 +4,7 @@ import com.stickfighter.enumStates.GameState;
 import com.stickfighter.graphics.Animation;
 import com.stickfighter.graphics.Assets;
 
+
 import java.awt.*;
 import java.util.LinkedList;
 
@@ -12,6 +13,7 @@ public class Player extends GameObject {
     public static int health = 100;
     private Animation moveR, moveL, attackR, attackL, idle;
     private int counter = 0;
+    //private boolean hasGun,shooting;
 
     public Player(int x, int y, Handler handler, ID id) {
         super(x, y, id);
@@ -24,6 +26,7 @@ public class Player extends GameObject {
         this.jumping = false;
         this.knockback = false;
         this.facingRight = true;
+        this.hasGun=true;//Set false later
 
         moveR = new Animation(.06f, Assets.pMoveR);
         moveL = new Animation(.06f, Assets.pMoveL);
@@ -48,6 +51,10 @@ public class Player extends GameObject {
         idle.tick();
         if (this.isAttacking) {
             hitEnemy(Game.gameObjects);
+        }
+        if(this.shooting){
+            shoot();
+            System.out.println("shoot");
         }
     }
 
@@ -201,6 +208,29 @@ public class Player extends GameObject {
                     temp.health -= 8;
                 }
             }
+        }
+    }
+
+    public Bullet shoot() {
+        //ammo--;
+        //shooting=true;
+        Bullet b=new Bullet((int) this.getX(),(int) this.getY()+32,ID.Bullet);
+        if(this.isFacingRight()){
+            //Bullet b=new Bullet(p);
+            b.setVelocity(5);
+            return b;
+        } else{
+            //Bullet b=new Bullet(p);
+            b.setVelocity(-5);
+            return b;
+        }
+        //return null;
+    }
+
+    public void fireGun(){
+        if(hasGun){
+            this.shooting=true;
+            //Gun.shoot(this);
         }
     }
 

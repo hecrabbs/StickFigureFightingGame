@@ -68,6 +68,13 @@ public class KeyInput extends KeyAdapter {
                         case KeyEvent.VK_J:
                             tempObject.isAttacking = true;
                             break;
+                        case KeyEvent.VK_B:
+                            tempObject.shooting=true;
+                            Bullet b=new Bullet((int) tempObject.getX(),(int) (tempObject.getY()+32),ID.Bullet);
+                            if(tempObject.facingRight){ b.setVelocity(5); }
+                            else{ b.setVelocity(-5); }
+                            handler.addObject(b);
+                            break;
 //                      case KeyEvent.VK_W:
 //                        up = true;
 //                        tempObject.setVelY(-5);
@@ -113,6 +120,9 @@ public class KeyInput extends KeyAdapter {
                             break;
                         case KeyEvent.VK_J:
 //                            tempObject.isAttacking=false;
+                            break;
+                        case KeyEvent.VK_B:
+                            tempObject.shooting=false;
                             break;
 //                      case KeyEvent.VK_W:
 //                          up = false;

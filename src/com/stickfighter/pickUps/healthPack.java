@@ -1,4 +1,4 @@
-package com.stickfighter.pickUps;
+/*package com.stickfighter.pickUps;
 
 import com.stickfighter.main.Player;
 
@@ -11,7 +11,6 @@ public class healthPack extends Items {
     }
 
     public void tick() {
-
     }
 
     public void render(Graphics g) {
@@ -25,13 +24,5 @@ public class healthPack extends Items {
         }
     }
 
-    @Override
-    public Rectangle shoot() {
-        return null;
-    }
-
-    @Override
-    public Rectangle hit() {
-        return null;
-    }
 }
+*/

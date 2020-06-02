@@ -1,4 +1,4 @@
-package com.stickfighter.pickUps;
+/*package com.stickfighter.pickUps;
 
 import com.stickfighter.main.Player;
 
@@ -32,7 +32,8 @@ public abstract class Items {
 
     public abstract void useItem(Player player);
 
-    public abstract Rectangle shoot();
+    //public abstract Rectangle shoot();
 
-    public abstract Rectangle hit();
+    //public abstract Rectangle hit();
 }
+*/
