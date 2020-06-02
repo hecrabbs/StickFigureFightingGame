@@ -27,6 +27,7 @@ public class Player extends GameObject {
         this.knockback = false;
         this.facingRight = true;
         this.hasGun=true;//Set false later
+        this.ammo=1000;
 
         moveR = new Animation(.06f, Assets.pMoveR);
         moveL = new Animation(.06f, Assets.pMoveL);
@@ -51,10 +52,6 @@ public class Player extends GameObject {
         idle.tick();
         if (this.isAttacking) {
             hitEnemy(Game.gameObjects);
-        }
-        if(this.shooting){
-            shoot();
-            System.out.println("shoot");
         }
     }
 
@@ -110,7 +107,14 @@ public class Player extends GameObject {
     }
 
     public void collision(LinkedList<GameObject> object) {
-        for (int i = 0; i < handler.gameObjects.size(); i++) {
+        for (int i = 0; i < handler.gameObjects.size() /*&& object.get(i).getID()!=ID.Bullet*/; i++) {
+            // The conditional below seems silly, but I think it is necessary because until
+            // a fire rate is added into the game, bullets can continuously be added
+            // which might be the source of the Index out of Bounds Exception we have
+            // been getting. I will implement this in EnemyCollision as well to see.
+            if(i>=handler.gameObjects.size()){
+                i=handler.gameObjects.size()-1;
+            }
             GameObject temp = object.get(i);
             if (temp.getID() == ID.Platform || temp.getID() == ID.Enemy) {
                 //this checks to see if the player object is overlapping the object in question
@@ -211,26 +215,25 @@ public class Player extends GameObject {
         }
     }
 
-    public Bullet shoot() {
+    /*public void shoot() {// maybe we do not need this at all? Maybe use it to check ammo?
         //ammo--;
         //shooting=true;
         Bullet b=new Bullet((int) this.getX(),(int) this.getY()+32,ID.Bullet);
         if(this.isFacingRight()){
-            //Bullet b=new Bullet(p);
-            b.setVelocity(5);
-            return b;
+            b.setX(b.getX()+32);
+            //b.setVelocity(16);
         } else{
-            //Bullet b=new Bullet(p);
-            b.setVelocity(-5);
-            return b;
+            b.setVelocity(-16);
         }
         //return null;
-    }
+    }*/
 
-    public void fireGun(){
-        if(hasGun){
-            this.shooting=true;
-            //Gun.shoot(this);
+    public boolean canShoot(){
+        if(hasGun && ammo>0){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 

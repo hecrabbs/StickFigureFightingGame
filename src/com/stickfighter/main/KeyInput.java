@@ -69,11 +69,19 @@ public class KeyInput extends KeyAdapter {
                             tempObject.isAttacking = true;
                             break;
                         case KeyEvent.VK_B:
-                            tempObject.shooting=true;
-                            Bullet b=new Bullet((int) tempObject.getX(),(int) (tempObject.getY()+32),ID.Bullet);
-                            if(tempObject.facingRight){ b.setVelocity(5); }
-                            else{ b.setVelocity(-5); }
-                            handler.addObject(b);
+                            if(tempObject.hasGun && tempObject.ammo>0) {
+                                tempObject.shooting = true;
+                                tempObject.ammo--;
+                                Bullet b = new Bullet((int) tempObject.getX(), (int) (tempObject.getY() + 32), handler, ID.Bullet);
+                                if (tempObject.facingRight) {
+                                    b.setVelocity(16);
+                                } else {
+                                    b.setVelocity(-16);
+                                }
+                                handler.addObject(b);
+                            }
+                            System.out.println("Ammo "+tempObject.ammo);
+                            tempObject.shooting = false;
                             break;
 //                      case KeyEvent.VK_W:
 //                        up = true;

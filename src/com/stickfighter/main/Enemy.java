@@ -28,10 +28,10 @@ public class Enemy extends GameObject {
         if (this.falling || this.jumping) {
             velY += gravity;
         }
+        //follow(player);
         enemyCollision(Game.gameObjects);
         enemyRebound();
         enemyRange();
-        //this.follow(this.player);
         //System.out.println("Enemy Falling: "+this.falling);
     }
 
@@ -53,8 +53,11 @@ public class Enemy extends GameObject {
 
     public void enemyCollision(LinkedList<GameObject> object){
         for(int i=0;i<handler.gameObjects.size();i++){
+            if(i>=handler.gameObjects.size()){
+                i=handler.gameObjects.size()-1;
+            }
             GameObject temp = object.get(i);
-            if(temp.getID()==ID.Platform || temp.getID()==ID.Player){
+            if(temp.getID()!=ID.Enemy) {//temp.getID()==ID.Platform || temp.getID()==ID.Player){
                 //this checks to see if the player object is overlapping the object in question
                 if(this.getBoundsB().intersects(temp.getBounds())){//Bottom intersection
                     //System.out.println("Boom");
@@ -67,7 +70,7 @@ public class Enemy extends GameObject {
                 }
                 if(this.getBoundsL().intersects(temp.getBounds())){//Left intersection
                     this.x = temp.getX() + temp.width;
-                    if(temp.getID()==ID.Player) {
+                    if(temp.getID()==ID.Player /*|| temp.getID()==ID.Bullet*/) {
                         velY = -10;
                         velX = 15;
                         this.knockback=true;
@@ -91,7 +94,7 @@ public class Enemy extends GameObject {
                 if(this.getBoundsR().intersects(temp.getBounds())){//Right intersection
                     this.x = temp.getX() - this.width;
                     //System.out.println("Boom!!!!");
-                    if(temp.getID()==ID.Player) {
+                    if(temp.getID()==ID.Player /*|| temp.getID()==ID.Bullet*/) {
                         velY = -10;
                         velX = -15;
                         this.knockback=true;

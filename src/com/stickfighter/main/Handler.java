@@ -39,6 +39,7 @@ public class Handler {
             this.gameObjects.remove(i); }
 //    this.gameObjects.clear(); replace this method with built in clear() method
     }
+    public int size(){ return this.gameObjects.size(); }
 
 
     public LinkedList<GameObject> getObject() {
