@@ -36,6 +36,7 @@ public class Game extends JPanel implements Runnable {
     public static Handler handler;
     public static Camera cam;
     public static Player p1;
+    public static Bullet bullet;//idk if this should be here rn
     public static LinkedList<GameObject> gameObjects;
     private HUD hud;
 
@@ -73,6 +74,8 @@ public class Game extends JPanel implements Runnable {
         gameOver = new GameOver();
         gameObjects = handler.getObject();
 
+        //bullet=new Bullet((int) p1.getX(),(int) p1.getY()/2,ID.Bullet);
+        //handler.addObject(bullet);
         handler.addObject(p1);
 //        for (int i = 0; i < 1; i++) {
 //            handler.addObject((new Enemy(WIDTH / 2, 0, handler, ID.Enemy, p1)));
