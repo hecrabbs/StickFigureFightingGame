@@ -1,8 +1,5 @@
 package com.stickfighter.main;
 
-import com.stickfighter.enumStates.GameMenu;
-import com.stickfighter.enumStates.GameStateManager;
-
 import java.awt.*;
 
 import javax.swing.*;

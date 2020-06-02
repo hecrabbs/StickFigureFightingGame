@@ -1,6 +1,6 @@
 package com.stickfighter.main;
 
-import com.stickfighter.enumStates.GameState;
+import com.stickfighter.enumStates.StateID;
 import com.stickfighter.graphics.Animation;
 import com.stickfighter.graphics.Assets;
 
@@ -101,7 +101,7 @@ public class Player extends GameObject {
 
     public void isAlive() {
         if (health <= 0) {
-            Game.setState(GameState.GameOver);
+            Game.setState(StateID.GameOver);
         }
     }
 

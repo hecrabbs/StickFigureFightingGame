@@ -8,7 +8,7 @@ import java.awt.Graphics;
 import java.awt.Font;
 import java.awt.Rectangle;
 
-public class Paused extends GameStateManager{
+public class Paused extends GameState {
 
     private int w = 400;
     private int h = 74;
@@ -22,8 +22,8 @@ public class Paused extends GameStateManager{
     private final Rectangle quitRect = new Rectangle(Game.WIDTH/2-150,500,300,74);
 
     public Paused(Game game) {
-        playLabel = new JLabelButton(game, playRect, GameState.Play);
-        helpLabel = new JLabelButton(game, helpRect, GameState.Help);
+        playLabel = new JLabelButton(game, playRect, StateID.Play);
+        helpLabel = new JLabelButton(game, helpRect, StateID.Help);
         quitLabel = new JLabelButton(game, quitRect, null);
         this.buttons.add(playLabel);
         this.buttons.add(helpLabel);

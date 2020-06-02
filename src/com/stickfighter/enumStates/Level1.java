@@ -6,7 +6,7 @@ import com.stickfighter.main.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Level1 extends GameStateManager {
+public class Level1 extends GameState {
 
     private static BufferedImage image;
     private static int w = 32, h = 32;

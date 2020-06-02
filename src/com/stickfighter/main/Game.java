@@ -9,7 +9,6 @@ import com.stickfighter.utilities.multiThread;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 import java.util.LinkedList;
 
 //Run from src directory with: javac ./com/stickfighter/main/*.java && java com.stickfighter.main.Game
@@ -24,7 +23,7 @@ public class Game extends JPanel implements Runnable {
     private static int frames = 0;
 
     //States declared here
-    private static GameState state = GameState.Menu;
+    private static StateID state = StateID.Menu;
     private GameOver gameOver;
     private static GameMenu menu;
     private static Paused pause;
@@ -145,15 +144,15 @@ public class Game extends JPanel implements Runnable {
     private void tick() {
         //GameState becomes 'Play' when the user: either exits the main menu or pause screen.
         //Refer to KeyInput class to see how the key input changes the game state.
-        if (state == GameState.Play) {
+        if (state == StateID.Play) {
             handler.tick();
             cam.tick(p1);
             hud.tick();
-        } else if (state == GameState.Menu) {
+        } else if (state == StateID.Menu) {
             menu.tick();
-        } else if (state == GameState.Paused) {
+        } else if (state == StateID.Paused) {
             pause.tick();
-        } else if (state == GameState.Help) {
+        } else if (state == StateID.Help) {
             help.tick();
         }
     }
@@ -163,7 +162,7 @@ public class Game extends JPanel implements Runnable {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        if (state == GameState.Play) {
+        if (state == StateID.Play) {
             g.setColor(Color.WHITE);
             g.fillRect(0, 0, WIDTH, HEIGHT);
             //Set origin at the camera position
@@ -172,24 +171,24 @@ public class Game extends JPanel implements Runnable {
             //reset origin back to normal
             g2d.translate(-cam.getX(), -cam.getY()); //end camera. Everything after this will move with camera
             hud.render(g);
-        } else if (state == GameState.Menu) {
+        } else if (state == StateID.Menu) {
             menu.renderScreen(g);
-        } else if (state == GameState.Paused) {
+        } else if (state == StateID.Paused) {
             pause.renderScreen(g);
-        } else if (state == GameState.Help) {
+        } else if (state == StateID.Help) {
             help.renderScreen(g);
-        } else if (state == GameState.GameOver) {
+        } else if (state == StateID.GameOver) {
             gameOver.renderScreen(g);
         }
     }
 
-    public static GameState getState() {
+    public static StateID getState() {
         return state;
     }
 
-    public static void setState(GameState gameState) {
-        state = gameState;
-        switch (gameState) {
+    public static void setState(StateID stateID) {
+        state = stateID;
+        switch (stateID) {
             case Menu -> menu.init();
             case Help -> help.init();
             case Paused -> pause.init();
@@ -202,7 +201,7 @@ public class Game extends JPanel implements Runnable {
         handler.addObject(p1);// Adding all of the game components again.
         new Level1();// As we add levels we should keep track of what level is currently being played.
         Level1.makeLevelFromImage(Game.handler);
-        setState(GameState.Play);
+        setState(StateID.Play);
     }
 
     public static void main(String[] args) {

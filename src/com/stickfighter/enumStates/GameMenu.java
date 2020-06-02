@@ -9,7 +9,7 @@ import java.awt.Font;
 import java.awt.Rectangle;
 
 
-public class GameMenu extends GameStateManager {
+public class GameMenu extends GameState {
 
     private int w = 100;
     private int h = 74;
@@ -23,8 +23,8 @@ public class GameMenu extends GameStateManager {
     private final Rectangle quitRect = new Rectangle(Game.WIDTH/2-80,500,w,h);
 
     public GameMenu(Game game) {
-        playLabel = new JLabelButton(game, playRect, GameState.Play);
-        helpLabel = new JLabelButton(game, helpRect, GameState.Help);
+        playLabel = new JLabelButton(game, playRect, StateID.Play);
+        helpLabel = new JLabelButton(game, helpRect, StateID.Help);
         quitLabel = new JLabelButton(game, quitRect, null);
         this.buttons.add(playLabel);
         this.buttons.add(helpLabel);

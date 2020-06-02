@@ -4,7 +4,7 @@ import com.stickfighter.main.Game;
 
 import java.awt.*;
 
-public class GameOver extends GameStateManager{
+public class GameOver extends GameState {
 
     private final Rectangle playRect = new Rectangle(Game.WIDTH/2-200,300,400,74);
     private final Rectangle quitRect = new Rectangle(Game.WIDTH/2-150,400,300,74);

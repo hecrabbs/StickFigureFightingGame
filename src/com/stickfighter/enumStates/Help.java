@@ -5,7 +5,7 @@ import com.stickfighter.main.JLabelButton;
 
 import java.awt.*;
 
-public class Help extends GameStateManager {
+public class Help extends GameState {
 
     private final JLabelButton playLabel;
     private final JLabelButton quitLabel;
@@ -14,7 +14,7 @@ public class Help extends GameStateManager {
     private final Rectangle quitRect = new Rectangle(Game.WIDTH/2-150,600,300,74);
 
     public Help(Game game) {
-        playLabel = new JLabelButton(game, playRect, GameState.Play);
+        playLabel = new JLabelButton(game, playRect, StateID.Play);
         quitLabel = new JLabelButton(game, quitRect, null);
         this.buttons.add(playLabel);
         this.buttons.add(quitLabel);

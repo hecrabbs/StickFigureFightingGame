@@ -1,24 +1,23 @@
 package com.stickfighter.main;
 
-import com.stickfighter.enumStates.GameState;
+import com.stickfighter.enumStates.StateID;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.LinkedList;
 
 public class JLabelButton extends MouseAdapter {
 
     public final Game game;
     private JLabel label;
-    public final GameState gameState;
+    public final StateID stateID;
     public boolean hover = false;
     public boolean clicked = false;
 
-    public JLabelButton(Game game, Rectangle rect, GameState gameState) {
+    public JLabelButton(Game game, Rectangle rect, StateID stateID) {
         this.game = game;
-        this.gameState = gameState;
+        this.stateID = stateID;
         label = new JLabel();
         label.setBounds(rect);
         label.addMouseListener(this);

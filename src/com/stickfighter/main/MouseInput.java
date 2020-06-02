@@ -1,7 +1,5 @@
 package com.stickfighter.main;
 
-import com.stickfighter.enumStates.GameState;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
