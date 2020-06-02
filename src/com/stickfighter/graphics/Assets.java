@@ -17,6 +17,7 @@ public class Assets {
 
     public static void init() {
         loadPlayerImages();
+//        level1 = loadImage("./res/levels/level1.png ");
         level1 = loadImage("./res/levels/level1.png ");
     }
 

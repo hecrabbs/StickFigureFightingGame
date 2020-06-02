@@ -49,6 +49,7 @@ public class Game extends JPanel implements Runnable {
         requestFocus();
         Assets.init();
         init();
+
         new Level1();
         Level1.makeLevelFromImage(handler);
         addKeyListener(new KeyInput(handler));
