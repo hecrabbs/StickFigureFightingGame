@@ -26,7 +26,7 @@ public class Help extends GameState {
         }
     }
 
-    public void renderScreen(Graphics g){
+    public void render(Graphics g){
         Font font=new Font("arial",Font.BOLD,60);
         g.setFont(font);
         g.setColor(Color.PINK);

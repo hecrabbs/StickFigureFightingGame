@@ -1,7 +1,6 @@
 package com.stickfighter.graphics;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,11 +13,16 @@ public class Assets {
     public static BufferedImage[] pAttackL = new BufferedImage[6];
     public static BufferedImage[] pIdle = new BufferedImage[6];
     public static BufferedImage level1;
+    public static BufferedImage level2;
+    public static BufferedImage[] grass = new BufferedImage[1];
 
     public static void init() {
         loadPlayerImages();
-//        level1 = loadImage("./res/levels/level1.png ");
+
+        grass[0] = (loadImage("./res/textures/grass.png"));
+
         level1 = loadImage("./res/levels/level1.png ");
+        level2 = loadImage("./res/levels/level2.png");
     }
 
     public static BufferedImage loadImage(String path) {

@@ -3,5 +3,5 @@ import com.stickfighter.main.KeyInput;
 import java.awt.*;
 
 public enum StateID {
-    Menu(), Paused(), Play(), Help(), GameOver(), Level1()
+    Menu(), Paused(), Play(), Help(), GameOver()
 }

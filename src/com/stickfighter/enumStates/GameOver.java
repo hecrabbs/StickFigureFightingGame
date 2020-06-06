@@ -9,7 +9,7 @@ public class GameOver extends GameState {
     private final Rectangle playRect = new Rectangle(Game.WIDTH/2-200,300,400,74);
     private final Rectangle quitRect = new Rectangle(Game.WIDTH/2-150,400,300,74);
 
-    public void renderScreen(Graphics g) {
+    public void render(Graphics g) {
         Font font=new Font("arial",Font.BOLD,60);
         g.setFont(font);
         g.setColor(Color.PINK);

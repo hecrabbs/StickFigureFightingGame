@@ -1,13 +1,14 @@
 package com.stickfighter.enumStates;
 
 import com.stickfighter.graphics.Assets;
+import com.stickfighter.main.Game;
 
 import java.awt.*;
 
-public class Level1 extends GameState {
+public class Level2 extends GameState {
 
-    public Level1() {
-        this.image = Assets.level1;
+    public Level2() {
+        this.image = Assets.level2;
     }
 
     public void render(Graphics g) {
@@ -16,5 +17,4 @@ public class Level1 extends GameState {
 
     public void init() {
     }
-
 }

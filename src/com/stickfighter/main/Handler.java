@@ -1,6 +1,5 @@
 package com.stickfighter.main;
 
-import javax.swing.*;
 import java.util.LinkedList;
 import java.awt.Graphics;
 
@@ -21,7 +20,6 @@ public class Handler {
     public void render(Graphics g) {
         for (int i = 0; i < gameObjects.size(); i++) {
             GameObject tempObject = gameObjects.get(i);
-
             tempObject.render(g);
         }
     }
@@ -34,14 +32,12 @@ public class Handler {
         this.gameObjects.remove(gameObjects);
     }
 
-    public void removeAll(){
-        for(int i=0;i<this.gameObjects.size();i++){// Time Complexity: O(n).
-            this.gameObjects.remove(i); }
-//    this.gameObjects.clear(); replace this method with built in clear() method
+    public void removeAll() {
+        this.gameObjects.clear();
     }
 
 
-    public LinkedList<GameObject> getObject() {
+    public LinkedList<GameObject> getGameObjects() {
         return gameObjects;
     }
 }

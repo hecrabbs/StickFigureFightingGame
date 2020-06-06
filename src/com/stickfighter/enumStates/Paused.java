@@ -36,7 +36,7 @@ public class Paused extends GameState {
         }
     }
 
-    public void renderScreen(Graphics g){
+    public void render(Graphics g){
         g.setColor(Color.WHITE);
         g.drawOval(80, 70, 150, 150);
         g.setColor(Color.YELLOW);

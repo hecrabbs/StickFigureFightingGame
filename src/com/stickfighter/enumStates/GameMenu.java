@@ -18,9 +18,9 @@ public class GameMenu extends GameState {
     private final JLabelButton helpLabel;
     private final JLabelButton quitLabel;
 
-    private final Rectangle playRect = new Rectangle(Game.WIDTH/2-80,300,w,h);
-    private final Rectangle helpRect = new Rectangle(Game.WIDTH/2-80,400,w,h);
-    private final Rectangle quitRect = new Rectangle(Game.WIDTH/2-80,500,w,h);
+    private final Rectangle playRect = new Rectangle(Game.WIDTH / 2 - 80, 300, w, h);
+    private final Rectangle helpRect = new Rectangle(Game.WIDTH / 2 - 80, 400, w, h);
+    private final Rectangle quitRect = new Rectangle(Game.WIDTH / 2 - 80, 500, w, h);
 
     public GameMenu(Game game) {
         playLabel = new JLabelButton(game, playRect, StateID.Play);
@@ -37,7 +37,7 @@ public class GameMenu extends GameState {
         }
     }
 
-    public void renderScreen(Graphics g){
+    public void render(Graphics g) {
         g.drawOval(80, 70, 150, 150);
         g.setColor(Color.YELLOW);
         g.fillOval(80, 70, 150, 150);
@@ -46,12 +46,12 @@ public class GameMenu extends GameState {
         g.fillOval(170, 120, 15, 25);
         g.drawArc(120, 160, 70, 40, 180, 180);
 
-        Font font=new Font("arial",Font.BOLD,60);
+        Font font = new Font("arial", Font.BOLD, 60);
         g.setFont(font);
         g.setColor(Color.PINK);
-        g.drawString("Trouble in ChinaTown", Game.WIDTH/4,100);
+        g.drawString("Trouble in ChinaTown", Game.WIDTH / 4, 100);
 
-        Font fnt=new Font("arial",Font.PLAIN,30);
+        Font fnt = new Font("arial", Font.PLAIN, 30);
         g.setFont(fnt);
 
         Graphics2D g2d = (Graphics2D) g;
@@ -61,20 +61,20 @@ public class GameMenu extends GameState {
             g.setColor(Color.ORANGE);
         }
         g2d.draw(playRect);
-        g.drawString("Play", Game.WIDTH/2-60,350);//Press space to play
+        g.drawString("Play", Game.WIDTH / 2 - 60, 350);//Press space to play
         if (helpLabel.hover) {
             g.setColor(Color.GREEN);
         } else {
             g.setColor(Color.ORANGE);
         }
         g2d.draw(helpRect);
-        g.drawString("Help", Game.WIDTH/2-60,450);//Press H for help
+        g.drawString("Help", Game.WIDTH / 2 - 60, 450);//Press H for help
         if (quitLabel.hover) {
             g.setColor(Color.GREEN);
         } else {
             g.setColor(Color.ORANGE);
         }
         g2d.draw(quitRect);
-        g.drawString("Quit", Game.WIDTH/2-60,550);//Press ESC to quit
+        g.drawString("Quit", Game.WIDTH / 2 - 60, 550);//Press ESC to quit
     }
 }

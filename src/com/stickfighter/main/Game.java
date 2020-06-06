@@ -11,11 +11,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
-//Run from src directory with: javac ./com/stickfighter/main/*.java && java com.stickfighter.main.Game
 public class Game extends JPanel implements Runnable {
 
-    public static final int WIDTH = 1280;//changed from 1920
-    public static final int HEIGHT = 720;//change from 1080
+    public static final int WIDTH = 1280;
+    public static final int HEIGHT = 720;
 
     private static double delta = 0;
     public static double dt = 0;
@@ -33,14 +32,15 @@ public class Game extends JPanel implements Runnable {
     private boolean running = false;
 
     public static Handler handler;
+    public static LevelHandler levelHandler;
     public static Camera cam;
     public static Player p1;
     public static Bullet bullet;//idk if this should be here rn
     public static LinkedList<GameObject> gameObjects;
     private HUD hud;
 
-    private BufferedImage image;
-    private Graphics g;
+    private final BufferedImage image;
+    private final Graphics g;
 
     public Game() {
         super();
@@ -49,9 +49,6 @@ public class Game extends JPanel implements Runnable {
         requestFocus();
         Assets.init();
         init();
-
-        new Level1();
-        Level1.makeLevelFromImage(handler);
         addKeyListener(new KeyInput(handler));
 
         //This image contains everything being rendered to the screen
@@ -59,12 +56,15 @@ public class Game extends JPanel implements Runnable {
         //This is the graphics of the image that we draw things to the image with
         g = image.createGraphics();
 
+        levelHandler.renderNextLevel();
+
         new Window(WIDTH, HEIGHT, "Stick Fighter", this);
     }
 
     public void init() {
         handler = new Handler();
-        p1 = new Player(64, 0, handler, ID.Player);
+        levelHandler = new LevelHandler(g, handler);
+        p1 = new Player(64, 0, handler, levelHandler, ID.Player);
         cam = new Camera(0, 0);
         hud = new HUD();
         menu = new GameMenu(this);
@@ -72,16 +72,7 @@ public class Game extends JPanel implements Runnable {
         pause = new Paused(this);
         help = new Help(this);
         gameOver = new GameOver();
-        gameObjects = handler.getObject();
-
-        //bullet=new Bullet((int) p1.getX(),(int) p1.getY()/2,ID.Bullet);
-        //handler.addObject(bullet);
-        handler.addObject(p1);
-//        for (int i = 0; i < 1; i++) {
-//            handler.addObject((new Enemy(WIDTH / 2, 0, handler, ID.Enemy, p1)));
-//        }
-//        handler.addObject((new Platform(0, HEIGHT - 50, WIDTH, 20, ID.Platform)));
-//        handler.addObject((new Platform(0, 2 * HEIGHT / 3, WIDTH / 5, 50, ID.Platform)));
+        gameObjects = handler.getGameObjects();
     }
 
     public synchronized void start() {
@@ -172,13 +163,13 @@ public class Game extends JPanel implements Runnable {
             g2d.translate(-cam.getX(), -cam.getY()); //end camera. Everything after this will move with camera
             hud.render(g);
         } else if (state == StateID.Menu) {
-            menu.renderScreen(g);
+            menu.render(g);
         } else if (state == StateID.Paused) {
-            pause.renderScreen(g);
+            pause.render(g);
         } else if (state == StateID.Help) {
-            help.renderScreen(g);
+            help.render(g);
         } else if (state == StateID.GameOver) {
-            gameOver.renderScreen(g);
+            gameOver.render(g);
         }
     }
 
@@ -195,19 +186,19 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
-    public static void restartGame(){
+    public static void restartGame() {
         handler.removeAll();// Preps handler for re-initialization.
         p1.revive();// Restores player health to 75.
         handler.addObject(p1);// Adding all of the game components again.
         new Level1();// As we add levels we should keep track of what level is currently being played.
-        Level1.makeLevelFromImage(Game.handler);
+        levelHandler.restart();
         setState(StateID.Play);
     }
 
     public static void main(String[] args) {
-        multiThread pool=new multiThread(2);//Using this to add music
+        multiThread pool = new multiThread(2);//Using this to add music
         new Game();
-        MusicPlayer music=new MusicPlayer("8 bit");
+        MusicPlayer music = new MusicPlayer("8 bit");
         pool.runTask(music);
         //pool.runTask(game);
         pool.join();

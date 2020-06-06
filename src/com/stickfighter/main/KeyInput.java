@@ -7,13 +7,7 @@ import java.awt.event.KeyEvent;
 
 public class KeyInput extends KeyAdapter {
 
-    private Handler handler;
-
-    private boolean up = false;
-    private boolean down = false;
-    private boolean left = false;
-    private boolean right = false;
-    public static boolean pause = false;
+    private final Handler handler;
 
     public KeyInput(Handler handler) {
         this.handler = handler;
@@ -41,7 +35,7 @@ public class KeyInput extends KeyAdapter {
             }
         } else if (Game.getState() == StateID.GameOver) {
             switch (key) {
-                case KeyEvent.VK_SPACE -> Game.restartGame();//Game.handler.addLevel1(); //Game.setState(GameState.Play);
+                case KeyEvent.VK_SPACE -> Game.restartGame();
                 case KeyEvent.VK_ESCAPE -> System.exit(1);
             }
         } else if (Game.getState() == StateID.Play) {
@@ -69,10 +63,13 @@ public class KeyInput extends KeyAdapter {
                             tempObject.isAttacking = true;
                             break;
                         case KeyEvent.VK_B:
-                            tempObject.shooting=true;
-                            Bullet b=new Bullet((int) tempObject.getX(),(int) (tempObject.getY()+32),ID.Bullet);
-                            if(tempObject.facingRight){ b.setVelocity(5); }
-                            else{ b.setVelocity(-5); }
+                            tempObject.shooting = true;
+                            Bullet b = new Bullet((int) tempObject.getX(), (int) (tempObject.getY() + 32), ID.Bullet);
+                            if (tempObject.facingRight) {
+                                b.setVelocity(5);
+                            } else {
+                                b.setVelocity(-5);
+                            }
                             handler.addObject(b);
                             break;
 //                      case KeyEvent.VK_W:
@@ -105,6 +102,7 @@ public class KeyInput extends KeyAdapter {
                         case KeyEvent.VK_A:
                             tempObject.movingLeft = false;
                             if (tempObject.movingRight) {
+                                tempObject.facingRight = true;
                                 tempObject.setVelX(8);
                             } else {
                                 tempObject.setVelX(0);
@@ -113,6 +111,7 @@ public class KeyInput extends KeyAdapter {
                         case KeyEvent.VK_D:
                             tempObject.movingRight = false;
                             if (tempObject.movingLeft) {
+                                tempObject.facingRight = false;
                                 tempObject.setVelX(-8);
                             } else {
                                 tempObject.setVelX(0);
@@ -122,7 +121,7 @@ public class KeyInput extends KeyAdapter {
 //                            tempObject.isAttacking=false;
                             break;
                         case KeyEvent.VK_B:
-                            tempObject.shooting=false;
+                            tempObject.shooting = false;
                             break;
 //                      case KeyEvent.VK_W:
 //                          up = false;
