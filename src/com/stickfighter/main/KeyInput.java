@@ -83,6 +83,9 @@ public class KeyInput extends KeyAdapter {
                             System.out.println("Ammo "+tempObject.ammo);
                             tempObject.shooting = false;
                             break;
+                        case KeyEvent.VK_R:
+                            Game.restartGame();
+                            break;
 //                      case KeyEvent.VK_W:
 //                        up = true;
 //                        tempObject.setVelY(-5);

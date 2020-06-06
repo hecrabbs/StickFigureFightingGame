@@ -47,8 +47,17 @@ public class Bullet extends GameObject{
                 if(temp.getID()==ID.Enemy){
                     temp.health=0;
                     //temp.knockback=true;
-                    temp.setVelX((int) -2*temp.getVelX());
-                    temp.setKnockback();
+                    if(this.initialPos<temp.getX()){
+                        temp.setVelX((int) -2 * temp.getVelX());
+                        temp.setKnockback();
+                        //System.out.println("Left");
+                    }
+                    else{
+                        temp.setVelX((int) 2 * temp.getVelX());
+                        temp.setKnockback();
+                        //System.out.println("Right");
+                    }
+                    //temp.setKnockback();
                     temp.setVelY(-10);
                     System.out.println("Hit Enemy");
                     handler.removeObject(this);

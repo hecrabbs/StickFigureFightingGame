@@ -87,7 +87,8 @@ public class Enemy extends GameObject {
                             temp.setVelX(-15);
                             temp.setVelY(-10);
                             Player.health--;
-                            temp.knockback=true;
+                            temp.setKnockback();
+                            //temp.knockback=true;
                         }
                     }
                 }

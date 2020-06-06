@@ -12,7 +12,7 @@ public class Player extends GameObject {
     private Handler handler;
     public static int health = 100;
     private Animation moveR, moveL, attackR, attackL, idle;
-    private int counter = 0;
+    private int initX,initY;
     //private boolean hasGun,shooting;
 
     public Player(int x, int y, Handler handler, ID id) {
@@ -103,7 +103,7 @@ public class Player extends GameObject {
     }
 
     public void revive() {
-        this.health = 75;
+        health = 75;
     }
 
     public void collision(LinkedList<GameObject> object) {
@@ -126,8 +126,7 @@ public class Player extends GameObject {
                     if (temp.getID() == ID.Enemy) {
                         health--;
                     }
-                }
-                if (!this.getBoundsB().intersects(temp.getBounds())) {
+                }if (!this.getBoundsB().intersects(temp.getBounds())) {
                     this.falling = true;
                 }
                 //else { this.falling = true; }
@@ -141,21 +140,35 @@ public class Player extends GameObject {
                 }
 
                 if (this.getBoundsL().intersects(temp.getBounds())) {
+                    //System.out.println("Player Right1");
                     this.x = temp.getX() + temp.width;
                     if (temp.getID() == ID.Enemy) {
+                        this.initX = (int) this.x;
+                        this.initY = (int) this.y;
                         velY = -10;
                         velX = 15;
+                        temp.setKnockback();
+                        temp.setVelX(-15);
+                        temp.setVelY(-10);
                         knockback = true;
+                        System.out.println("Player Left");
                         health--;
                     }
                 }
 
                 if (this.getBoundsR().intersects(temp.getBounds())) {//Right intersection
                     this.x = temp.getX() - this.width;
+                    //System.out.println("Player Right1");
                     if (temp.getID() == ID.Enemy) {
+                        this.initX = (int) this.x;
+                        this.initY = (int) this.y;
                         velY = -10;
                         velX = -15;
-                        knockback = true;
+                        temp.setKnockback();
+                        temp.setVelX(15);
+                        temp.setVelY(-10);
+                        this.knockback = true;
+                        //System.out.println("Player Right");
                         health--;
                     }
                 }
@@ -171,6 +184,49 @@ public class Player extends GameObject {
                 knockback = false;
                 this.movingRight = false;
                 this.movingLeft = false;
+            }
+        }
+    }
+
+    public void checkLeft(){
+        for(int i=0;i<handler.gameObjects.size() && handler.gameObjects.get(i).getID()==ID.Platform;i++){
+            GameObject temp = Game.gameObjects.get(i);
+            if (this.getBoundsL().intersects(temp.getBounds())){
+                this.x = temp.getX() + temp.width;
+                velX=0;
+                knockback=false;
+            }
+            if(this.getBoundsL().intersects(temp.getBounds()) && this.getBoundsT().intersects(temp.getBounds())){
+                if(this.initX>this.x){
+                    //this.x = temp.getX() - this.width;
+                    this.x = temp.getX() + temp.width;
+                    System.out.println("Wagan1");
+                    velX=0;
+                    knockback=false;
+                }
+                if(this.initX<this.x){
+                    //this.x = temp.getX() + temp.width;
+                    this.x = temp.getX() - this.width;
+                    System.out.println("Wagan2");
+                    velX=0;
+                    knockback=false;
+                }
+            }
+            if(this.getBoundsB().intersects(temp.getBounds()) && this.getBoundsL().intersects(temp.getBounds())){
+                if(this.initY>this.y){
+                    //this.x = temp.getX() - this.width;
+                    this.y = temp.getY() - this.height;
+                    System.out.println("Bummer");
+                    velX=0;
+                    knockback=false;
+                }
+                if(this.initY<this.y){
+                    //this.x = temp.getX() + temp.width;
+                    System.out.println("Bummer2");
+                    this.y = temp.getY() + temp.height;
+                    velX=0;
+                    knockback=false;
+                }
             }
         }
     }
@@ -215,10 +271,10 @@ public class Player extends GameObject {
         }
     }
 
-    /*public void shoot() {// maybe we do not need this at all? Maybe use it to check ammo?
+    public void shoot() {// maybe we do not need this at all? Maybe use it to check ammo?
         //ammo--;
         //shooting=true;
-        Bullet b=new Bullet((int) this.getX(),(int) this.getY()+32,ID.Bullet);
+        Bullet b=new Bullet((int) this.getX(),(int) this.getY()+32,this.handler,ID.Bullet);
         if(this.isFacingRight()){
             b.setX(b.getX()+32);
             //b.setVelocity(16);
@@ -226,7 +282,7 @@ public class Player extends GameObject {
             b.setVelocity(-16);
         }
         //return null;
-    }*/
+    }
 
     public boolean canShoot(){
         if(hasGun && ammo>0){
