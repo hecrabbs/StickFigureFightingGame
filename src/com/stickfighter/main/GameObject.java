@@ -16,6 +16,7 @@ public abstract class GameObject {
     protected boolean isAttacking, shooting, hasGun;
     protected int health;
     protected Rectangle strikeRange;
+    protected int ammo;
 
     public GameObject(int x, int y, ID id) {
         this.x = x;
@@ -126,5 +127,7 @@ public abstract class GameObject {
     public boolean isFacingRight() {
         return facingRight;
     }
+
+    public void setKnockback(){ this.knockback=true; }
 
 }

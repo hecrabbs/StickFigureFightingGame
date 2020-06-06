@@ -196,11 +196,10 @@ public class Game extends JPanel implements Runnable {
     }
 
     public static void main(String[] args) {
-        multiThread pool = new multiThread(2);//Using this to add music
+        //multiThread pool=new multiThread(2);//Using this to add music
         new Game();
-        MusicPlayer music = new MusicPlayer("8 bit");
-        pool.runTask(music);
-        //pool.runTask(game);
-        pool.join();
+        //MusicPlayer music=new MusicPlayer("8 bit");
+        //pool.runTask(music);
+        //pool.join();
     }
 }
