@@ -55,6 +55,7 @@ public class Enemy extends GameObject {
             }
         }
     }
+    
 
     public void handleCollisions(Rectangle r, Rectangle oldR, GameObject temp) {
         if (temp.id == ID.Player) {
