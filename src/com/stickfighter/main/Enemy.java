@@ -1,15 +1,11 @@
 package com.stickfighter.main;
 
-import com.stickfighter.graphics.Assets;
-
 import java.awt.*;
-import java.util.LinkedList;
 
 public class Enemy extends GameObject {
 
-    private GameObject player;
-    private Handler handler;
-    private int rangeLeft, rangeRight;
+    private final GameObject player;
+
     private float theta = 0;
 
     public Enemy(int x, int y, Handler handler, ID id, GameObject player) {
@@ -18,19 +14,16 @@ public class Enemy extends GameObject {
         this.handler = handler;
         this.width = 32;
         this.height = 64;
+        setRectCollider();
         this.health = 32;
-        this.rangeLeft = 95;
-        this.rangeRight = 198;
     }
 
-    public void tick() {
+    public void tick(Double dt) {
+        addGravity();
         move();
-        y += velY;
-        if (this.falling || this.jumping) {
-            velY += gravity;
-        }
-        enemyCollision(Game.gameObjects);
-        enemyRebound();
+        updatePosition();
+        checkCollision();
+        rebound();
     }
 
     public void render(Graphics g) {
@@ -40,91 +33,55 @@ public class Enemy extends GameObject {
         //enemy's rectangle
         g.fillRect((int) this.x, (int) this.y, this.width, this.height);
 
-        g.setColor(Color.WHITE);
-        //hitbox rectangles
-        g2d.draw(this.getBoundsB());
-        g2d.draw(this.getBoundsT());
-        g2d.draw(this.getBoundsL());
-        g2d.draw(this.getBoundsR());
+        g.setColor(Color.BLACK);
+        //old hitbox rectangles
+//        g2d.draw(this.getBoundsB());
+//        g2d.draw(this.getBoundsT());
+//        g2d.draw(this.getBoundsL());
+//        g2d.draw(this.getBoundsR());
+        //new hitbox shape
+        g2d.draw(pathPoly);
         enemyHealth(g);
     }
 
     public void move() {
-        if (Math.abs(this.x - player.x) <= 300) {
-            velX = 4;
-            follow(player);
-            theta = (this.x > player.x) ? (float) Math.PI / 2 : (float) (3 * Math.PI / 2);
-        } else {
-            velX = (float) (3 * Math.sin(theta));
-            x += velX;
-            theta += .02;
+        if (!knockback) {
+            if (Math.abs(this.x - player.x) <= 400) {
+                follow(player);
+                theta = (this.x > player.x) ? (float) Math.PI / 2 : (float) (3 * Math.PI / 2);
+            } else {
+                velX = (float) (2 * Math.sin(theta));
+                theta += .02;
+            }
         }
     }
 
-    public void enemyCollision(LinkedList<GameObject> object) {
-        for (int i = 0; i < handler.gameObjects.size(); i++) {
-            if(i>=handler.gameObjects.size()){
-                i=handler.gameObjects.size()-1;
-            }
-            GameObject temp = object.get(i);
-            if(temp.getID()!=ID.Enemy) {//temp.getID()==ID.Platform || temp.getID()==ID.Player){
-                //this checks to see if the player object is overlapping the object in question
-                if (this.getBoundsB().intersects(temp.getBounds())) {//Bottom intersection
-                    //System.out.println("Boom");
-                    this.velY = 0;
-                    this.y = temp.getY() - this.height;
-                    falling = false;
-                    jumping = false;
-                } else {
-                    this.falling = true;
-                }
-                if (this.getBoundsT().intersects(temp.getBounds())) {//Top intersection
-                    this.y = temp.getY() + temp.height;
-                }
-                if (this.getBoundsL().intersects(temp.getBounds())) {//Left intersection
-                    this.x = temp.getX() + temp.width;
-                    if (temp.getID() == ID.Player) {
-                        velY = -10;
-                        velX = 15;
-                        this.knockback = true;
-                        this.health--;
-                        if (temp.getVelX() == 0 && temp.isAttacking) {
-                            //temp.setVelX(-15);
-                            //temp.setVelY(-10);
-                            System.out.println("Kapow");
-                            this.x = (float) temp.strikeRange.getX() + (float) temp.strikeRange.getWidth();
-                            temp.knockback = false;
-                        } else if (temp.getVelX() == 0 && !temp.isAttacking) {
-                            System.out.println("Kapow2");
-                            temp.setVelX(-15);
-                            temp.setVelY(-10);
-                            Player.health--;
-                            temp.setKnockback();
-                            //temp.knockback=true;
-                        }
-                    }
-                }
-                if (this.getBoundsR().intersects(temp.getBounds())) {//Right intersection
-                    this.x = temp.getX() - this.width;
-                    //System.out.println("Boom!!!!");
-                    if (temp.getID() == ID.Player) {
-                        velY = -10;
-                        velX = -15;
-                        this.knockback = true;
-                        this.health--;
-                        if (temp.getVelX() == 0 && temp.isAttacking) {
-                            //temp.setVelX(15);
-                            //temp.setVelY(-10);
-                            temp.knockback = false;
-                        }
-                        if (temp.getVelX() == 0 && !temp.isAttacking) {
-                            temp.setVelX(15);
-                            temp.setVelY(-10);
-                            Player.health--;
-                            temp.knockback = true;
-                        }
-                    }
-                }
+    public void handleCollisions(Rectangle r, Rectangle oldR, GameObject temp) {
+        if (temp.id == ID.Player) {
+            temp.health--;
+            if (oldR.x >= temp.x + temp.width) {//left
+                x = temp.x + temp.width;
+                System.out.println("MOVED");
+                temp.velY = -10;
+                temp.velX = -15;
+                temp.knockback = true;
+                velX = 10;
+                knockback = true;
+            } else if (oldR.x + width <= temp.x) {//right
+                x = temp.x - width;
+                temp.velY = -10;
+                temp.velX = 15;
+                temp.knockback = true;
+                velX = -10;
+                knockback = true;
+            } else if (oldR.y + oldR.height <= temp.y) { //bottom
+                y = temp.y - height;
+                velY = 0;
+                falling = false;
+                jumping = false;
+            } else if (oldR.y >= temp.y + temp.height) {//top
+                y = temp.y + temp.height;
+                velY = 0;
             }
         }
     }
@@ -136,20 +93,6 @@ public class Enemy extends GameObject {
         g.fillRect((int) this.x, (int) this.y - 20, this.health, 7);
         g.setColor(Color.WHITE);
         g.drawRect((int) this.x, (int) this.y - 20, width, 7);
-    }
-    //public int getEnemyHealth(){ return health; }
-    //public void setEnemyHealth(int health){ this.health=health; }
-
-    public void enemyRebound() {
-        if (this.knockback) {
-            velX -= (float) velX / (1 + 20);
-            if (Math.abs(velX) <= 2) {
-                velX = 0;
-                this.knockback = false;
-                this.movingRight = false;
-                this.movingLeft = false;
-            }
-        }
     }
 
 }

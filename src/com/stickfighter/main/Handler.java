@@ -5,22 +5,24 @@ import java.awt.Graphics;
 
 public class Handler {
 
-    LinkedList<GameObject> gameObjects = new LinkedList<GameObject>();
+    private final LinkedList<GameObject> gameObjects = new LinkedList<>();
+
+    public Handler() {
+    }
 
     //updates all game gameObjects
-    public void tick() {
+    public void tick(Double dt) {
+        //DO NOT replace with enhanced for loop. Will cause ConcurrentModificationException
         for (int i = 0; i < gameObjects.size(); i++) {
-            GameObject tempObject = gameObjects.get(i);
-
-            tempObject.tick();
+            gameObjects.get(i).tick(dt);
         }
     }
 
     //renders all game gameObjects
     public void render(Graphics g) {
+        //DO NOT replace with enhanced for loop. Will cause ConcurrentModificationException
         for (int i = 0; i < gameObjects.size(); i++) {
-            GameObject tempObject = gameObjects.get(i);
-            tempObject.render(g);
+            gameObjects.get(i).render(g);
         }
     }
 
@@ -32,11 +34,13 @@ public class Handler {
         this.gameObjects.remove(gameObjects);
     }
 
-    public void removeAll() {
+    public void clear() {
         this.gameObjects.clear();
     }
-    public int size(){ return this.gameObjects.size(); }
 
+    public int size() {
+        return this.gameObjects.size();
+    }
 
     public LinkedList<GameObject> getGameObjects() {
         return gameObjects;

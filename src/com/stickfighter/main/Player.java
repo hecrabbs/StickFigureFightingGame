@@ -6,27 +6,21 @@ import com.stickfighter.graphics.Animation;
 import com.stickfighter.graphics.Assets;
 
 import java.awt.*;
-import java.util.LinkedList;
 
 public class Player extends GameObject {
-    private final Handler handler;
     private final LevelHandler levelHandler;
-    public static int health = 100;
     private final Animation moveR, moveL, attackR, attackL, idle;
-    private int initX,initY;
+    private int initX, initY;
     //private boolean hasGun,shooting;
 
-    public Player(int x, int y, Handler handler, LevelHandler levelHandler, ID id) {
+
+    public Player(int x, int y, LevelHandler levelHandler, ID id) {
         super(x, y, id);
-        this.handler = handler;
         this.levelHandler = levelHandler;
         this.width = 32;
         this.height = 64;
-        this.movingLeft = false;
-        this.movingRight = false;
-        this.falling = true;
-        this.jumping = false;
-        this.knockback = false;
+        setRectCollider();
+        this.health = 100;
         this.facingRight = true;
         this.hasGun = true;//Set false later
         this.ammo = 1000;
@@ -36,16 +30,21 @@ public class Player extends GameObject {
         attackR = new Animation(100, Assets.pAttackR);
         attackL = new Animation(100, Assets.pAttackL);
         idle = new Animation(100, Assets.pIdle);
+
+        falling = true;
+        jumping = false;
+        fixed = false;
+        knockback = false;
+        movingRight = false;
+        movingLeft = false;
+
     }
 
-    public void tick() {
-        this.x += this.velX;
-        this.y += this.velY;
-        if (this.falling || this.jumping) {
-            this.velY += gravity;
-        }
-        collision(Game.gameObjects);
-        playerRebound();
+    public void tick(Double dt) {
+        addGravity();
+        updatePosition();
+        checkCollision();
+        rebound();
         isAlive();
         moveR.tick();
         moveL.tick();
@@ -53,7 +52,7 @@ public class Player extends GameObject {
         attackL.tick();
         idle.tick();
         if (this.isAttacking) {
-            hitEnemy(Game.gameObjects);
+            hitEnemy();
         }
         if (this.shooting) {
             shoot();
@@ -66,11 +65,13 @@ public class Player extends GameObject {
         //player's rectangle
         g.fillRect((int) this.x, (int) this.y, this.width, this.height);
         g.setColor(Color.RED);
-        //hitbox rectangles
-        g2d.draw(this.getBoundsB());
-        g2d.draw(this.getBoundsT());
-        g2d.draw(this.getBoundsL());
-        g2d.draw(this.getBoundsR());
+        //old hitbox rectangles
+//        g2d.draw(this.getBoundsB());
+//        g2d.draw(this.getBoundsT());
+//        g2d.draw(this.getBoundsL());
+//        g2d.draw(this.getBoundsR());
+        //new hitbox shape
+        g2d.draw(pathPoly);
 
         if (this.isAttacking) {
             if (facingRight) {
@@ -83,7 +84,7 @@ public class Player extends GameObject {
                 attackR.done = false;
                 attackL.done = false;
             }
-//            g2d.draw(this.playerLightAttack());
+            g2d.draw(playerLightAttack());
         } else if (jumping) {
             if (facingRight) {
                 g.drawImage(Assets.pMoveR[7], (int) x - 15, (int) y, 64, 64, null);
@@ -101,6 +102,37 @@ public class Player extends GameObject {
         }
     }
 
+    public void handleCollisions(Rectangle r, Rectangle oldR, GameObject temp) {
+        if (temp.id == ID.Enemy) {
+            health--;
+            if (oldR.x >= temp.x + temp.width) {//left
+                x = temp.x + temp.width;
+                velY = -10;
+                velX = 15;
+                knockback = true;
+                temp.velX = -10;
+                temp.knockback = true;
+            } else if (oldR.x + width <= temp.x) {//right
+                x = temp.x - width;
+                velY = -10;
+                velX = -15;
+                knockback = true;
+                temp.velX = 10;
+                temp.knockback = true;
+            } else if (oldR.y + oldR.height <= temp.y) { //bottom
+                y = temp.y - height;
+                velY = 0;
+                falling = false;
+                jumping = false;
+            } else if (oldR.y >= temp.y + temp.height) {//top
+                y = temp.y + temp.height;
+                velY = 0;
+            }
+        } else if (temp.id == ID.Flag) {
+            Game.levelHandler.renderNextLevel();
+        }
+    }
+
     public void isAlive() {
         if (health <= 0) {
             Game.setState(StateID.GameOver);
@@ -109,130 +141,6 @@ public class Player extends GameObject {
 
     public void revive() {
         health = 75;
-    }
-
-    public void collision(LinkedList<GameObject> gameObjects) {
-        for (int i = 0; i < handler.gameObjects.size() /*&& object.get(i).getID()!=ID.Bullet*/; i++) {
-            // The conditional below seems silly, but I think it is necessary because until
-            // a fire rate is added into the game, bullets can continuously be added
-            // which might be the source of the Index out of Bounds Exception we have
-            // been getting. I will implement this in EnemyCollision as well to see.
-            if(i>=handler.gameObjects.size()){
-                i=handler.gameObjects.size()-1;
-            }
-            GameObject temp = gameObjects.get(i);
-            if (temp.getID() == ID.Platform || temp.getID() == ID.Enemy) {
-                if (this.getBoundsB().intersects(temp.getBounds())) {
-                    this.y = temp.getY() - this.height;
-                    this.velY = 0;
-                    this.falling = false;
-                    this.jumping = false;
-                    if (temp.getID() == ID.Enemy) {
-                        health--;
-                    }
-                } else {
-                    this.falling = true;
-                }
-
-                if (this.getBoundsT().intersects(temp.getBounds())) {
-                    this.y = temp.getY() + temp.height;
-                    this.velY = 0;
-                    if (temp.getID() == ID.Enemy) {
-                        health--;
-                    }
-                }
-
-                if (this.getBoundsL().intersects(temp.getBounds())) {
-                    this.x = temp.getX() + temp.width;
-                    if (temp.getID() == ID.Enemy) {
-                        this.initX = (int) this.x;
-                        this.initY = (int) this.y;
-                        velY = -10;
-                        velX = 15;
-                        temp.setKnockback();
-                        temp.setVelX(-15);
-                        temp.setVelY(-10);
-                        knockback = true;
-                        health--;
-                    }
-                }
-
-                if (this.getBoundsR().intersects(temp.getBounds())) {
-                    this.x = temp.getX() - this.width;
-                    if (temp.getID() == ID.Enemy) {
-                        this.initX = (int) this.x;
-                        this.initY = (int) this.y;
-                        velY = -10;
-                        velX = -15;
-                        temp.setKnockback();
-                        temp.setVelX(15);
-                        temp.setVelY(-10);
-                        this.knockback = true;
-                        //System.out.println("Player Right");
-                        health--;
-                    }
-                }
-            } else if (temp.getID() == ID.Flag) {
-                if (this.getBounds().intersects(temp.getBounds())) {
-                    levelHandler.renderNextLevel();
-                }
-            }
-        }
-    }
-
-    public void playerRebound() {
-        if (knockback) {
-            velX -= velX / (1 + 20);
-            if (Math.abs(velX) <= 5) {
-                velX = 0;
-                knockback = false;
-                this.movingRight = false;
-                this.movingLeft = false;
-            }
-        }
-    }
-
-    public void checkLeft(){
-        for(int i=0;i<handler.gameObjects.size() && handler.gameObjects.get(i).getID()==ID.Platform;i++){
-            GameObject temp = Game.gameObjects.get(i);
-            if (this.getBoundsL().intersects(temp.getBounds())){
-                this.x = temp.getX() + temp.width;
-                velX=0;
-                knockback=false;
-            }
-            if(this.getBoundsL().intersects(temp.getBounds()) && this.getBoundsT().intersects(temp.getBounds())){
-                if(this.initX>this.x){
-                    //this.x = temp.getX() - this.width;
-                    this.x = temp.getX() + temp.width;
-                    System.out.println("Wagan1");
-                    velX=0;
-                    knockback=false;
-                }
-                if(this.initX<this.x){
-                    //this.x = temp.getX() + temp.width;
-                    this.x = temp.getX() - this.width;
-                    System.out.println("Wagan2");
-                    velX=0;
-                    knockback=false;
-                }
-            }
-            if(this.getBoundsB().intersects(temp.getBounds()) && this.getBoundsL().intersects(temp.getBounds())){
-                if(this.initY>this.y){
-                    //this.x = temp.getX() - this.width;
-                    this.y = temp.getY() - this.height;
-                    System.out.println("Bummer");
-                    velX=0;
-                    knockback=false;
-                }
-                if(this.initY<this.y){
-                    //this.x = temp.getX() + temp.width;
-                    System.out.println("Bummer2");
-                    this.y = temp.getY() + temp.height;
-                    velX=0;
-                    knockback=false;
-                }
-            }
-        }
     }
 
     public Rectangle playerLightAttack() {
@@ -253,12 +161,12 @@ public class Player extends GameObject {
         }
     }
 
-    public void hitEnemy(LinkedList<GameObject> object) {
-        for (int i = 0; i < handler.gameObjects.size(); i++) {
-            if (object.get(i).getID() == ID.Enemy) {
-                GameObject temp = object.get(i);
-                if (this.playerLightAttack().getBounds().intersects(temp.getBounds())) {
-                    this.knockback = false;
+    public void hitEnemy() {
+        for (int i = 0; i < handler.size(); i++) {
+            GameObject temp = handler.getGameObjects().get(i);
+            if (temp.id == ID.Enemy) {
+                if (playerLightAttack().getBounds().intersects(temp.getBounds())) {
+                    knockback = false;
                     temp.knockback = true;
                     if (temp.getX() > this.x) {//knocks to the right side
                         temp.x = (float) ((strikeRange.getX() + strikeRange.getWidth()));
@@ -278,23 +186,18 @@ public class Player extends GameObject {
     public void shoot() {// maybe we do not need this at all? Maybe use it to check ammo?
         //ammo--;
         //shooting=true;
-        Bullet b=new Bullet((int) this.getX(),(int) this.getY()+32,this.handler,ID.Bullet);
-        if(this.isFacingRight()){
-            b.setX(b.getX()+32);
+        Bullet b = new Bullet((int) this.getX(), (int) this.getY() + 32, this.handler, ID.Bullet);
+        if (this.isFacingRight()) {
+            b.setX(b.getX() + 32);
             //b.setVelocity(16);
-        } else{
+        } else {
             b.setVelocity(-16);
         }
         //return null;
     }
 
-    public boolean canShoot(){
-        if(hasGun && ammo>0){
-            return true;
-        }
-        else{
-            return false;
-        }
+    public boolean canShoot() {
+        return hasGun && ammo > 0;
     }
 
 }

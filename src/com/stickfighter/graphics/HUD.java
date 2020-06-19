@@ -14,17 +14,17 @@ public class HUD {
     private int healthWidth;
 
     public void tick() {
-        if(Player.health <= 0) {
+        if(Game.p1.getHealth() <= 0) {
             healthWidth = 0;
         } else {
-            healthWidth = Player.health*width/100;
+            healthWidth = Game.p1.getHealth()*width/100;
         }
     }
 
     public void render(Graphics g) {
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(x, y, width, height);
-        g.setColor(Color.getHSBColor( (1f * Player.health) / 360, 1f, 1f));
+        g.setColor(Color.getHSBColor( (1f * Game.p1.getHealth()) / 360, 1f, 1f));
         g.fillRect(x, y, healthWidth, height);
         g.setColor(Color.BLACK);
         g.drawRect(x, y, width, height);

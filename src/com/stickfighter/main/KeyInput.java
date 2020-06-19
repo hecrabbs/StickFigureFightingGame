@@ -39,8 +39,8 @@ public class KeyInput extends KeyAdapter {
                 case KeyEvent.VK_ESCAPE -> System.exit(1);
             }
         } else if (Game.getState() == StateID.Play) {
-            for (int i = 0; i < handler.gameObjects.size(); i++) {
-                GameObject tempObject = handler.gameObjects.get(i);
+            for (int i = 0; i < handler.size(); i++) {
+                GameObject tempObject = handler.getGameObjects().get(i);
                 if (tempObject.getID() == ID.Player && !tempObject.knockback) {
                     switch (key) {
                         case KeyEvent.VK_SPACE:
@@ -63,7 +63,7 @@ public class KeyInput extends KeyAdapter {
                             tempObject.isAttacking = true;
                             break;
                         case KeyEvent.VK_B:
-                            if(tempObject.hasGun && tempObject.ammo>0) {
+                            if (tempObject.hasGun && tempObject.ammo > 0) {
                                 tempObject.shooting = true;
                                 tempObject.ammo--;
                                 Bullet b = new Bullet((int) tempObject.getX(), (int) (tempObject.getY() + 32), handler, ID.Bullet);
@@ -74,7 +74,7 @@ public class KeyInput extends KeyAdapter {
                                 }
                                 handler.addObject(b);
                             }
-                            System.out.println("Ammo "+tempObject.ammo);
+                            System.out.println("Ammo " + tempObject.ammo);
                             tempObject.shooting = false;
                             break;
                         case KeyEvent.VK_R:
@@ -102,8 +102,8 @@ public class KeyInput extends KeyAdapter {
                 case KeyEvent.VK_P -> Game.setState(StateID.Paused);
                 case KeyEvent.VK_ESCAPE -> System.exit(0);
             }
-            for (int i = 0; i < handler.gameObjects.size(); i++) {
-                GameObject tempObject = handler.gameObjects.get(i);
+            for (int i = 0; i < handler.size(); i++) {
+                GameObject tempObject = handler.getGameObjects().get(i);
                 //player movement
                 if (tempObject.getID() == ID.Player && !tempObject.knockback) {
                     switch (key) {

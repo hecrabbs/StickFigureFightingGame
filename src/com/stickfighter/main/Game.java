@@ -9,21 +9,18 @@ import com.stickfighter.utilities.multiThread;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
 
 public class Game extends JPanel implements Runnable {
 
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
 
-    private static double delta = 0;
-    public static double dt = 0;
-    public static int FPS = 60;
-    private static int frames = 0;
+    private double delta = 0;
+    private int frames = 0;
 
     //States declared here
     private static StateID state = StateID.Menu;
-    private GameOver gameOver;
+    private static GameOver gameOver;
     private static GameMenu menu;
     private static Paused pause;
     private static Help help;
@@ -33,10 +30,9 @@ public class Game extends JPanel implements Runnable {
 
     public static Handler handler;
     public static LevelHandler levelHandler;
-    public static Camera cam;
     public static Player p1;
-    public static Bullet bullet;//idk if this should be here rn
-    public static LinkedList<GameObject> gameObjects;
+    private Camera cam;
+    private Bullet bullet;//idk if this should be here rn
     private HUD hud;
 
     private final BufferedImage image;
@@ -64,7 +60,7 @@ public class Game extends JPanel implements Runnable {
     public void init() {
         handler = new Handler();
         levelHandler = new LevelHandler(g, handler);
-        p1 = new Player(64, 0, handler, levelHandler, ID.Player);
+        p1 = new Player(384, 1856, levelHandler, ID.Player);
         cam = new Camera(0, 0);
         hud = new HUD();
         menu = new GameMenu(this);
@@ -72,7 +68,6 @@ public class Game extends JPanel implements Runnable {
         pause = new Paused(this);
         help = new Help(this);
         gameOver = new GameOver();
-        gameObjects = handler.getGameObjects();
     }
 
     public synchronized void start() {
@@ -94,6 +89,7 @@ public class Game extends JPanel implements Runnable {
         /* 1 billion nano seconds per second divided by frames per second = nanoSec/frames
          * timePerTick is max amount of time allowed to run tick and render methods per 1 frame
          */
+        int FPS = 60;
         double timePerTick = 1e9 / FPS;
         long now;
         long lastTime = System.nanoTime();
@@ -102,13 +98,13 @@ public class Game extends JPanel implements Runnable {
         while (running) {
             now = System.nanoTime();
             //amount of time passed since this line was last run, divided by max time allowed
-            dt = now - lastTime;
+            double dt = now - lastTime;
             delta += (now - lastTime) / timePerTick;
             lastTime = now;
             /* once the time that has passed is greater than or equal to the max time allowed
              * tick, render, and start delta timer over */
             if (delta >= 1) {
-                tick();
+                tick(dt);
                 render();
                 repaint();
                 frames++;
@@ -132,11 +128,11 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
-    private void tick() {
+    private void tick(Double dt) {
         //GameState becomes 'Play' when the user: either exits the main menu or pause screen.
         //Refer to KeyInput class to see how the key input changes the game state.
         if (state == StateID.Play) {
-            handler.tick();
+            handler.tick(dt);
             cam.tick(p1);
             hud.tick();
         } else if (state == StateID.Menu) {
@@ -187,7 +183,7 @@ public class Game extends JPanel implements Runnable {
     }
 
     public static void restartGame() {
-        handler.removeAll();// Preps handler for re-initialization.
+        handler.clear();// Preps handler for re-initialization.
         p1.revive();// Restores player health to 75.
         handler.addObject(p1);// Adding all of the game components again.
         new Level1();// As we add levels we should keep track of what level is currently being played.

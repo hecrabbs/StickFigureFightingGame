@@ -10,12 +10,16 @@ public class Flag extends GameObject {
         this.height = 32;
     }
 
-    public void tick() {
+    public void tick(Double dt) {
     }
 
 
     public void render(Graphics g) {
         g.setColor(Color.YELLOW);
-        g.fillRect((int) x, (int) y,width,height);
+        g.fillRect((int) x, (int) y, width, height);
+    }
+    
+    public void handleCollisions(Rectangle r, Rectangle oldR, GameObject temp) {
+
     }
 }

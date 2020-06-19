@@ -24,7 +24,7 @@ public class Platform extends GameObject {
         }
     }
 
-    public void tick() {
+    public void tick(Double dt) {
         //Only need to update platform here if it is moving.
     }
 
@@ -41,6 +41,10 @@ public class Platform extends GameObject {
                 case 5 -> g.drawImage(Assets.grass[0], (int) this.x, (int) this.y, this.width, this.height, null);
             }
         }
+    }
+    
+    public void handleCollisions(Rectangle r, Rectangle oldR, GameObject temp) {
+
     }
 
 }

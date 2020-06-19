@@ -10,8 +10,8 @@ public class LevelHandler {
 
     private final Graphics g;
     private final Handler handler;
-    LinkedList<GameState> levels = new LinkedList<>();
-    public int currentLevel = 0;
+    private final LinkedList<GameState> levels = new LinkedList<>();
+    private int currentLevel = 0;
 
     public LevelHandler(Graphics g, Handler handler) {
         levels.add(null);
@@ -24,7 +24,7 @@ public class LevelHandler {
     }
 
     public void renderNextLevel() {
-        handler.getGameObjects().clear();
+        handler.clear();
         handler.addObject(Game.p1);
         currentLevel++;
         levels.get(currentLevel).render(g);
