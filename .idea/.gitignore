@@ -1,7 +1,7 @@
 # Default ignored files
 /shelf/
 /workspace.xml
-../out
+../out/
 /dictionaries
 /saveactions_settings.xml
 # Datasource local storage ignored files
