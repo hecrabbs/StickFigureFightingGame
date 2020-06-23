@@ -47,18 +47,20 @@ public class Bullet extends GameObject {
             // because enemies will get knocked back in the opposite direction
             // of their velocities no matter what. Double check to make sure this is correct.
             if (this.getBulletBounds().intersects(temp.getBounds())) {
+                //float vel_dir = temp.getVelX()/temp.getVelX();
                 if (temp.getID() == ID.Enemy) {
                     temp.health = 0;
                     //temp.knockback=true;
                     if (this.initialPos < temp.getX()) {
-                        temp.setVelX(-2 * temp.getVelX());
-                        //System.out.println("Left");
+                        //temp.setVelX(-2 * temp.getVelX());
+                        temp.setVelX(15);
+                        System.out.println("Left");
                     } else {
-                        temp.setVelX(2 * temp.getVelX());
-                        //System.out.println("Right");
+                        //temp.setVelX(-2 * temp.getVelX());
+                        temp.setVelX(-15);
                     }
-                    //temp.setKnockback();
                     temp.setVelY(-10);
+                    temp.knockback=true;
                     System.out.println("Hit Enemy");
                     handler.removeObject(this);
                 }
