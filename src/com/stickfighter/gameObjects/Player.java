@@ -70,7 +70,7 @@ public class Player extends GameObject {
 //        g2d.draw(this.getBoundsL());
 //        g2d.draw(this.getBoundsR());
         //new hitbox shape
-        g2d.draw(pathPoly);
+        //g2d.draw(pathPoly);
 
         if (this.attacking) {
             if (facingRight) {

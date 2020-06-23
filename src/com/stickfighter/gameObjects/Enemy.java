@@ -41,7 +41,7 @@ public class Enemy extends GameObject {
 //        g2d.draw(this.getBoundsL());
 //        g2d.draw(this.getBoundsR());
         //new hitbox shape
-        g2d.draw(pathPoly);
+        //g2d.draw(pathPoly);
         enemyHealth(g);
     }
 
@@ -67,14 +67,14 @@ public class Enemy extends GameObject {
                 temp.velY = -10;
                 temp.velX = -15;
                 temp.knockback = true;
-                velX = 10;
+                velX = 12;
                 knockback = true;
             } else if (oldR.x + width <= temp.x + temp.width / 2) {//right
                 x = temp.x - width;
                 temp.velY = -10;
                 temp.velX = 15;
                 temp.knockback = true;
-                velX = -10;
+                velX = -12;
                 knockback = true;
             } else if (oldR.y + oldR.height <= temp.y) { //bottom
                 y = temp.y - height;
