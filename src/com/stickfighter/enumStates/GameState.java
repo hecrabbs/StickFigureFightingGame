@@ -1,5 +1,8 @@
 package com.stickfighter.enumStates;
 
+import com.stickfighter.gameObjects.Enemy;
+import com.stickfighter.gameObjects.Flag;
+import com.stickfighter.gameObjects.Platform;
 import com.stickfighter.main.*;
 
 import java.awt.*;
@@ -103,7 +106,7 @@ public abstract class GameState {
                     Game.p1.setX(x * 32);
                     Game.p1.setY(y * 32);
                 } else if (c.getRed() == 255 && c.getGreen() == 0 && c.getBlue() == 0) {
-                    handler.addObject(new Enemy(x * 32, y * 32, handler, ID.Enemy, Game.p1));
+                    handler.addObject(new Enemy(x * 32, y * 32, ID.Enemy, Game.p1));
                 } else if (c.getRed() == 255 && c.getGreen() == 255 && c.getBlue() == 0) {
                     handler.addObject(new Flag(x * 32, y * 32, ID.Flag));
                 } else if (c.getRed() == 0 && c.getGreen() == 255 && c.getBlue() == 0) {

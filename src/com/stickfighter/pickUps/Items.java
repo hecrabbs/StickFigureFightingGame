@@ -1,6 +1,6 @@
 /*package com.stickfighter.pickUps;
 
-import com.stickfighter.main.Player;
+import com.stickfighter.gameObjects.Player;
 
 import java.awt.*;
 

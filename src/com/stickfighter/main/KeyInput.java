@@ -1,6 +1,8 @@
 package com.stickfighter.main;
 
 import com.stickfighter.enumStates.StateID;
+import com.stickfighter.gameObjects.Bullet;
+import com.stickfighter.gameObjects.GameObject;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -40,34 +42,34 @@ public class KeyInput extends KeyAdapter {
             }
         } else if (Game.getState() == StateID.Play) {
             for (int i = 0; i < handler.size(); i++) {
-                GameObject tempObject = handler.getGameObjects().get(i);
-                if (tempObject.getID() == ID.Player && !tempObject.knockback) {
+                GameObject tempObject = handler.get(i);
+                if (tempObject.getID() == ID.Player && !tempObject.isKnockback()) {
                     switch (key) {
                         case KeyEvent.VK_SPACE:
-                            if (!tempObject.jumping) {
-                                tempObject.jumping = true;
+                            if (!tempObject.isJumping()) {
+                                tempObject.setJumping(true);
                                 tempObject.setVelY(-20);
                             }
                             break;
                         case KeyEvent.VK_A:
-                            tempObject.facingRight = false;
-                            tempObject.movingLeft = true;
+                            tempObject.setFacingRight(false);
+                            tempObject.setMovingLeft(true);
                             tempObject.setVelX(-8);
                             break;
                         case KeyEvent.VK_D:
-                            tempObject.facingRight = true;
-                            tempObject.movingRight = true;
+                            tempObject.setFacingRight(true);
+                            tempObject.setMovingRight(true);
                             tempObject.setVelX(8);
                             break;
                         case KeyEvent.VK_J:
-                            tempObject.isAttacking = true;
+                            tempObject.setAttacking(true);
                             break;
                         case KeyEvent.VK_B:
-                            if (tempObject.hasGun && tempObject.ammo > 0) {
-                                tempObject.shooting = true;
+                            if (tempObject.isHasGun() && tempObject.ammo > 0) {
+                                tempObject.setShooting(true);
                                 tempObject.ammo--;
                                 Bullet b = new Bullet((int) tempObject.getX(), (int) (tempObject.getY() + 32), handler, ID.Bullet);
-                                if (tempObject.facingRight) {
+                                if (tempObject.isFacingRight()) {
                                     b.setVelocity(16);
                                 } else {
                                     b.setVelocity(-16);
@@ -75,7 +77,7 @@ public class KeyInput extends KeyAdapter {
                                 handler.addObject(b);
                             }
                             System.out.println("Ammo " + tempObject.ammo);
-                            tempObject.shooting = false;
+                            tempObject.setShooting(false);
                             break;
                         case KeyEvent.VK_R:
                             Game.restartGame();
@@ -103,23 +105,23 @@ public class KeyInput extends KeyAdapter {
                 case KeyEvent.VK_ESCAPE -> System.exit(0);
             }
             for (int i = 0; i < handler.size(); i++) {
-                GameObject tempObject = handler.getGameObjects().get(i);
+                GameObject tempObject = handler.get(i);
                 //player movement
-                if (tempObject.getID() == ID.Player && !tempObject.knockback) {
+                if (tempObject.getID() == ID.Player && !tempObject.isKnockback()) {
                     switch (key) {
                         case KeyEvent.VK_A:
-                            tempObject.movingLeft = false;
-                            if (tempObject.movingRight) {
-                                tempObject.facingRight = true;
+                            tempObject.setMovingLeft(false);
+                            if (tempObject.isMovingRight()) {
+                                tempObject.setFacingRight(true);
                                 tempObject.setVelX(8);
                             } else {
                                 tempObject.setVelX(0);
                             }
                             break;
                         case KeyEvent.VK_D:
-                            tempObject.movingRight = false;
-                            if (tempObject.movingLeft) {
-                                tempObject.facingRight = false;
+                            tempObject.setMovingRight(false);
+                            if (tempObject.isMovingLeft()) {
+                                tempObject.setFacingRight(false);
                                 tempObject.setVelX(-8);
                             } else {
                                 tempObject.setVelX(0);
@@ -129,7 +131,7 @@ public class KeyInput extends KeyAdapter {
 //                            tempObject.isAttacking=false;
                             break;
                         case KeyEvent.VK_B:
-                            tempObject.shooting = false;
+                            tempObject.setShooting(false);
                             break;
 //                      case KeyEvent.VK_W:
 //                          up = false;

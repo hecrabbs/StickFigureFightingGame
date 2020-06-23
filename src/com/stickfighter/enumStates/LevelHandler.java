@@ -11,7 +11,7 @@ public class LevelHandler {
     private final Graphics g;
     private final Handler handler;
     private final LinkedList<GameState> levels = new LinkedList<>();
-    private int currentLevel = 0;
+    public int currentLevel = 0;
 
     public LevelHandler(Graphics g, Handler handler) {
         levels.add(null);
@@ -34,8 +34,12 @@ public class LevelHandler {
         return levels;
     }
 
+    public GameState getLevel(int i) {
+        return levels.get(i);
+    }
+
     public void restart() {
-        levels.get(1).render(g);
+        levels.get(currentLevel).render(g);
     }
 
 }

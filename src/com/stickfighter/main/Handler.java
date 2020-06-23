@@ -1,5 +1,7 @@
 package com.stickfighter.main;
 
+import com.stickfighter.gameObjects.GameObject;
+
 import java.util.LinkedList;
 import java.awt.Graphics;
 
@@ -44,5 +46,9 @@ public class Handler {
 
     public LinkedList<GameObject> getGameObjects() {
         return gameObjects;
+    }
+
+    public GameObject get(int i) {
+        return gameObjects.get(i);
     }
 }

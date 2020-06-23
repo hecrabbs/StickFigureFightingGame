@@ -15,6 +15,7 @@ public class Assets {
     public static BufferedImage level1;
     public static BufferedImage level2;
     public static BufferedImage[] grass = new BufferedImage[1];
+    public static BufferedImage background;
 
     public static void init() {
         loadPlayerImages();
@@ -23,6 +24,8 @@ public class Assets {
 
         level1 = loadImage("./res/levels/level1.png ");
         level2 = loadImage("./res/levels/level2.png");
+
+        background = loadImage("./res/textures/testBackground.png");
     }
 
     public static BufferedImage loadImage(String path) {

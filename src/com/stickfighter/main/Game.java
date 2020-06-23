@@ -1,10 +1,10 @@
 package com.stickfighter.main;
 
 import com.stickfighter.enumStates.*;
-import com.stickfighter.gameAudio.MusicPlayer;
+import com.stickfighter.gameObjects.Bullet;
+import com.stickfighter.gameObjects.Player;
 import com.stickfighter.graphics.Assets;
 import com.stickfighter.graphics.HUD;
-import com.stickfighter.utilities.multiThread;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,7 +60,7 @@ public class Game extends JPanel implements Runnable {
     public void init() {
         handler = new Handler();
         levelHandler = new LevelHandler(g, handler);
-        p1 = new Player(384, 1856, levelHandler, ID.Player);
+        p1 = new Player(384, 1856, ID.Player);
         cam = new Camera(0, 0);
         hud = new HUD();
         menu = new GameMenu(this);
@@ -150,13 +150,17 @@ public class Game extends JPanel implements Runnable {
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         if (state == StateID.Play) {
-            g.setColor(Color.WHITE);
+            //Solid Background Color (moves with camera)
+            g.setColor(new Color(181, 234, 255));
             g.fillRect(0, 0, WIDTH, HEIGHT);
-            //Set origin at the camera position
-            g2d.translate(cam.getX(), cam.getY()); //start camera.
+
+            g2d.translate(cam.getX(), cam.getY());    //Set origin at the camera position
+
+            g.drawImage(Assets.background, -640, -180, Assets.background.getWidth() * 2, Assets.background.getHeight() * 2, null); //Draw background image
             handler.render(g);
-            //reset origin back to normal
-            g2d.translate(-cam.getX(), -cam.getY()); //end camera. Everything after this will move with camera
+
+            g2d.translate(-cam.getX(), -cam.getY()); //end camera. reset origin back to normal
+
             hud.render(g);
         } else if (state == StateID.Menu) {
             menu.render(g);
@@ -186,7 +190,6 @@ public class Game extends JPanel implements Runnable {
         handler.clear();// Preps handler for re-initialization.
         p1.revive();// Restores player health to 75.
         handler.addObject(p1);// Adding all of the game components again.
-        new Level1();// As we add levels we should keep track of what level is currently being played.
         levelHandler.restart();
         setState(StateID.Play);
     }
